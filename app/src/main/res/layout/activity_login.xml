@@ -17,11 +17,14 @@
 
 
         <ImageView
+            android:id="@+id/iddd"
             android:layout_width="@dimen/logo_w_h"
             android:layout_height="@dimen/logo_w_h"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
-            android:src="@mipmap/ic_launcher" />
+            android:contentDescription="@android:string/yes"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
