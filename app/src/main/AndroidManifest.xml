@@ -27,17 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.hsehhh.sv3.SignupActivity"
+            android:name=".SignupActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".ScrollingActivity"
             android:label="@string/app_name" />
 
         <activity
-            android:name="com.hsehhh.sv3.LoginActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name="com.hsehhh.sv3.ScrollingActivity"
+            android:name=".CreateEvent"
             android:label="@string/app_name" />
 
         <meta-data

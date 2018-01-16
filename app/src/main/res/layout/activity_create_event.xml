@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hsehhh.sv3.CreateEvent">
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="255dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="448dp"
+        android:ems="10"
+        android:hint="название"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageButton
+        android:id="@+id/whateverType"
+        android:layout_width="125dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="208dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/studyType"
+        app:srcCompat="@drawable/fff" />
+
+    <ImageButton
+        android:id="@+id/studyType"
+        android:layout_width="122dp"
+        android:layout_height="109dp"
+        android:layout_marginBottom="212dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/whateverType"
+        app:layout_constraintStart_toEndOf="@+id/funType"
+        app:srcCompat="@drawable/ggg" />
+
+    <ImageButton
+        android:id="@+id/funType"
+        android:layout_width="108dp"
+        android:layout_height="109dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="132dp"
+        app:layout_constraintEnd_toStartOf="@+id/studyType"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:srcCompat="@drawable/hhh" />
+
+    <ImageButton
+        android:id="@+id/questionType"
+        android:layout_width="108dp"
+        android:layout_height="106dp"
+        android:layout_marginBottom="22dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/whateverType"
+        app:layout_constraintStart_toEndOf="@+id/actionType"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/xxx" />
+
+    <ImageButton
+        android:id="@+id/actionType"
+        android:layout_width="97dp"
+        android:layout_height="104dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/studyType"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/yyy" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="139dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:hint="00:00"
+        android:inputType="time"
+        app:layout_constraintBottom_toTopOf="@+id/editText4"
+        app:layout_constraintEnd_toStartOf="@+id/editText3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/funType" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="170dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="21dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="День Месяц"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/editText4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editText2"
+        app:layout_constraintTop_toBottomOf="@+id/whateverType" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="153dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="Описание"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/doneButt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+    <Button
+        android:id="@+id/doneButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="280dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="11dp"
+        android:text="Готово"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+
+    <Button
+        android:id="@+id/backButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="296dp"
+        android:text="Назад"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
