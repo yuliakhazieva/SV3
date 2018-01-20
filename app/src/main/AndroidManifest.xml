@@ -14,19 +14,18 @@
         android:theme="@style/AppTheme"
         tools:node="replace">
 
-        <!-- <activity android:name=".MainActivity"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" />
         <activity
             android:name=".SignupActivity"
             android:label="@string/app_name" />
@@ -36,7 +35,6 @@
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/app_name" />
-
         <activity
             android:name=".CreateEvent"
             android:label="@string/app_name" />
