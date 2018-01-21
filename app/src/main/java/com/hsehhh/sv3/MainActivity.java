@@ -33,7 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
 
+    public scrollingFragment fragment;
+    public createEventFragment eventFragment;
+    public myEventsFrag myEventsFragment;
 
+    public FrameLayout frame2;
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +53,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mainToolbar);
 
         FrameLayout frame = findViewById(R.id.frame);
+        frame2 = findViewById(R.id.frame2);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragment = new scrollingFragment();
+        myEventsFragment = new myEventsFrag();
+        eventFragment = new createEventFragment();
 
-        scrollingFragment fragment = new scrollingFragment();
         fragmentTransaction.add(R.id.frame, fragment);
+
+        fragmentTransaction.add(R.id.frame2, myEventsFragment);
         fragmentTransaction.commit();
+        findViewById(myEventsFragment.getId()).setY(1500);
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -75,31 +87,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Create a new Fragment to be placed in the activity layout
-      //  scrollingFragment firstFragment = new scrollingFragment();
-
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-
-//        if (savedInstanceState == null) {
-//            scrollingFragment newFragment = new scrollingFragment();
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.add(frame.getId(), newFragment).commit();
-//        }
-
-
-
-      //  ImageButton addEvent = findViewById(R.id.addEvent);
-//        addEvent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                // Begin the transaction
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//             //   ft.replace(, createEventFrag);
-//                ft.commit();
-//            }
-//        });
     }
 
     @Override
@@ -116,55 +103,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_scroll_frag, menu);
-        return true;
+    public createEventFragment getEventFragment()
+    {
+        return this.eventFragment;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings: {
-                return true;
-            }
-            case R.id.action_add:{
-
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    public scrollingFragment getFragment()
+    {
+        return this.fragment;
     }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_scroll_frag, menu);
-//        return true;
-//    }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_scroll_frag, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_settings: {
-//                startActivity(new Intent(this, SettingsActivity.class));
-//                finish();
-//                return true;
-//            }
-//            case R.id.action_add:{
-//                Toast.makeText(this, "Add new event", Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
 }

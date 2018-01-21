@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -35,27 +36,29 @@ public class scrollingFragment extends android.support.v4.app.Fragment
         super.onCreate(savedInstanceState);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_scroll_frag, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_scroll_frag, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_settings: {
-//                return true;
-//            }
-//            case R.id.action_add:{
-//                createEventFragment nextFrag= new createEventFragment();
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.frame, nextFrag,"findThisFragment")
-//                        .addToBackStack(null)
-//                        .commit();
-//            }
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings: {
+
+                return true;
+            }
+            case R.id.action_add:{
+                FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(this.getId(), new createEventFragment());
+                fragmentTransaction.remove(this);
+                fragmentTransaction.commit();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

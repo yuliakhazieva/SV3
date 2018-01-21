@@ -16,7 +16,6 @@ public class CreateEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        backButt = (Button) findViewById(R.id.backButt);
         doneButt = (Button) findViewById(R.id.doneButt);
 
         backButt.setOnClickListener(new View.OnClickListener() {
