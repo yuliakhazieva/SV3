@@ -5,7 +5,7 @@
         android:title="@string/title_add"
         app:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/title_settings"
-        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/profile" />
 </menu>

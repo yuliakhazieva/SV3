@@ -17,15 +17,15 @@ public class ScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(ScrollingActivity.this, CreateEvent.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+      //  FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(ScrollingActivity.this, CreateEvent.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
     }
 }
