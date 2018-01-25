@@ -53,6 +53,7 @@ public class scrollingFragment extends android.support.v4.app.Fragment
                 FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(this.getId(), new createEventFragment());
                 fragmentTransaction.remove(this);
+                fragmentTransaction.hide(getFragmentManager().findFragmentByTag("myEvents"));
                 fragmentTransaction.commit();
                 return true;
             }

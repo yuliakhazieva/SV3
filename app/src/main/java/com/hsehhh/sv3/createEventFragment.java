@@ -34,6 +34,7 @@ public class createEventFragment extends Fragment
         FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
         fragmentTransaction.replace(this.getId(), new scrollingFragment());
         fragmentTransaction.remove(this);
+        fragmentTransaction.show(getFragmentManager().findFragmentByTag("myEvents"));
         fragmentTransaction.commit();
         return super.onOptionsItemSelected(item);
     }
