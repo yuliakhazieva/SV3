@@ -29,6 +29,13 @@ public class myEventsFrag extends android.support.v4.app.Fragment //implements V
         super.onViewCreated(view, savedInstanceState);
         close = getView().findViewById(R.id.closeMyEvents);
         close.setClickable(true);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).findViewById(R.id.frame2).animate().translationY(1700).start();
+                setCloseVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public static void setCloseVisibility(int newVal)
@@ -38,8 +45,7 @@ public class myEventsFrag extends android.support.v4.app.Fragment //implements V
 
     public static void setCloseClickability(boolean newVal)
     {
-        close.setClickable(newVal);
-
+        close.setClickable(true);
     }
 
     public static int getCloseVisibility()
@@ -51,5 +57,7 @@ public class myEventsFrag extends android.support.v4.app.Fragment //implements V
     {
         return close.getId();
     }
+
+
 
 }

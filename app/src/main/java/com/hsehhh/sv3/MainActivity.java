@@ -100,15 +100,7 @@ public class MainActivity extends AppCompatActivity {
         frame2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myEventsFrag.getCloseVisibility() == View.VISIBLE)
-                {
-                   // if(v.getId() == myEventsFrag.getName())
-                   // {
-                        frame2.animate().translationY(1700).start();
-                      //  myEventsFrag.setCloseClickability(false);
-                        myEventsFrag.setCloseVisibility(View.INVISIBLE);
-                   // }
-                } else
+                if(myEventsFrag.getCloseVisibility() != View.VISIBLE)
                 {
                     frame2.animate().translationY(1).start();
                     myEventsFrag.setCloseClickability(true);
