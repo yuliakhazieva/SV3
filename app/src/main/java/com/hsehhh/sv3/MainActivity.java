@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     // Firebase objects
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
     private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
+    public FirebaseDatabase firebaseDatabase;
 
     public scrollingFragment fragment;
     public createEventFragment eventFragment;
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onStart();
         myEventsFragment.setCloseVisibility(View.INVISIBLE);
-       // myEventsFragment.setClickability(false);
     }
 
     @Override

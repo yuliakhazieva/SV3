@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class createEventFragment extends Fragment
 {
 
@@ -25,6 +28,10 @@ public class createEventFragment extends Fragment
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
+        EventOrRequest e = new EventOrRequest(true, "blah");
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        String userId = mDatabase.push().getKey();
+        mDatabase.child(userId).setValue(e);
         return inflater.inflate(R.layout.activity_create_event, container, false);
     }
 
