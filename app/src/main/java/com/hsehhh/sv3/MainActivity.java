@@ -1,78 +1,62 @@
 package com.hsehhh.sv3;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentContainer;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.io.Console;
 
 public class MainActivity extends AppCompatActivity {
 
     //UI objects
     Toolbar mainToolbar;
+    FrameLayout mainFrame;
+    Button showEventsButton;
 
-    // Firebase objects
+    //Fragments
+    ScrollingFragment scrollingFragment;
+    CreateEventFragment createEventFragment;
+    MyEventsFragment myEventsFragment;
+    FragmentTransaction fragmentTransaction;
+
+    //Firebase objects
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
     private FirebaseAuth firebaseAuth;
     public FirebaseDatabase firebaseDatabase;
-
-    public scrollingFragment fragment;
-    public createEventFragment eventFragment;
-    public myEventsFrag myEventsFragment;
-    public ImageButton closeMyEvents;
-
-    public FrameLayout frame2;
-
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseApp.initializeApp(this);
-
-        mainToolbar = findViewById(R.id.main_tool_bar);
+        mainToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(mainToolbar);
 
-        final FrameLayout frame = findViewById(R.id.frame);
-        frame2 = findViewById(R.id.frame2);
+        if (savedInstanceState == null)
+            initFragments();
 
-        fragment = new scrollingFragment();
-        myEventsFragment = new myEventsFrag();
-        eventFragment = new createEventFragment();
+        mainFrame = findViewById(R.id.frame_main);
 
-        fragmentTransaction.add(R.id.frame, fragment);
-
-        fragmentTransaction.add(R.id.frame2, myEventsFragment, "myEvents");
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.frame_main, scrollingFragment);
         fragmentTransaction.commit();
-        findViewById(myEventsFragment.getId()).setY(1900);
+
+        showEventsButton = findViewById(R.id.button_show_events);
+        showEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
+                fragmentTransaction.commit();
+            }
+        });
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -93,30 +77,29 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if (savedInstanceState != null) {
-            return;
-        }
-
-        frame2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(myEventsFrag.getCloseVisibility() != View.VISIBLE)
-                {
-                    frame2.animate().translationY(1).start();
-                    myEventsFrag.setCloseClickability(true);
-                    myEventsFrag.setCloseVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        if (savedInstanceState != null) {
+//            return;
+//        }
+//
+//        frame2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(myEventsFrag.getCloseVisibility() != View.VISIBLE)
+//                {
+//                    frame2.animate().translationY(1).start();
+//                    myEventsFrag.setCloseClickability(true);
+//                    myEventsFrag.setCloseVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
     }
 
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        myEventsFragment.setCloseVisibility(View.INVISIBLE);
-    }
+    //   @Override
+//    protected void onStart()
+//    {
+//        super.onStart();
+//        myEventsFragment.setCloseVisibility(View.INVISIBLE);
+//    }
 
     @Override
     protected void onResume() {
@@ -125,11 +108,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         if (firebaseAuthStateListener != null) {
             firebaseAuth.removeAuthStateListener(firebaseAuthStateListener);
         }
     }
 
+    // Utility methods
+    void initFragments(){
+        scrollingFragment = new ScrollingFragment();
+        myEventsFragment = new MyEventsFragment();
+        createEventFragment = new CreateEventFragment();
+    }
 }

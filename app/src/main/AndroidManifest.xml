@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:node="replace">
+        tools:node="replace"
+        android:name=".SV3App">
 
 
         <activity

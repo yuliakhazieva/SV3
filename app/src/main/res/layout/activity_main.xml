@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/main_tool_bar"
+            android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -21,23 +21,29 @@
             android:theme="?attr/actionBarTheme" />
 
         <FrameLayout
-            android:id="@+id/frame"
+            android:id="@+id/frame_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="461dp"></FrameLayout>
 
-        </FrameLayout>
+        <Button
+            android:id="@+id/button_show_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show events"
+            tools:layout_editor_absoluteX="43dp"
+            tools:layout_editor_absoluteY="410dp" />
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/frame2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frame2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="70dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent">-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
 </android.support.constraint.ConstraintLayout>

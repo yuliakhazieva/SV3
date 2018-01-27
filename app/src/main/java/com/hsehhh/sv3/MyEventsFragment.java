@@ -15,7 +15,7 @@ import android.widget.ImageView;
  * Created by a1 on 21.01.18.
  */
 
-public class myEventsFrag extends android.support.v4.app.Fragment //implements View.OnClickListener
+public class MyEventsFragment extends android.support.v4.app.Fragment
 {
     public static ImageView close;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,35 +28,35 @@ public class myEventsFrag extends android.support.v4.app.Fragment //implements V
     public void onViewCreated (final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         close = getView().findViewById(R.id.closeMyEvents);
-        close.setClickable(true);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).findViewById(R.id.frame2).animate().translationY(1700).start();
-                setCloseVisibility(View.INVISIBLE);
-            }
-        });
+//        close.setClickable(true);
+//        close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getActivity().findViewById(R.id.frame2).animate().translationY(1700).start();
+////                setCloseVisibility(View.INVISIBLE);
+//            }
+//        });
     }
 
-    public static void setCloseVisibility(int newVal)
-    {
-        close.setVisibility(newVal);
-    }
-
-    public static void setCloseClickability(boolean newVal)
-    {
-        close.setClickable(true);
-    }
-
-    public static int getCloseVisibility()
-    {
-        return close.getVisibility();
-    }
-
-    public static int getName()
-    {
-        return close.getId();
-    }
+//    public static void setCloseVisibility(int newVal)
+//    {
+//        close.setVisibility(newVal);
+//    }
+//
+//    public static void setCloseClickability(boolean newVal)
+//    {
+//        close.setClickable(true);
+//    }
+//
+//    public static int getCloseVisibility()
+//    {
+//        return close.getVisibility();
+//    }
+//
+//    public static int getName()
+//    {
+//        return close.getId();
+//    }
 
 
 
