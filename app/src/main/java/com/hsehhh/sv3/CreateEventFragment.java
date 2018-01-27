@@ -1,7 +1,7 @@
-package com.hsehhh.sv3; /**
+package com.hsehhh.sv3;
+/**
  * Created by a1 on 18.01.18.
  */
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
 
-public class createEventFragment extends Fragment
+public class CreateEventFragment extends Fragment
 {
 
     @Override
@@ -21,7 +21,7 @@ public class createEventFragment extends Fragment
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        Toolbar toolbar = getActivity().findViewById(R.id.main_tool_bar);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
@@ -31,8 +31,8 @@ public class createEventFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(this.getId(), new scrollingFragment());
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(this.getId(), new ScrollingFragment());
         fragmentTransaction.remove(this);
         fragmentTransaction.show(getFragmentManager().findFragmentByTag("myEvents"));
         fragmentTransaction.commit();
