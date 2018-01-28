@@ -29,11 +29,11 @@ public class CreateEventFragment extends Fragment
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
-        EventOrRequest e = new EventOrRequest(true, "blah");
+        Event e = new Event("title", "description", "user_id", false);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         String userId = mDatabase.push().getKey();
         mDatabase.child(userId).setValue(e);
-        return inflater.inflate(R.layout.activity_create_event, container, false);
+        return inflater.inflate(R.layout.create_event_fragment, container, false);
     }
 
     @Override
