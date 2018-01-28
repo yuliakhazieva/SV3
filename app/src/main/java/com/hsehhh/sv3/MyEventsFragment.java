@@ -1,14 +1,12 @@
 package com.hsehhh.sv3;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 /**
@@ -17,47 +15,37 @@ import android.widget.ImageView;
 
 public class MyEventsFragment extends android.support.v4.app.Fragment
 {
-    public static ImageView close;
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.my_events, container, false);
-        return v;
-    }
+    public SwitchToScrolling listener;
+
+    public ImageView closeImageView;
+    public RecyclerView organizedEventsView;
+    public RecyclerView visitedEventsView;
 
     @Override
-    public void onViewCreated (final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        close = getView().findViewById(R.id.closeMyEvents);
-//        close.setClickable(true);
-//        close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().findViewById(R.id.frame2).animate().translationY(1700).start();
-////                setCloseVisibility(View.INVISIBLE);
-//            }
-//        });
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listener = (SwitchToScrolling) getActivity();
     }
 
-//    public static void setCloseVisibility(int newVal)
-//    {
-//        close.setVisibility(newVal);
-//    }
-//
-//    public static void setCloseClickability(boolean newVal)
-//    {
-//        close.setClickable(true);
-//    }
-//
-//    public static int getCloseVisibility()
-//    {
-//        return close.getVisibility();
-//    }
-//
-//    public static int getName()
-//    {
-//        return close.getId();
-//    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_my_events, container, false);
 
+        closeImageView = v.findViewById(R.id.closeMyEvents);
+        closeImageView.setClickable(true);
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.switchToScrolling();
+            }
+        });
+        organizedEventsView = v.findViewById(R.id.recycler_organized_events);
+        organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        organizedEventsView.setAdapter(createAdapter());
+        visitedEventsView = v.findViewById(R.id.recycler_visited_events);
+        visitedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        return v;
+    }
 
 }
