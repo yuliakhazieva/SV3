@@ -12,7 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,15 +27,21 @@ public class CreateEventFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        Button done = getActivity().findViewById(R.id.doneButt);
         // Inflate the layout for this fragment
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
-        EventOrRequest e = new EventOrRequest(true, "blah");
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-        String userId = mDatabase.push().getKey();
-        mDatabase.child(userId).setValue(e);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).addNewEventObject();
+            }
+        });
+
         return inflater.inflate(R.layout.activity_create_event, container, false);
     }
 
@@ -41,7 +50,7 @@ public class CreateEventFragment extends Fragment
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(this.getId(), new ScrollingFragment());
         fragmentTransaction.remove(this);
-        fragmentTransaction.show(getFragmentManager().findFragmentByTag("myEvents"));
+     //   fragmentTransaction.show(getFragmentManager().findFragmentByTag("myEvents"));
         fragmentTransaction.commit();
         return super.onOptionsItemSelected(item);
     }

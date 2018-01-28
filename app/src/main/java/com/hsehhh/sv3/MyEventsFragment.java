@@ -28,7 +28,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     public void onViewCreated (final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         close = getView().findViewById(R.id.closeMyEvents);
-//        close.setClickable(true);
+        close.setClickable(true);
 //        close.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

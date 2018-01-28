@@ -57,4 +57,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         }
     }
 
+    public void addIcon(EventOrRequest event)
+    {
+        int floor = event.getFloor();
+
+    }
+
 }

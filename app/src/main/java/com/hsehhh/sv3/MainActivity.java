@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button showEventsButton;
 
     //Fragments
-    ScrollingFragment scrollingFragment;
+    public ScrollingFragment scrollingFragment;
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     FragmentTransaction fragmentTransaction;
@@ -120,5 +120,11 @@ public class MainActivity extends AppCompatActivity {
         scrollingFragment = new ScrollingFragment();
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
+    }
+
+    public void addNewEventObject()
+    {
+        EventOrRequest newEvent = new EventOrRequest(42);
+        scrollingFragment.addIcon(newEvent);
     }
 }

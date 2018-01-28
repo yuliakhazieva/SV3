@@ -7,19 +7,22 @@ import com.google.firebase.database.IgnoreExtraProperties;
  */
 
 @IgnoreExtraProperties
-public class EventOrRequest
+class EventOrRequest
 {
-    boolean isEvent;
-    String description;
+    int floor;
 
     EventOrRequest()
     {
 
     }
-
-    EventOrRequest(boolean isEvent, String description)
+    EventOrRequest(int floor)
     {
-        this.isEvent = isEvent;
-        this.description = description;
+        this.floor = floor;
     }
+
+    public int getFloor()
+    {
+        return floor;
+    }
+
 }
