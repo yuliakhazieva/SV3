@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
     //Firebase objects
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
     private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
+    public FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,30 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
 
             }
         };
+
+//        if (savedInstanceState != null) {
+//            return;
+//        }
+//
+//        frame2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(myEventsFrag.getCloseVisibility() != View.VISIBLE)
+//                {
+//                    frame2.animate().translationY(1).start();
+//                    myEventsFrag.setCloseClickability(true);
+//                    myEventsFrag.setCloseVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
     }
+
+    //   @Override
+//    protected void onStart()
+//    {
+//        super.onStart();
+//        myEventsFragment.setCloseVisibility(View.INVISIBLE);
+//    }
 
     @Override
     protected void onResume() {
