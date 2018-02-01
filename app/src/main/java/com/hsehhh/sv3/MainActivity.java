@@ -47,17 +47,8 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
         //Place scrolling fragment into the view
         mainFrame = findViewById(R.id.frame_main);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame_main, scrollingFragment);
+        fragmentTransaction.add(R.id.frame_main, scrollingFragment, "scroll");
         fragmentTransaction.commit();
-
-//        showEventsButton = findViewById(R.id.button_show_events);
-//        showEventsButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switchToMyEvents();
-//            }
-//        });
-
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -76,30 +67,7 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
 
             }
         };
-
-//        if (savedInstanceState != null) {
-//            return;
-//        }
-//
-//        frame2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(myEventsFrag.getCloseVisibility() != View.VISIBLE)
-//                {
-//                    frame2.animate().translationY(1).start();
-//                    myEventsFrag.setCloseClickability(true);
-//                    myEventsFrag.setCloseVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
     }
-
-    //   @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//        myEventsFragment.setCloseVisibility(View.INVISIBLE);
-//    }
 
     @Override
     protected void onResume() {

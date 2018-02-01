@@ -9,18 +9,16 @@
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <GridLayout
-            android:id="@+id/grid"
+        <TableLayout
+            android:id="@+id/table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tri"
-            android:columnCount="6"
-            android:paddingTop="20dp"
-            android:rowCount="25">
+            android:background="@drawable/tri">
 
-        </GridLayout>
+        </TableLayout>
+
     </ScrollView>
 
     <Button
