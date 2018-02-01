@@ -13,12 +13,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements SwitchToMyEvents, SwitchToScrolling {
+public class MainActivity extends AppCompatActivity implements SwitchToMyEvents, SwitchToScrolling, SwitchToCreateEvent {
 
     //UI objects
     Toolbar mainToolbar;
     FrameLayout mainFrame;
-    Button showEventsButton;
+   // Button showEventsButton;
 
     //Fragments
     public ScrollingFragment scrollingFragment;
@@ -50,13 +50,13 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
         fragmentTransaction.add(R.id.frame_main, scrollingFragment);
         fragmentTransaction.commit();
 
-        showEventsButton = findViewById(R.id.button_show_events);
-        showEventsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchToMyEvents();
-            }
-        });
+//        showEventsButton = findViewById(R.id.button_show_events);
+//        showEventsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switchToMyEvents();
+//            }
+//        });
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -134,6 +134,14 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
     public void switchToScrolling() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, scrollingFragment);
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void switchToCreateEvent() {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_main, createEventFragment);
         fragmentTransaction.commit();
 
     }

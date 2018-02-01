@@ -23,15 +23,7 @@
         <FrameLayout
             android:id="@+id/frame_main"
             android:layout_width="match_parent"
-            android:layout_height="461dp"></FrameLayout>
-
-        <Button
-            android:id="@+id/button_show_events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Show events"
-            tools:layout_editor_absoluteX="43dp"
-            tools:layout_editor_absoluteY="410dp" />
+            android:layout_height="match_parent"></FrameLayout>
 
     </LinearLayout>
 

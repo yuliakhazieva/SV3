@@ -1,14 +1,17 @@
 package com.hsehhh.sv3;
 
+import android.view.View;
+import android.widget.GridLayout;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Event {
+public class Event  {
     public String title;
     public String description;
     public String published_by;
-
+    public GridLayout.LayoutParams layoutParams;
     @Exclude
     public boolean isRequest;
 

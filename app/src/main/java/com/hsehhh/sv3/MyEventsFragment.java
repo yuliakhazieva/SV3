@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,9 +41,10 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 {
     public SwitchToScrolling listener;
 
-    public ImageView closeImageView;
+    public ImageButton closeImageView;
     public RecyclerView organizedEventsView;
     public RecyclerView visitedEventsView;
+    public ImageButton ib;
 
     FirebaseDatabase database;
     DatabaseReference eventsReference;
@@ -68,14 +70,13 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         //change this to correct uid
         visitedEventsAdapter = createAdapter(eventsReference.equalTo("uid1"));
 
-        closeImageView = v.findViewById(R.id.closeMyEvents);
-        closeImageView.setClickable(true);
-        closeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.switchToScrolling();
-            }
-        });
+//        closeImageView.setClickable(true);
+//        closeImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listener.switchToScrolling();
+//            }
+//        });
 
         organizedEventsView = v.findViewById(R.id.recycler_organized_events);
         organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -88,20 +89,21 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         return v;
     }
 
-//<<<<<<< HEAD
-//    @Override
-//    public void onViewCreated (final View view, final Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        close = getView().findViewById(R.id.closeMyEvents);
-//        close.setClickable(true);
-//        close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().findViewById(R.id.frame2).animate().translationY(1700).start();
-////                setCloseVisibility(View.INVISIBLE);
-//            }
-//        });
- //   }
+
+
+
+    @Override
+    public void onViewCreated (final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        closeImageView = getView().findViewById(R.id.closeMyEvents);
+        closeImageView.setClickable(true);
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.switchToScrolling();
+            }
+        });
+    }
 
     public FirebaseRecyclerAdapter<Event, EventViewHolder> createAdapter(Query query)
     {

@@ -22,25 +22,20 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CreateEventFragment extends Fragment
 
 {
-
+    SwitchToScrolling listener;
+    Button done;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        listener = (SwitchToScrolling)getActivity();
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        Button done = getActivity().findViewById(R.id.doneButt);
         // Inflate the layout for this fragment
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
 
-//        done.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ((MainActivity)getActivity()).addNewEventObject();
-//            }
-//        });
 
        // return inflater.inflate(R.layout.activity_create_event, container, false);
 
@@ -53,12 +48,25 @@ public class CreateEventFragment extends Fragment
     }
 
     @Override
+    public void onViewCreated (final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        done = getView().findViewById(R.id.doneButt);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.switchToScrolling();
+            }
+        });
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(this.getId(), new ScrollingFragment());
-        fragmentTransaction.remove(this);
+      //  FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(this.getId(), new ScrollingFragment());
+//        fragmentTransaction.remove(this);
      //   fragmentTransaction.show(getFragmentManager().findFragmentByTag("myEvents"));
-        fragmentTransaction.commit();
+//        fragmentTransaction.commit();
+        listener.switchToScrolling();
         return super.onOptionsItemSelected(item);
     }
 }
