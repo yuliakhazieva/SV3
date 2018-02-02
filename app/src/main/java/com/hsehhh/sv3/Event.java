@@ -12,17 +12,17 @@ public class Event  {
     public String description;
     public String published_by;
     public int floor;
- //   public GridLayout.LayoutParams layoutParams;
+
     @Exclude
-    public boolean isRequest;
+    public String type;
 
     public Event() { }
 
-    public Event(String title, String description, String published_by, boolean isRequest, int floor) {
+    public Event(String title, String description, String type, String published_by, int floor) {
         this.title = title;
         this.description = description;
+        this.type = type;
         this.published_by = published_by;
-        this.isRequest = isRequest;
         this.floor = floor;
     }
 
@@ -66,8 +66,4 @@ public class Event  {
         this.floor = floor;
     }
 
-    public void setRequest(boolean request)
-    {
-        this.isRequest = request;
-    }
 }

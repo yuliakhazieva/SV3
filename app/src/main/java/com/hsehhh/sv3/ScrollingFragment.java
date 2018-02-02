@@ -3,6 +3,7 @@ package com.hsehhh.sv3;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,15 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public SwitchToMyEvents listenerMyEvents;
     public Button showEvents;
     public TableLayout table;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listenerCreateEvent = (SwitchToCreateEvent) getActivity();
+        listenerMyEvents = (SwitchToMyEvents) getActivity();
+        setRetainInstance(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,30 +71,20 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's instance
         getFragmentManager().putFragment(outState, "lscrol", this);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-//        setHasOptionsMenu(true);
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_scroll_frag, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         table = getView().findViewById(R.id.table);
         table.setPadding(0,130,0,0);
         for(int i = 0; i < 25; i++)
@@ -102,7 +102,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             table.addView(newRow, i);
         }
 
-        listenerMyEvents = (SwitchToMyEvents)getActivity();
         showEvents = getView().findViewById(R.id.showMyEvents);
         showEvents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +135,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getContext(), "Database error.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -149,7 +148,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 return true;
             }
             case R.id.action_add:{
-                listenerCreateEvent = (SwitchToCreateEvent) getActivity();
                 listenerCreateEvent.switchToCreateEvent();
                 return true;
             }

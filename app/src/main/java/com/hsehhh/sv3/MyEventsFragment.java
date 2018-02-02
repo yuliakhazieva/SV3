@@ -58,7 +58,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         listener = (SwitchToScrolling) getActivity();
 
         database = FirebaseDatabase.getInstance();
-        eventsReference = database.getReference().child("activities").child("events");
+        eventsReference = database.getReference().child("events");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +80,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
         return v;
     }
-
 
     @Override
     public void onViewCreated (final View view, final Bundle savedInstanceState) {
@@ -123,8 +122,8 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     @Override
     public void onResume(){
         super.onResume();
-        visitedEventsAdapter.startListening();
-        organizedEventsAdapter.startListening();
+//        visitedEventsAdapter.startListening();
+//        organizedEventsAdapter.startListening();
     }
 
     public void onStop(){

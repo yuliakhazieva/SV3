@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
    // Button showEventsButton;
 
     //Fragments
-    public ScrollingFragment scrollingFragment;
+    ScrollingFragment scrollingFragment;
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     FragmentTransaction fragmentTransaction;

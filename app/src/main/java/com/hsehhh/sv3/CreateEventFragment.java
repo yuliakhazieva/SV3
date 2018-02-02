@@ -3,8 +3,9 @@ package com.hsehhh.sv3;
  * Created by a1 on 18.01.18.
  */
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,64 +13,83 @@ import android.view.View;
 import android.view.ViewGroup;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Random;
-
 public class CreateEventFragment extends Fragment
-
 {
+    DatabaseReference mDatabase;
+
     SwitchToScrolling listener;
-    Button done;
-    String userId;
+
+    EditText eventTitleEditText;
+    EditText eventDescriptionEditText;
+    EditText eventFloorEditText;
+    Spinner eventTypeSpinner;
+    Button submitButton;
+
+    //Пока что так. А по-хорошему надо сделать дефолтный спиннер и унести отсюда ресурсы
+    String[] eventTypes = {"fun", "request"};
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listener = (SwitchToScrolling) getActivity();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_create_event, container, false);
 
-        listener = (SwitchToScrolling)getActivity();
-        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        // Inflate the layout for this fragment
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        // мне не нравится. буду разбираться с тем, как это лучше написать
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setHasOptionsMenu(true);
 
-        return inflater.inflate(R.layout.create_event_fragment, container, false);
+        eventTitleEditText = v.findViewById(R.id.edit_text_title);
+        eventDescriptionEditText = v.findViewById(R.id.edit_text_description);
+        eventFloorEditText = v.findViewById(R.id.edit_text_floor);
 
-    }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, eventTypes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-    @Override
-    public void onViewCreated (final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        done = getView().findViewById(R.id.doneButt);
-        done.setOnClickListener(new View.OnClickListener() {
+        eventTypeSpinner = v.findViewById(R.id.spinner_select_type);
+        eventTypeSpinner.setAdapter(adapter);
+        eventTypeSpinner.setSelection(0);
+
+        submitButton = v.findViewById(R.id.button_submit);
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Random rand = new Random(24);
-                Event e = new Event("one", "two", "three", false, rand.nextInt());
-                DatabaseReference mDatabase;
-                if(e.isRequest)
-                {
-                    mDatabase = FirebaseDatabase.getInstance().getReference("requests");
-                } else
-                {
-                    mDatabase = FirebaseDatabase.getInstance().getReference("events");
-                }
-                String userId = mDatabase.push().getKey();
-                mDatabase.child(userId).setValue(e);
-                listener.switchToScrolling();
+            public void onClick(View view) {
+                Event e = new Event(eventTitleEditText.getText().toString(),
+                        eventDescriptionEditText.getText().toString(),
+                        eventTypeSpinner.getSelectedItem().toString(),
+                        "uid1",
+                        Integer.parseInt(eventFloorEditText.getText().toString()));
+                mDatabase.push().setValue(e);
+                Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
             }
         });
+        return v;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        listener.switchToScrolling();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                listener.switchToScrolling();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
+
+
