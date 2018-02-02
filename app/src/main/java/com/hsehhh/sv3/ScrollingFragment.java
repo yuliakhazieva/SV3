@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,7 +84,9 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public void onViewCreated(final View view, final Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         table = getView().findViewById(R.id.table);
+        table.setPadding(0,130,0,0);
         for(int i = 0; i < 25; i++)
         {
             TableRow newRow = new TableRow(getContext());
@@ -91,8 +94,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             for(int j = 0; j < 6; j++)
             {
                 Space space = new Space(getContext());
-                space.setMinimumWidth(50);
-                space.setMinimumHeight(50);
+                space.setLayoutParams(new TableRow.LayoutParams(100, 175));
                 space.setTag("s" + i + j);
                 space.setClickable(false);
                 newRow.addView(space, j);
@@ -132,7 +134,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     }
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -156,9 +157,5 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-
 }
 

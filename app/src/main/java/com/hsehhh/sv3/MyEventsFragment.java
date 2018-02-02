@@ -70,14 +70,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         //change this to correct uid
         visitedEventsAdapter = createAdapter(eventsReference.equalTo("uid1"));
 
-//        closeImageView.setClickable(true);
-//        closeImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.switchToScrolling();
-//            }
-//        });
-
         organizedEventsView = v.findViewById(R.id.recycler_organized_events);
         organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
         organizedEventsView.setAdapter(organizedEventsAdapter);
@@ -88,8 +80,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
         return v;
     }
-
-
 
 
     @Override

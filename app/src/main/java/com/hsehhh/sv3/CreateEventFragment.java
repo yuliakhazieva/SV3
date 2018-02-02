@@ -52,7 +52,14 @@ public class CreateEventFragment extends Fragment
             public void onClick(View v) {
                 Random rand = new Random(24);
                 Event e = new Event("one", "two", "three", false, rand.nextInt());
-                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("activities");
+                DatabaseReference mDatabase;
+                if(e.isRequest)
+                {
+                    mDatabase = FirebaseDatabase.getInstance().getReference("requests");
+                } else
+                {
+                    mDatabase = FirebaseDatabase.getInstance().getReference("events");
+                }
                 String userId = mDatabase.push().getKey();
                 mDatabase.child(userId).setValue(e);
                 listener.switchToScrolling();
