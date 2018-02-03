@@ -31,10 +31,7 @@ import java.util.Random;
 
 public class ScrollingFragment extends android.support.v4.app.Fragment
 {
-    Toolbar mainToolbar;
-    public SwitchToCreateEvent listenerCreateEvent;
-    public SwitchToMyEvents listenerMyEvents;
-    public SwitchToEventDetails listenerEventDetails;
+    FragmentSwitcher fragmentSwitcher;
 
     public Button showEvents;
     public TableLayout table;
@@ -43,9 +40,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listenerCreateEvent = (SwitchToCreateEvent) getActivity();
-        listenerMyEvents = (SwitchToMyEvents) getActivity();
-        listenerEventDetails = (SwitchToEventDetails) getActivity();
+        fragmentSwitcher = (FragmentSwitcher) getActivity();
         setRetainInstance(true);
     }
 
@@ -53,10 +48,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        if (savedInstanceState != null) {
-            //Restore the fragment's instance
+        if (savedInstanceState != null)
             getFragmentManager().getFragment(savedInstanceState, "scroll");
-        }
 
         return inflater.inflate(R.layout.new_grid_scrolling, container, false);
     }
@@ -99,7 +92,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         showEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenerMyEvents.switchToMyEvents();
+                fragmentSwitcher.switchToMyEvents();
             }
         });
 
@@ -124,7 +117,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         ib.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                listenerEventDetails.switchToEventDetails(e);
+                                fragmentSwitcher.switchToEventDetails(e);
                             }
                         });
                         trow.addView(ib, num);
@@ -146,18 +139,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 return true;
             }
             case R.id.action_add:{
-                listenerCreateEvent.switchToCreateEvent();
+                fragmentSwitcher.switchToCreateEvent();
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }
 

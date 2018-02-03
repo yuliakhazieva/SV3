@@ -86,8 +86,8 @@ public class SignupActivity extends AppCompatActivity {
                                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
+                                // the auth state switchToScrolling will be notified and logic to handle the
+                                // signed in user can be handled in the switchToScrolling.
                                 if (!task.isSuccessful()) {
                                  //   startActivity(new Intent(SignupActivity.this, ScrollingActivity.class));
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),

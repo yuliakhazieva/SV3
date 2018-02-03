@@ -6,16 +6,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity
-        implements SwitchToMyEvents, SwitchToScrolling, SwitchToCreateEvent, SwitchToEventDetails {
+public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
 
     //UI objects
     Toolbar mainToolbar;
@@ -26,6 +23,8 @@ public class MainActivity extends AppCompatActivity
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
+
+    private Fragment lastViewedFragment;
 
     FragmentTransaction fragmentTransaction;
 
@@ -43,15 +42,17 @@ public class MainActivity extends AppCompatActivity
         mainToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(mainToolbar);
 
+        mainFrame = findViewById(R.id.frame_main);
+
         //Create all fragments
         if (savedInstanceState == null)
             initFragments();
 
-        //Place scrolling fragment into the view
-        mainFrame = findViewById(R.id.frame_main);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_main, scrollingFragment, "scroll");
         fragmentTransaction.commit();
+
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -94,9 +95,17 @@ public class MainActivity extends AppCompatActivity
         eventDetailFragment = new EventDetailFragment();
     }
 
+    // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент. 
+    public void switchToPrevious() {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);
+        fragmentTransaction.commit();
+    }
 
     @Override
     public void switchToMyEvents() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
         fragmentTransaction.commit();
@@ -104,6 +113,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void switchToScrolling() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, scrollingFragment);
         fragmentTransaction.commit();
@@ -112,14 +123,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void switchToCreateEvent() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
         fragmentTransaction.commit();
     }
 
-    // TODO: Сделать так, чтобы возвращение всегда было туда, откуда мы пришли на этот объект.
     @Override
     public void switchToEventDetails(Event e) {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
         Bundle eventArgs = new Bundle();
         eventArgs.putParcelable("event", e);
         eventDetailFragment.setArguments(eventArgs);

@@ -26,7 +26,7 @@ public class CreateEventFragment extends Fragment
 {
     DatabaseReference mDatabase;
 
-    SwitchToScrolling listener;
+    FragmentSwitcher fragmentSwitcher;
 
     EditText eventTitleEditText;
     EditText eventDescriptionEditText;
@@ -40,7 +40,7 @@ public class CreateEventFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listener = (SwitchToScrolling) getActivity();
+        fragmentSwitcher = (FragmentSwitcher) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
         setHasOptionsMenu(true);
     }
@@ -85,7 +85,7 @@ public class CreateEventFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                listener.switchToScrolling();
+                fragmentSwitcher.switchToPrevious();
                 return true;
         }
         return super.onOptionsItemSelected(item);

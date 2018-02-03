@@ -123,7 +123,7 @@ public class EventDetailFragment extends Fragment {
     // Data
     Event event;
 
-    SwitchToScrolling listener;
+    FragmentSwitcher fragmentSwitcher;
 
     TextView eventTitleTextView;
     TextView eventDescriptionTextView;
@@ -142,7 +142,7 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listener = (SwitchToScrolling) getActivity();
+        fragmentSwitcher = (FragmentSwitcher) getActivity();
         setHasOptionsMenu(true);
     }
 
@@ -193,7 +193,7 @@ public class EventDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                listener.switchToScrolling();
+                fragmentSwitcher.switchToPrevious();
                 return true;
         }
         return super.onOptionsItemSelected(item);
