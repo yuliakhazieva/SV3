@@ -1,10 +1,7 @@
 package com.hsehhh.sv3;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -13,20 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by a1 on 20.01.18.
@@ -45,14 +34,18 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     Toolbar mainToolbar;
     public SwitchToCreateEvent listenerCreateEvent;
     public SwitchToMyEvents listenerMyEvents;
+    public SwitchToEventDetails listenerEventDetails;
+
     public Button showEvents;
     public TableLayout table;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listenerCreateEvent = (SwitchToCreateEvent) getActivity();
         listenerMyEvents = (SwitchToMyEvents) getActivity();
+        listenerEventDetails = (SwitchToEventDetails) getActivity();
         setRetainInstance(true);
     }
 
@@ -110,16 +103,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             }
         });
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("activities");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    for(DataSnapshot childSnapshot: postSnapshot.getChildren())
+                    for (DataSnapshot childSnapshot: dataSnapshot.getChildren())
                     {
-                        Event e = childSnapshot.getValue(Event.class);
+                        final Event e = childSnapshot.getValue(Event.class);
                         Random rand = new Random();
                         int num = rand.nextInt(5);
                         TableRow trow = (TableRow) table.getChildAt(e.floor);
@@ -129,10 +120,16 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         trow.removeViewAt(num);
                         ImageButton ib = new ImageButton(getContext());
                         ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
+                        ib.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                listenerEventDetails.switchToEventDetails(e);
+                            }
+                        });
                         trow.addView(ib, num);
                     }
                 }
-            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getContext(), "Database error.", Toast.LENGTH_SHORT).show();
@@ -154,6 +151,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }
 

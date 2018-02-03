@@ -13,17 +13,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements SwitchToMyEvents, SwitchToScrolling, SwitchToCreateEvent {
+public class MainActivity extends AppCompatActivity
+        implements SwitchToMyEvents, SwitchToScrolling, SwitchToCreateEvent, SwitchToEventDetails {
 
     //UI objects
     Toolbar mainToolbar;
     FrameLayout mainFrame;
-   // Button showEventsButton;
 
     //Fragments
     ScrollingFragment scrollingFragment;
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
+    EventDetailFragment eventDetailFragment;
+
     FragmentTransaction fragmentTransaction;
 
     //Firebase objects
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
         scrollingFragment = new ScrollingFragment();
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
+        eventDetailFragment = new EventDetailFragment();
     }
 
 
@@ -111,6 +114,17 @@ public class MainActivity extends AppCompatActivity implements SwitchToMyEvents,
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
         fragmentTransaction.commit();
-
     }
+
+    @Override
+    public void switchToEventDetails(Event e) {
+        Bundle eventArgs = new Bundle();
+        eventArgs.putParcelable("event", e);
+        eventDetailFragment.setArguments(eventArgs);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_main, eventDetailFragment);
+        fragmentTransaction.commit();
+    }
+
 }

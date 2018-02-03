@@ -1,56 +1,148 @@
 package com.hsehhh.sv3;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by a1 on 21.01.18.
  */
 
-class EventViewHolder extends RecyclerView.ViewHolder
-{
-    TextView title;
-    TextView desciption;
-    TextView published_by;
 
-    EventViewHolder(View v) {
-        super(v);
+/**
+ * Класс адаптера наследуется от RecyclerView.Adapter с указанием класса, который будет хранить ссылки на виджеты элемента списка, т.е. класса, имплементирующего ViewHolder. В нашем случае класс объявлен внутри класса адаптера.
+ */
+class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
 
-        title = v.findViewById(R.id.event_title);
-        desciption =  v.findViewById(R.id.event_description);
-        published_by = v.findViewById(R.id.published_user_id);
+    private List<Event> events;
+    private DatabaseReference eventsReference;
+    private ChildEventListener childEventListener;
+
+    public EventsAdapter(EventFilter filter) {
+        events = new ArrayList<>(0);
+        initializeReference(filter);
     }
+
+    @Override
+    public int getItemCount() { return events.size(); }
+
+    private int getEventIndex(Event e) {
+        for (int i = 0; i < getItemCount(); i++)
+            if (events.get(i).equals(e))
+                return i;
+        return -1;
+    }
+
+    public void initializeReference(final EventFilter eventFilter){
+        eventsReference = FirebaseDatabase.getInstance().getReference("events");
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Event model = dataSnapshot.getValue(Event.class);
+                if (eventFilter.filter(model)) {
+                    events.add(model);
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Event model = dataSnapshot.getValue(Event.class);
+                if (eventFilter.filter(model)) {
+                    int eventIndex = getEventIndex(model);
+                    if (eventIndex != -1) // бывает ли иначе? хм.
+                        events.set(eventIndex, model);
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Event model = dataSnapshot.getValue(Event.class);
+                if (eventFilter.filter(model)) {
+                    int eventIndex = getEventIndex(model);
+                    if (eventIndex != -1) // бывает ли иначе? хм.
+                        events.remove(eventIndex);
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        };
+        eventsReference.addChildEventListener(childEventListener);
+    }
+
+    public void cleanup() {
+        if (eventsReference != null)
+            eventsReference.removeEventListener(childEventListener);
+        events.clear();
+    }
+
+    @Override
+    public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_event, viewGroup, false);
+        return new EventViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(EventViewHolder holder, int i) {
+        Event model = events.get(i);
+
+        holder.title.setText(model.title);
+        holder.desciption.setText(model.description);
+        holder.published_by.setText(model.published_by);
+    }
+
+    class EventViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
+        TextView desciption;
+        TextView published_by;
+
+        EventViewHolder(View v) {
+            super(v);
+
+            title = v.findViewById(R.id.event_title);
+            desciption =  v.findViewById(R.id.event_description);
+            published_by = v.findViewById(R.id.published_user_id);
+        }
+    }
+
 }
 
 public class MyEventsFragment extends android.support.v4.app.Fragment
 {
     public SwitchToScrolling listener;
 
-    public ImageButton closeImageView;
     public RecyclerView organizedEventsView;
     public RecyclerView visitedEventsView;
-    public ImageButton ib;
 
     FirebaseDatabase database;
     DatabaseReference eventsReference;
 
-    FirebaseRecyclerAdapter organizedEventsAdapter;
-    FirebaseRecyclerAdapter visitedEventsAdapter;
+    EventsAdapter organizedEventsAdapter;
+    EventsAdapter visitedEventsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,16 +151,23 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
         database = FirebaseDatabase.getInstance();
         eventsReference = database.getReference().child("events");
+        setHasOptionsMenu(true);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_events, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //change queries to correct later
-        organizedEventsAdapter = createAdapter(eventsReference);
-        //change this to correct uid
-        visitedEventsAdapter = createAdapter(eventsReference.equalTo("uid1"));
+        // Надо наверное написать дефолтные фильтры. Пока пусть так.
+        organizedEventsAdapter = new EventsAdapter(new EventFilter() {
+            @Override
+            public boolean filter(Event e) { return e.published_by.equals("uid1"); }
+        });
+        visitedEventsAdapter = new EventsAdapter(new EventFilter() {
+            @Override
+            public boolean filter(Event e) { return !e.published_by.equals("uid1"); }
+        });
 
         organizedEventsView = v.findViewById(R.id.recycler_organized_events);
         organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -82,53 +181,27 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     }
 
     @Override
-    public void onViewCreated (final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        closeImageView = getView().findViewById(R.id.closeMyEvents);
-        closeImageView.setClickable(true);
-        closeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.switchToScrolling();
-            }
-        });
-    }
-
-    public FirebaseRecyclerAdapter<Event, EventViewHolder> createAdapter(Query query)
-    {
-        FirebaseRecyclerOptions<Event> options =
-                new FirebaseRecyclerOptions.Builder<Event>()
-                        .setQuery(query, Event.class)
-                        .build();
-
-        return new FirebaseRecyclerAdapter<Event, EventViewHolder>(options) {
-            @Override
-            public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_event, parent, false);
-                return new EventViewHolder(view);
-            }
-
-
-            @Override
-            protected void onBindViewHolder(@NonNull final EventViewHolder holder, int position, @NonNull Event model) {
-                holder.title.setText(model.title);
-                holder.desciption.setText(model.description);
-                holder.published_by.setText(model.published_by);
-            }
-        };
-    }
-
-    @Override
     public void onResume(){
         super.onResume();
-//        visitedEventsAdapter.startListening();
-//        organizedEventsAdapter.startListening();
+//        Тут еще надо с инициализацией похимичить. Унести в правильные места.
+//        organizedEventsAdapter.initializeReference();
+//        visitedEventsAdapter.initializeReference();
     }
 
     public void onStop(){
         super.onStop();
-        visitedEventsAdapter.startListening();
-        organizedEventsAdapter.startListening();    }
+//        organizedEventsAdapter.cleanup();
+//        visitedEventsAdapter.cleanup();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                listener.switchToScrolling();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
