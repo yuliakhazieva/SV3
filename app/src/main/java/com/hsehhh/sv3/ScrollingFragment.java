@@ -111,6 +111,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren())
                     {
                         final Event e = childSnapshot.getValue(Event.class);
+                        e.setKey(childSnapshot.getKey());
                         Random rand = new Random();
                         int num = rand.nextInt(5);
                         TableRow trow = (TableRow) table.getChildAt(e.floor);

@@ -1,6 +1,7 @@
 package com.hsehhh.sv3;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    // TODO: Сделать так, чтобы возвращение всегда было туда, откуда мы пришли на этот объект.
     @Override
     public void switchToEventDetails(Event e) {
         Bundle eventArgs = new Bundle();

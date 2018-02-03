@@ -22,14 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by a1 on 21.01.18.
- */
-
-
-/**
- * Класс адаптера наследуется от RecyclerView.Adapter с указанием класса, который будет хранить ссылки на виджеты элемента списка, т.е. класса, имплементирующего ViewHolder. В нашем случае класс объявлен внутри класса адаптера.
- */
 class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
 
     private List<Event> events;
@@ -57,8 +49,11 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Event model = dataSnapshot.getValue(Event.class);
+                model.setKey(dataSnapshot.getKey());
+
                 if (eventFilter.filter(model)) {
                     events.add(model);
+
                     notifyDataSetChanged();
                 }
             }
@@ -66,6 +61,7 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Event model = dataSnapshot.getValue(Event.class);
+                model.setKey(dataSnapshot.getKey());
                 if (eventFilter.filter(model)) {
                     int eventIndex = getEventIndex(model);
                     if (eventIndex != -1) // бывает ли иначе? хм.
@@ -77,6 +73,8 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Event model = dataSnapshot.getValue(Event.class);
+                model.setKey(dataSnapshot.getKey());
+
                 if (eventFilter.filter(model)) {
                     int eventIndex = getEventIndex(model);
                     if (eventIndex != -1) // бывает ли иначе? хм.
@@ -138,7 +136,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     public RecyclerView organizedEventsView;
     public RecyclerView visitedEventsView;
 
-    FirebaseDatabase database;
     DatabaseReference eventsReference;
 
     EventsAdapter organizedEventsAdapter;
@@ -149,8 +146,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         super.onCreate(savedInstanceState);
         listener = (SwitchToScrolling) getActivity();
 
-        database = FirebaseDatabase.getInstance();
-        eventsReference = database.getReference().child("events");
+        eventsReference = FirebaseDatabase.getInstance().getReference().child("events");
         setHasOptionsMenu(true);
     }
 

@@ -18,6 +18,8 @@ public class Event implements Parcelable {
 
     @Exclude
     public String type;
+    @Exclude
+    public String key;
 
     Event() { }
 
@@ -36,6 +38,7 @@ public class Event implements Parcelable {
         published_by = in.readString();
         floor = in.readInt();
         type = in.readString();
+        key = in.readString();
     }
 
     @Override
@@ -48,6 +51,7 @@ public class Event implements Parcelable {
         in.writeString(published_by);
         in.writeInt(floor);
         in.writeString(type);
+        in.writeString(key);
     }
 
     public String getTitle()
@@ -58,6 +62,10 @@ public class Event implements Parcelable {
     {
         this.title = title;
     }
+    public void setKey(String key)
+    {
+        this.key = key;
+    }
 
     // TODO: Написать нормальное отношение эквивалентности
     @Override
@@ -67,7 +75,7 @@ public class Event implements Parcelable {
             tmp = (Event) obj;
         else
             return false;
-        return tmp.title.equals(title) && tmp.published_by.equals(published_by);
+        return tmp.key.equals(key);
     }
 
     //    @SuppressWarnings("unused")
