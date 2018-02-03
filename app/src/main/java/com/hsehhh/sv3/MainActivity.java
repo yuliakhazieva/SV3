@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         eventDetailFragment = new EventDetailFragment();
     }
 
-    // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент. 
+    // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
     public void switchToPrevious() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);

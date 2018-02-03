@@ -85,7 +85,7 @@ public class CreateEventFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                fragmentSwitcher.switchToPrevious();
+                fragmentSwitcher.switchToScrolling();
                 return true;
         }
         return super.onOptionsItemSelected(item);

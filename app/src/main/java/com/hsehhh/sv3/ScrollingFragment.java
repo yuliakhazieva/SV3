@@ -132,6 +132,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings: {
