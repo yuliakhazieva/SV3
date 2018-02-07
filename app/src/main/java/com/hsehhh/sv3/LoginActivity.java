@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, SettingsActivity.class));
             finish();
         }
 
@@ -90,19 +90,19 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
+                                // the auth state switchToScrolling will be notified and logic to handle the
+                                // signed in user can be handled in the switchToScrolling.
                                 progressBar.setVisibility(View.GONE);
                                 if (!task.isSuccessful()) {
                                     // there was an error
                                     if (password.length() < 6) {
                                         inputPassword.setError(getString(R.string.minimum_password));
                                     } else {
-                                        startActivity(new Intent(LoginActivity.this, ScrollingActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(LoginActivity.this, ScrollingActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
