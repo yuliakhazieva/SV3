@@ -14,7 +14,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
-    <string name="profile">Профиль</string>
+    <string name="profile">Profile</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
@@ -125,4 +125,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="event_name">Name</string>
+    <string name="event_description">Description</string>
+    <string name="event_floor">Floor</string>
+    <string name="event_done">Done</string>
+    <string name="slider_my_events">My events</string>
 </resources>
