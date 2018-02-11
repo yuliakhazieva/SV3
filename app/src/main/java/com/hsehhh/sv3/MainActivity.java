@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
         fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
         fragmentTransaction.commit();
     }
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
         fragmentTransaction.commit();
     }

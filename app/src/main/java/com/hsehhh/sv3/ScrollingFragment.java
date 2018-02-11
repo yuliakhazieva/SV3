@@ -87,7 +87,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             for(int j = 0; j < 6; j++)
             {
                 Space space = new Space(getContext());
-                space.setLayoutParams(new TableRow.LayoutParams(100, 175));
+                space.setLayoutParams(new TableRow.LayoutParams(100, 90));
                 space.setTag("s" + i + j);
                 space.setClickable(false);
                 newRow.addView(space, j);
