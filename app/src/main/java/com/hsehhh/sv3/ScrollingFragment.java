@@ -1,8 +1,11 @@
 package com.hsehhh.sv3;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,18 +14,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -97,7 +104,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         });
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -129,6 +135,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 Toast.makeText(getContext(), "Database error.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     @Override
@@ -153,4 +161,3 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         }
     }
 }
-
