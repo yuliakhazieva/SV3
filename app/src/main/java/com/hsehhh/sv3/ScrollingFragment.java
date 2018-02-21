@@ -1,5 +1,5 @@
 package com.hsehhh.sv3;
-
+import com.google.firebase.database.DatabaseError;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.data.Event;
-
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -37,13 +35,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     public Button showEvents;
     public TableLayout table;
-    public HashMap<String, Event> eventsMap = new HashMap<>();
+    public HashMap<String, Event> eventsMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentSwitcher = (FragmentSwitcher) getActivity();
         setRetainInstance(true);
+        eventsMap = new HashMap<>();
     }
 
     @Override

@@ -16,12 +16,15 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.Message;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by a1 on 21.02.18.
@@ -121,7 +124,8 @@ public class NewEventDetail extends Fragment
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                user.
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + "uid1" + "/subscribedTo");
+                ref.push().setValue(event.key);
             }
         });
     }
