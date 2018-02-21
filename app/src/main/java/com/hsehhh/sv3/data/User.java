@@ -11,11 +11,11 @@ public class User implements Parcelable {
     public String name;
     public String floor;
 
-    User() { }
+    public User() { }
 
-    User(String name, String floor) {
+    public User(String name, String floor) {
         this.name = name;
-        this.floor = name;
+        this.floor = floor;
     }
 
     protected User(Parcel in) {
