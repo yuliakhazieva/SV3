@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -49,6 +50,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         super.onCreate(savedInstanceState);
         fragmentSwitcher = (FragmentSwitcher) getActivity();
         setRetainInstance(true);
+        eventsMap = new HashMap<>();
     }
 
     @Override
