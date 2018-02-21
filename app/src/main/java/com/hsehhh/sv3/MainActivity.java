@@ -20,12 +20,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     //UI objects
     Toolbar mainToolbar;
     FrameLayout mainFrame;
+    FrameLayout detailFrame;
 
     //Fragments
     ScrollingFragment scrollingFragment;
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
+    NewEventDetail newEventDetail;
 
     private Fragment lastViewedFragment;
 
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         setSupportActionBar(mainToolbar);
 
         mainFrame = findViewById(R.id.frame_main);
+        detailFrame = findViewById(R.id.frame_det);
 
         //Create all fragments
         if (savedInstanceState == null)
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
+        newEventDetail = new NewEventDetail();
     }
 
     // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
@@ -149,4 +153,29 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void addDetail(Event e)
+    {
+        Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
+        if (fragmentA == null) {
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+            lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
+            Bundle eventArgs = new Bundle();
+            eventArgs.putParcelable("event", e);
+            newEventDetail.setArguments(eventArgs);
+
+            fragmentTransaction.add(R.id.frame_det, newEventDetail, "detail");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void removeDetail()
+    {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(newEventDetail);
+        fragmentTransaction.commit();
+    }
 }

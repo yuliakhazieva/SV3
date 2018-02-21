@@ -1,7 +1,7 @@
 package com.hsehhh.sv3;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,26 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
-
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by a1 on 20.01.18.
@@ -42,7 +37,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     public Button showEvents;
     public TableLayout table;
-    public Map<String, Event> eventsMap;
+    public HashMap<String, Event> eventsMap = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +73,17 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public void onViewCreated(final View view, final Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        //кнопка мои события
+        showEvents = getView().findViewById(R.id.showMyEvents);
+        showEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSwitcher.switchToMyEvents();
+            }
+        });
+
+        //делаем пустую таблицу
         table = getView().findViewById(R.id.table);
         table.setPadding(0,130,0,0);
         for(int i = 0; i < 25; i++)
@@ -88,19 +94,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             table.addView(newRow, i);
         }
 
-        showEvents = getView().findViewById(R.id.showMyEvents);
-        showEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentSwitcher.switchToMyEvents();
-            }
-        });
-
+        //работа с бд
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
-
         ChildEventListener childListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                 final Event e = dataSnapshot.getValue(Event.class);
                 e.setKey(dataSnapshot.getKey());
                 eventsMap.put(e.key, e);
@@ -114,11 +113,13 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     ImageButton ib = new ImageButton(getContext());
                     ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
-                    ib.setTag("one");
+                    ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            fragmentSwitcher.switchToEventDetails(e);
+                            //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
+                           // fragmentSwitcher.switchToEventDetails(eventsMap.get(e.key));
+                            fragmentSwitcher.addDetail(eventsMap.get(e.key));
                         }
                     });
                     trow.addView(ib, 0);
@@ -128,7 +129,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
-                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one") {
+                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
+                {
                     //логика если там были еще евенты
                 } else {
                     eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
@@ -138,10 +140,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
-                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one") {
+                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
+                {
                     //логика если там были еще евенты
                 } else {
                     tRow.removeViewAt(dataSnapshot.getValue(Event.class).aptNumber);
+                    eventsMap.remove(dataSnapshot.getValue(Event.class).key);
                 }
             }
 
@@ -157,7 +161,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         };
 
         ref.addChildEventListener(childListener);
-
     }
 
     @Override

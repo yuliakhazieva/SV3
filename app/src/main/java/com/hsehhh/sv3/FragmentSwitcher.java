@@ -12,4 +12,6 @@ public interface FragmentSwitcher {
     void switchToMyEvents();
     void switchToScrolling();
     void switchToPrevious();
+    void addDetail(Event e);
+    void removeDetail();
 }
