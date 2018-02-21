@@ -22,6 +22,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -42,7 +44,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     public Button showEvents;
     public TableLayout table;
-
+    public Map<String, Event> eventsMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,14 +86,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         {
             TableRow newRow = new TableRow(getContext());
             newRow.setTag("r" + i);
-            for(int j = 0; j < 6; j++)
-            {
-                Space space = new Space(getContext());
-                space.setLayoutParams(new TableRow.LayoutParams(100, 90));
-                space.setTag("s" + i + j);
-                space.setClickable(false);
-                newRow.addView(space, j);
-            }
+            newRow.setMinimumHeight(90);
             table.addView(newRow, i);
         }
 
@@ -104,38 +99,66 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         });
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        ChildEventListener childListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childSnapshot: dataSnapshot.getChildren())
-                    {
-                        final Event e = childSnapshot.getValue(Event.class);
-                        e.setKey(childSnapshot.getKey());
-                        Random rand = new Random();
-                        int num = rand.nextInt(5);
-                        TableRow trow = (TableRow) table.getChildAt(e.floor);
-                        while (trow.getChildAt(num).isClickable()) {
-                            num = rand.nextInt(5);
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                final Event e = dataSnapshot.getValue(Event.class);
+                e.setKey(dataSnapshot.getKey());
+                eventsMap.put(e.key, e);
+
+                TableRow trow = (TableRow) table.getChildAt(e.floor);
+                int aptNum = e.aptNumber;
+                if(trow.getChildAt(aptNum) != null)
+                {
+                    //тут логика двух иконок в одном месте
+                } else {
+                    ImageButton ib = new ImageButton(getContext());
+                    ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
+                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
+                    ib.setTag("one");
+                    ib.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            fragmentSwitcher.switchToEventDetails(e);
                         }
-                        trow.removeViewAt(num);
-                        ImageButton ib = new ImageButton(getContext());
-                        ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
-                        ib.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                fragmentSwitcher.switchToEventDetails(e);
-                            }
-                        });
-                        trow.addView(ib, num);
-                    }
+                    });
+                    trow.addView(ib, 0);
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
+                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one") {
+                    //логика если там были еще евенты
+                } else {
+                    eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
+                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one") {
+                    //логика если там были еще евенты
+                } else {
+                    tRow.removeViewAt(dataSnapshot.getValue(Event.class).aptNumber);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                //не наш случай
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Database error.", Toast.LENGTH_SHORT).show();
+                //ошибаются токо ЛОХИ (я не знаю что тут делать пока)
             }
-        });
+        };
 
+        ref.addChildEventListener(childListener);
 
     }
 
