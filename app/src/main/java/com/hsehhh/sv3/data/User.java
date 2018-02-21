@@ -19,12 +19,13 @@ public class User implements Parcelable {
     public String floor;
     public ArrayList<String> subscribedTo;
 
-    User() { }
+    public User() { }
 
-    User(String name, String floor) {
+    public User(String name, String floor) {
         this.name = name;
-        this.floor = name;
+
         subscribedTo = new ArrayList<>();
+        this.floor = floor;
     }
 
     protected User(Parcel in) {

@@ -15,6 +15,10 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
+
+
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -177,6 +181,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             }
             case R.id.action_add:{
                 fragmentSwitcher.switchToCreateEvent();
+                return true;
+            }
+            case R.id.sign_out:{
+                FirebaseAuth.getInstance().signOut();
                 return true;
             }
             default:
