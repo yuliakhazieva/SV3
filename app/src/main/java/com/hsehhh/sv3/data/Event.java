@@ -16,6 +16,9 @@ public class Event implements Parcelable {
     public String description;
     public String published_by;
     public int floor;
+    public int aptNumber;
+
+    @Exclude
     public String type;
 
     public List<User> participants;
