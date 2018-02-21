@@ -1,5 +1,7 @@
 package com.hsehhh.sv3;
 
+import com.hsehhh.sv3.data.Event;
+
 /**
  * Created by Tima on 04.02.2018.
  */

@@ -5,14 +5,12 @@ package com.hsehhh.sv3;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 //import android.widget.Toolbar;
-import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.data.Event;
 
 public class CreateEventFragment extends Fragment
 {
@@ -72,7 +71,8 @@ public class CreateEventFragment extends Fragment
                         eventDescriptionEditText.getText().toString(),
                         eventTypeSpinner.getSelectedItem().toString(),
                         "uid1",
-                        Integer.parseInt(eventFloorEditText.getText().toString()));
+                        Integer.parseInt(eventFloorEditText.getText().toString()),
+                        null);
                 mDatabase.push().setValue(e);
                 Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
             }
