@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.data.Event;
 
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
 

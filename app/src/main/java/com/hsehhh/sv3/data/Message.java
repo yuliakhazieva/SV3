@@ -1,4 +1,4 @@
-package com.hsehhh.sv3;
+package com.hsehhh.sv3.data;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;

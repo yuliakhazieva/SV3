@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.data.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +55,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
                     if (eventFilter.filter(model)) {
                         events.add(model);
-
-                        notifyDataSetChanged();
+                        notifyItemInserted(events.size() - 1);
                     }
                 }
 
@@ -65,9 +65,10 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                     model.setKey(dataSnapshot.getKey());
                     if (eventFilter.filter(model)) {
                         int eventIndex = getEventIndex(model);
-                        if (eventIndex != -1) // бывает ли иначе? хм.
+                        if (eventIndex != -1) { // бывает ли иначе? хм.
                             events.set(eventIndex, model);
-                        notifyDataSetChanged();
+                            notifyItemChanged(eventIndex);
+                        }
                     }
                 }
 
@@ -78,9 +79,10 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
                     if (eventFilter.filter(model)) {
                         int eventIndex = getEventIndex(model);
-                        if (eventIndex != -1) // бывает ли иначе? хм.
+                        if (eventIndex != -1) { // бывает ли иначе? хм.
                             events.remove(eventIndex);
-                        notifyDataSetChanged();
+                            notifyItemRemoved(eventIndex);
+                        }
                     }
                 }
 

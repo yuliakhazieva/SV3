@@ -1,34 +1,37 @@
-package com.hsehhh.sv3;
+package com.hsehhh.sv3.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.GridLayout;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.List;
+
 @IgnoreExtraProperties
 public class Event implements Parcelable {
 
+    // инкапуслировать всё вщщи
     public String title;
     public String description;
     public String published_by;
     public int floor;
-
-    @Exclude
     public String type;
+
+    public List<User> participants;
+
     @Exclude
     public String key;
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, int floor) {
+    public Event(String title, String description, String type, String published_by, int floor, List<User> participants) {
         this.title = title;
         this.description = description;
         this.type = type;
         this.published_by = published_by;
         this.floor = floor;
+        this.participants = participants;
     }
 
 
@@ -39,6 +42,7 @@ public class Event implements Parcelable {
         floor = in.readInt();
         type = in.readString();
         key = in.readString();
+        in.readTypedList(participants, User.CREATOR);
     }
 
     @Override
@@ -52,6 +56,7 @@ public class Event implements Parcelable {
         in.writeInt(floor);
         in.writeString(type);
         in.writeString(key);
+        in.writeTypedList(participants);
     }
 
     public String getTitle()
