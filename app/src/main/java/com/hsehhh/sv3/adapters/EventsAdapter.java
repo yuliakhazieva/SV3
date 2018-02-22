@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -33,7 +34,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     private List<Event> events;
     private ChildEventListener childEventListener;
-    public boolean isHosted;
 
     public EventsAdapter(MainActivity presenter, EventFilter filter) {
         this.presenter = presenter;
@@ -137,20 +137,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isHosted)
-                    FirebaseDatabase.getInstance().getReference("events/" + model.key).removeValue();
-                else
-                {
-                    DatabaseReference ref= FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
-                    ref.child(model.key).removeValue();
-                    FirebaseDatabase.getInstance().getReference("events/" + model.key + "/participants/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
-                }
+                removeEvent(model);
             }
         });
-
     }
 
-
+    void removeEvent(Event event) {
+        if(event.published_by.equals(presenter.firebaseUser.getUid()))
+            presenter.getEventsReference().child(event.key).removeValue();
+        else
+        {
+            presenter.getUsersReference().child(presenter.firebaseUser.getUid())
+                    .child("subscribedTo").child(event.key).removeValue();
+            presenter.getEventsReference().child(event.key)
+                    .child("participants").child(presenter.firebaseUser.getUid()).removeValue();
+        }
+    }
 
 
 }

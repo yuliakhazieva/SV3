@@ -42,8 +42,6 @@ public class EventDetailFragment extends Fragment {
     RecyclerView chat;
 
     ChatAdapter chatAdapter;
-    DatabaseReference messagesReference;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,11 +56,10 @@ public class EventDetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
         // мне не нравится. буду разбираться с тем, как это лучше написать
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle arguments = getArguments();
         event = arguments.getParcelable("event");
-        messagesReference = FirebaseDatabase.getInstance().getReference("chats").child(event.key);
 
         eventTitleTextView = v.findViewById(R.id.layout);
         eventDescriptionTextView = v.findViewById(R.id.text_view_description);
@@ -86,14 +83,17 @@ public class EventDetailFragment extends Fragment {
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(getContext(), "hi!", Toast.LENGTH_SHORT).show();
-                String message = messageTextView.getText().toString().trim();
-                if (!message.isEmpty())
-                    messagesReference.push().setValue(new Message( "uid1", message));
+                String messageText = messageTextView.getText().toString().trim();
+                if (!messageText.isEmpty())
+                    sendMessage(messageText);
             }
         });
 
         return v;
+    }
+
+    private void sendMessage(String messageText) {
+        presenter.getChatsReference().push().setValue(new Message( presenter.firebaseUser.getUid(), messageText));
     }
 
     @Override

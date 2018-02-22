@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
@@ -21,12 +22,15 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
 
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        getActivity().setContentView(R.layout.fragment_profile);
 //        Toolbar toolbar = getView().findViewById(R.id.toolbar);
@@ -42,7 +46,7 @@ public class ProfileFragment extends Fragment {
 //        });
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return view;
     }
 
     @Override

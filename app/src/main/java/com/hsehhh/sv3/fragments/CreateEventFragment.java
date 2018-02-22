@@ -28,8 +28,6 @@ import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 public class CreateEventFragment extends Fragment
 {
-    DatabaseReference mDatabase;
-
     MainActivity presenter;
 
     EditText eventTitleEditText;
@@ -45,7 +43,6 @@ public class CreateEventFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
         setHasOptionsMenu(true);
     }
 
@@ -53,9 +50,7 @@ public class CreateEventFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_create_event, container, false);
-
-        // мне не нравится. буду разбираться с тем, как это лучше написать
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         eventTitleEditText = v.findViewById(R.id.edit_text_title);
         eventDescriptionEditText = v.findViewById(R.id.edit_text_description);
@@ -72,22 +67,23 @@ public class CreateEventFragment extends Fragment
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Event e = new Event(eventTitleEditText.getText().toString(),
-                        eventDescriptionEditText.getText().toString(),
-                        eventTypeSpinner.getSelectedItem().toString(),
-                        presenter.firebaseUser.getUid(),
-                        new Room("A", Integer.parseInt(eventFloorEditText.getText().toString()), 1),
-                        "12/12/12", "12:12");
-                String key = mDatabase.push().getKey();
-                e.key = key;
-                mDatabase.child(key).setValue(e);
-
-                Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                createEvent();
             }
         });
         return v;
     }
 
+    public void createEvent() {
+        Event e = new Event(eventTitleEditText.getText().toString(),
+                eventDescriptionEditText.getText().toString(),
+                eventTypeSpinner.getSelectedItem().toString(),
+                presenter.firebaseUser.getUid(),
+                new Room("A", Integer.parseInt(eventFloorEditText.getText().toString()), 1),
+                "12/12/12", "12:12");
+        presenter.getEventsReference().push().setValue(e);
+
+        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

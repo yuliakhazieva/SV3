@@ -41,8 +41,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     public RecyclerView organizedEventsView;
     public RecyclerView visitedEventsView;
 
-    DatabaseReference eventsReference;
-
     EventsAdapter organizedEventsAdapter;
     EventsAdapter visitedEventsAdapter;
 
@@ -51,47 +49,29 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
 
-        eventsReference = FirebaseDatabase.getInstance().getReference().child("events");
         setHasOptionsMenu(true);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_events, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Надо наверное написать дефолтные фильтры. Пока пусть так.
-        //EventFilter orgFilter = new EventFilter();
+
         organizedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
             @Override
             public boolean filter(Event e) {
-                //заглушка
-               // return true;
-                //вот правильное
-
                 return e.published_by.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
             }
         } );
 
-        organizedEventsAdapter.isHosted = true;
         visitedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
             @Override
             public boolean filter(Event e) {
-//                if(e.participants != null) {
-//                    for (String participant : e.participants) {
-//                        if (participant.equals(presenter.firebaseUser.getUid()))
-//                            return true;
-//                    }
-//                }
                 return false;
-
-
-                //заглушка
-               // return true;
             }
         });
-        visitedEventsAdapter.isHosted = false;
         organizedEventsView = v.findViewById(R.id.recycler_organized_events);
         organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
         organizedEventsView.setAdapter(organizedEventsAdapter);
