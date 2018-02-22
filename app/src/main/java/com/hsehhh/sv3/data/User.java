@@ -19,7 +19,7 @@ public class User implements Parcelable {
     public String name;
     public String floor;
     public HashMap<String, String> subscribedTo;
-
+    public String ID;
     public User() { }
 
     public User(String name, String floor) {

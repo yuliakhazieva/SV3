@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.MainActivity;
+
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.EventFilter;
@@ -134,9 +135,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         EventViewHolder(View v) {
             super(v);
 
-            title = v.findViewById(R.id.event_title);
-            desciption =  v.findViewById(R.id.event_description);
-            published_by = v.findViewById(R.id.published_user_id);
+            title = v.findViewById(R.id.text_view_title);
+            desciption =  v.findViewById(R.id.text_view_description);
+            published_by = v.findViewById(R.id.text_view_user_id);
         }
     }
 

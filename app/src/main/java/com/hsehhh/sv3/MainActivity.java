@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             }
 
             private void createUser() {
-                user = new User("fuck", "myass");
+             //   FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+            //    user = new User(fbUser.getDisplayName(), fbUser.);
                 userReference.setValue(user);
             }
 
