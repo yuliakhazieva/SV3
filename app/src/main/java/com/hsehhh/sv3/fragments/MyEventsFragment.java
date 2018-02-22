@@ -69,7 +69,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                // return true;
                 //вот правильное
 
-                return e.published_by.equals(FirebaseAuth.getInstance().getUid());
+                return e.published_by.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
             }
         } );

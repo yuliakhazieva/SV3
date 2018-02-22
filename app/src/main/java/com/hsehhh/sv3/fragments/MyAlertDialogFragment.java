@@ -78,7 +78,7 @@ public class MyAlertDialogFragment extends DialogFragment {
         description = view.findViewById(R.id.text_view_description);
 
         publisher.setText(event.published_by);
-        apt.setText("" + event.room.floor + event.room.aptNumber);
+        apt.setText("" + event.floor + event.aptNumber);
         description.setText(event.description);
 
         builder.setView(view);
