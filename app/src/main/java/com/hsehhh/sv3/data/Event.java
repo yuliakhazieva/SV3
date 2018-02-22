@@ -16,13 +16,12 @@ public class Event implements Parcelable {
     public String title;
     public String description;
     public String published_by;
-    public int floor;
-    public int aptNumber;
+    public Room room;
+
+
     public String date;
     public String time;
-    public enum section {A,B,C};
 
-    @Exclude
     public String type;
 
     public List<String> participants;
@@ -32,21 +31,21 @@ public class Event implements Parcelable {
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, int floor, List<String> participants) {
+
+    public Event(String title, String description, String type, String published_by, Room room, List<String> participants) {
         this.title = title;
         this.description = description;
         this.type = type;
+        this.room = room;
         this.published_by = published_by;
-        this.floor = floor;
         this.participants = participants;
     }
-
 
     protected Event(Parcel in) {
         title = in.readString();
         description = in.readString();
         published_by = in.readString();
-        floor = in.readInt();
+        room = in.readTypedObject(Room.CREATOR);
         type = in.readString();
         key = in.readString();
         in.readStringList(participants);
@@ -60,7 +59,8 @@ public class Event implements Parcelable {
         in.writeString(title);
         in.writeString(description);
         in.writeString(published_by);
-        in.writeInt(floor);
+        in.writeTypedObject(room, 0);
+//        in.writeInt(floor);
         in.writeString(type);
         in.writeString(key);
         in.writeStringList(participants);
