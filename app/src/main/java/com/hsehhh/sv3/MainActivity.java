@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
+    ProfileFragment profileFragment;
 
     private Fragment lastViewedFragment;
 
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
+        profileFragment = new ProfileFragment();
     }
 
     // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
@@ -146,6 +148,16 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, eventDetailFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void switchToProfile() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.frame_main, profileFragment);
         fragmentTransaction.commit();
     }
 

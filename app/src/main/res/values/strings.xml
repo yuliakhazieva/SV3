@@ -130,4 +130,7 @@
     <string name="event_floor">Floor</string>
     <string name="event_done">Done</string>
     <string name="slider_my_events">My events</string>
+    <string name="host">Hosting</string>
+    <string name="attend">Going to attend</string>
+    <string name="flat">Flat</string>
 </resources>
