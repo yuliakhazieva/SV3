@@ -157,7 +157,7 @@ public class EventDetailFragment extends Fragment {
         event = arguments.getParcelable("event");
         messagesReference = FirebaseDatabase.getInstance().getReference("chats").child(event.key);
 
-        eventTitleTextView = v.findViewById(R.id.text_view_title);
+        eventTitleTextView = v.findViewById(R.id.layout);
         eventDescriptionTextView = v.findViewById(R.id.text_view_description);
         eventFloorTextView = v.findViewById(R.id.text_view_floor);
         eventUserIdTextView = v.findViewById(R.id.text_view_published_by);

@@ -2,6 +2,13 @@ package com.hsehhh.sv3.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Tima on 21.02.2018.
@@ -10,12 +17,15 @@ import android.os.Parcelable;
 public class User implements Parcelable {
     public String name;
     public String floor;
+    public ArrayList<String> subscribedTo;
 
-    User() { }
+    public User() { }
 
-    User(String name, String floor) {
+    public User(String name, String floor) {
         this.name = name;
-        this.floor = name;
+
+        subscribedTo = new ArrayList<>();
+        this.floor = floor;
     }
 
     protected User(Parcel in) {
