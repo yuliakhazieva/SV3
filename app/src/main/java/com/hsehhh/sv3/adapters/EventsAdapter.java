@@ -16,6 +16,7 @@ import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.EventFilter;
+import com.hsehhh.sv3.viewholders.EventViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +25,10 @@ import java.util.List;
  * Created by Tima on 22.02.2018.
  */
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     MainActivity presenter;
 
     private List<Event> events;
-    private DatabaseReference eventsReference;
     private ChildEventListener childEventListener;
 
     public EventsAdapter(MainActivity presenter, EventFilter filter) {
@@ -48,7 +48,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
     }
 
     public void initializeReference(final EventFilter eventFilter){
-        eventsReference = FirebaseDatabase.getInstance().getReference("events");
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -94,12 +93,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         };
-        eventsReference.addChildEventListener(childEventListener);
+        presenter.getEventsReference().addChildEventListener(childEventListener);
     }
 
     public void cleanup() {
-        if (eventsReference != null)
-            eventsReference.removeEventListener(childEventListener);
+        if (presenter.getEventsReference() != null)
+            presenter.getEventsReference().removeEventListener(childEventListener);
         events.clear();
     }
 
@@ -127,18 +126,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
     }
 
 
-    class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView desciption;
-        TextView published_by;
 
-        EventViewHolder(View v) {
-            super(v);
-
-            title = v.findViewById(R.id.text_view_title);
-            desciption =  v.findViewById(R.id.text_view_description);
-            published_by = v.findViewById(R.id.text_view_user_id);
-        }
-    }
 
 }

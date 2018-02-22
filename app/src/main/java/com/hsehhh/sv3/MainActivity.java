@@ -41,26 +41,31 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     FrameLayout detailFrame;
 
     //Fragments
+    FragmentTransaction fragmentTransaction;
+
     ScrollingFragment scrollingFragment;
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
     ProfileFragment profileFragment;
-  //  NewEventDetail newEventDetail;
+
+    Fragment lastViewedFragment;
+
+    //  NewEventDetail newEventDetail;
     DialogFragment dialogFragment;
 
-
-    private Fragment lastViewedFragment;
-
-    FragmentTransaction fragmentTransaction;
 
     //Firebase objects
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
     private FirebaseAuth firebaseAuth;
-    public FirebaseDatabase firebaseDatabase;
-    public DatabaseReference userReference;
 
-    // User object
+    public FirebaseDatabase firebaseDatabase;
+    public DatabaseReference usersReference;
+    public DatabaseReference chatsReference;
+    public DatabaseReference eventsReference;
+
+    // User objects
+    FirebaseUser firebaseUser;
     User user;
 
     @Override
@@ -68,49 +73,44 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Init toolbar
+        //Init toolbar and frame
         mainToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(mainToolbar);
-
         mainFrame = findViewById(R.id.frame_main);
-        detailFrame = findViewById(R.id.frame_det);
 
-        //Create all fragments
-//        if (savedInstanceState == null)
-        initFragments(); // надо починить чтобы после не было реинициализации просто так
+        //Init database reference
+        initDatabaseReferences();
 
-        mainFrame = findViewById(R.id.frame_main);
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame_main, scrollingFragment, "scroll");
-        fragmentTransaction.commit();
-
-        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        //Init authorization
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-                if (firebaseUser == null || firebaseUser.isAnonymous()) {
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setLogo(R.drawable.trilist)
-                                    .build(),
-                            RC_SIGN_IN);
-                } else {
-                    onSignedInInitialize(firebaseUser);
-                }
+                firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser == null || firebaseUser.isAnonymous())
+                    onSignedOut();
+                else
+                    onSignedIn();
             }
         };
+
+//        Init all fragments and show default
+//        if (savedInstanceState == null) надо починить чтобы не было лишней реинициализации
+        initFragments(); //
+        showDefaultFragment();
+
     }
 
-    private void onSignedInInitialize(FirebaseUser firebaseUser) {
-        userReference = firebaseDatabase.getReference("users").child(firebaseUser.getUid());
-        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+    private void onSignedIn() {
+        usersReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            private void createUser() {
+                //   FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+                //    user = new User(fbUser.getDisplayName(), fbUser.);
+                usersReference.child(firebaseUser.getUid()).setValue(user);
+            }
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot == null || dataSnapshot.getValue() == null) {
@@ -122,12 +122,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                 }
             }
 
-            private void createUser() {
-             //   FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-            //    user = new User(fbUser.getDisplayName(), fbUser.);
-                userReference.setValue(user);
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // TODO: Посмотреть, что такое OnCancelled
@@ -136,19 +130,28 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         });
     }
 
-
+    private void onSignedOut() {
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setIsSmartLockEnabled(false)
+                        .setLogo(R.drawable.trilist)
+                        .build(),
+                RC_SIGN_IN);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case RC_SIGN_IN:{
-                if (resultCode == RESULT_OK){
+        switch (requestCode) {
+            case RC_SIGN_IN: {
+                if (resultCode == RESULT_OK) {
+                    firebaseUser = firebaseAuth.getCurrentUser();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-                } else if (resultCode == RESULT_CANCELED){
+                } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
                 }
             }
-            default:{
+            default: {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
@@ -168,18 +171,48 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         }
     }
 
-    // Utility methods
-    void initFragments(){
+    // Uitility database references methods
+    void initDatabaseReferences() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        eventsReference = firebaseDatabase.getReference("events");
+        usersReference = firebaseDatabase.getReference("users");
+        chatsReference = firebaseDatabase.getReference("chats");
+    }
+
+    public DatabaseReference getEventsReference() {
+        return eventsReference;
+    }
+
+    public DatabaseReference getUsersReference() {
+        return usersReference;
+    }
+
+    public DatabaseReference getChatsReference() {
+        return chatsReference;
+    }
+
+
+    // Utility fragment methods
+    void initFragments() {
         scrollingFragment = new ScrollingFragment();
         myEventsFragment = new MyEventsFragment();
         dialogFragment = new MyAlertDialogFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
         profileFragment = new ProfileFragment();
-       // newEventDetail = new NewEventDetail();
+        // newEventDetail = new NewEventDetail();
+    }
+
+    void showDefaultFragment() {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.frame_main, scrollingFragment);
+        fragmentTransaction.commit();
+
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
     }
 
     // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
+    @Override
     public void switchToPrevious() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);
@@ -254,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
 
+    }
 }
+
