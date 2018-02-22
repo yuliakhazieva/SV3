@@ -22,6 +22,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 
 public class ScrollingFragment extends android.support.v4.app.Fragment
 {
-    FragmentSwitcher fragmentSwitcher;
+    MainActivity presenter;
 
     public Button showEvents;
     public TableLayout table;
@@ -43,7 +44,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentSwitcher = (FragmentSwitcher) getActivity();
+        presenter = (MainActivity) getActivity();
         setRetainInstance(true);
         eventsMap = new HashMap<>();
     }
@@ -81,7 +82,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         showEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentSwitcher.switchToMyEvents();
+                presenter.switchToMyEvents();
             }
         });
 
@@ -121,7 +122,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         public void onClick(View view) {
                             //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
                            // fragmentSwitcher.switchToEventDetails(eventsMap.get(e.key));
-                            fragmentSwitcher.addDetail(eventsMap.get(e.key));
+                            presenter.addDetail(eventsMap.get(e.key));
                         }
                     });
                     trow.addView(ib, 0);
@@ -183,11 +184,11 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings: {
-                fragmentSwitcher.switchToProfile();
+                presenter.switchToProfile();
                 return true;
             }
             case R.id.action_add:{
-                fragmentSwitcher.switchToCreateEvent();
+                presenter.switchToCreateEvent();
                 return true;
             }
             case R.id.sign_out:{

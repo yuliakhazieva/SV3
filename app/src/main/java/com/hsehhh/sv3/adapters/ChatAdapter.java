@@ -48,7 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Message model = dataSnapshot.getValue(Message.class);
                 messages.add(model);
-                notifyDataSetChanged();
+                notifyItemInserted(messages.size() - 1);
                 }
 
             @Override
@@ -58,7 +58,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                     if (messageIndex != -1) // бывает ли иначе? хм.
                         messages.set(messageIndex, model);
                     messages.add(model);
-                    notifyDataSetChanged();
+                    notifyItemChanged(messageIndex);
                 }
 
             @Override
@@ -67,7 +67,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                 int messageIndex = getMessageIndex(model);
                 if (messageIndex != -1) // бывает ли иначе? хм.
                     messages.remove(messageIndex);
-                notifyDataSetChanged();
+                notifyItemRemoved(messageIndex);
             }
 
             @Override

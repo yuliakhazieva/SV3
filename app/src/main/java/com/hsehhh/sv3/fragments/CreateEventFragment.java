@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
@@ -27,7 +28,7 @@ public class CreateEventFragment extends Fragment
 {
     DatabaseReference mDatabase;
 
-    FragmentSwitcher fragmentSwitcher;
+    MainActivity presenter;
 
     EditText eventTitleEditText;
     EditText eventDescriptionEditText;
@@ -41,7 +42,7 @@ public class CreateEventFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentSwitcher = (FragmentSwitcher) getActivity();
+        presenter = (MainActivity) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
         setHasOptionsMenu(true);
     }
@@ -87,7 +88,7 @@ public class CreateEventFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                fragmentSwitcher.switchToScrolling();
+                presenter.switchToScrolling();
                 return true;
         }
         return super.onOptionsItemSelected(item);

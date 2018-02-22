@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.adapters.ChatAdapter;
 import com.hsehhh.sv3.data.Event;
@@ -28,7 +29,7 @@ public class EventDetailFragment extends Fragment {
     // Data
     Event event;
 
-    FragmentSwitcher fragmentSwitcher;
+    MainActivity presenter;
 
     TextView eventTitleTextView;
     TextView eventDescriptionTextView;
@@ -47,7 +48,7 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentSwitcher = (FragmentSwitcher) getActivity();
+        presenter = (MainActivity) getActivity();
         setHasOptionsMenu(true);
     }
 
@@ -98,7 +99,7 @@ public class EventDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                fragmentSwitcher.switchToPrevious();
+                presenter.switchToPrevious();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -7,18 +7,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 
 public class ProfileFragment extends Fragment {
 
-    FragmentSwitcher fragmentSwitcher;
+    MainActivity presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentSwitcher = (FragmentSwitcher) getActivity();
+        presenter = (MainActivity) getActivity();
 
     }
 
@@ -48,7 +49,7 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                fragmentSwitcher.switchToPrevious();
+                presenter.switchToPrevious();
                 return true;
         }
         return super.onOptionsItemSelected(item);
