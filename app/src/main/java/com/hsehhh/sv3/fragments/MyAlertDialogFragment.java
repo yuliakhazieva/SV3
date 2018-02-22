@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 
@@ -19,54 +20,65 @@ import com.hsehhh.sv3.data.Event;
  */
 
 public class MyAlertDialogFragment extends DialogFragment {
+    Event event;
+    MainActivity presenter;
 
-    static Event e;
     TextView publisher;
     TextView apt;
     TextView description;
     AlertDialog.Builder builder;
 
     public static MyAlertDialogFragment newInstance(Event event) {
-        e = event;
         MyAlertDialogFragment frag = new MyAlertDialogFragment();
         Bundle args = new Bundle();
+        args.putParcelable("event", event);
         frag.setArguments(args);
         return frag;
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        event = args.getParcelable("event");
+
+        presenter = (MainActivity) getActivity();
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(presenter);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View thisView = inflater.inflate(R.layout.new_event_detail, null);
+        LayoutInflater inflater = presenter.getLayoutInflater();
+        View view = inflater.inflate(R.layout.new_event_detail, null);
 
-        builder.setView(thisView)
-                .setTitle(e.title)
+        builder.setView(view)
+                .setTitle(event.title)
                 .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseDatabase.getInstance().getReference("events/" + e.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()).child("subscribedTo").push().setValue(e.key);
-                    }
-                })
-                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
+                        // event.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
+                        presenter.getUsersReference().child(presenter.user.ID).child("subscribedTo").push().setValue(event.key);
                     }
                 });
+//                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
 
         builder.create();
-        publisher = thisView.findViewById(R.id.text_view_published_by);
-        apt = thisView.findViewById(R.id.text_view_floor);
-        description = thisView.findViewById(R.id.text_view_description);
+        publisher = view.findViewById(R.id.text_view_published_by);
+        apt = view.findViewById(R.id.text_view_floor);
+        description = view.findViewById(R.id.text_view_description);
 
-        publisher.setText(e.published_by);
-        apt.setText("" + e.floor+e.aptNumber);
-        description.setText(e.description);
+        publisher.setText(event.published_by);
+        apt.setText("" + event.floor+ event.aptNumber);
+        description.setText(event.description);
 
-        builder.setView(thisView);
+        builder.setView(view);
 
         return builder.create();
     }

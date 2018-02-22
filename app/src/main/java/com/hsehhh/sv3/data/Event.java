@@ -25,7 +25,7 @@ public class Event implements Parcelable {
     @Exclude
     public String type;
 
-    public ArrayList<String> participants;
+    public List<String> participants;
 
     @Exclude
     public String key;
@@ -38,7 +38,7 @@ public class Event implements Parcelable {
         this.type = type;
         this.published_by = published_by;
         this.floor = floor;
-        this.participants = new ArrayList<>();
+        this.participants = participants;
     }
 
 
