@@ -23,14 +23,14 @@ public class Event implements Parcelable {
     @Exclude
     public String type;
 
-    public List<User> participants;
+    public List<String> participants;
 
     @Exclude
     public String key;
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, int floor, List<User> participants) {
+    public Event(String title, String description, String type, String published_by, int floor, List<String> participants) {
         this.title = title;
         this.description = description;
         this.type = type;
@@ -47,7 +47,7 @@ public class Event implements Parcelable {
         floor = in.readInt();
         type = in.readString();
         key = in.readString();
-        in.readTypedList(participants, User.CREATOR);
+        in.readStringList(participants);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Event implements Parcelable {
         in.writeInt(floor);
         in.writeString(type);
         in.writeString(key);
-        in.writeTypedList(participants);
+        in.writeStringList(participants);
     }
 
     public String getTitle()

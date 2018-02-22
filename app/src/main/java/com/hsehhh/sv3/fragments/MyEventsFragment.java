@@ -65,9 +65,9 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
             @Override
             public boolean filter(Event e) {
                 //заглушка
-                return true;
+               // return true;
                 //вот правильное
-                //   return e.published_by.equals(FirebaseAuth.getInstance().getUid());
+                return e.published_by.equals(FirebaseAuth.getInstance().getUid());
             }
         } );
 
@@ -75,17 +75,17 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         visitedEventsAdapter = new EventsAdapter(new EventFilter() {
             @Override
             public boolean filter(Event e) {
-//                //правильное
-//                if(e.participants != null) {
-//                    for (User participant : e.participants) {
-//                        if (participant.ID.equals(FirebaseAuth.getInstance().getUid()))
-//                            return true;
-//                    }
-//                }
-//                return false;
+
+                if(e.participants != null) {
+                    for (String participant : e.participants) {
+                        if (participant.equals(FirebaseAuth.getInstance().getUid()))
+                            return true;
+                    }
+                }
+                return false;
 
                 //заглушка
-                return true;
+               // return true;
             }
         });
         visitedEventsAdapter.isHosted = false;

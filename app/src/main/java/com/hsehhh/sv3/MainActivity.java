@@ -241,32 +241,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     public void addDetail(Event e)
     {
-//        Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
-//        if (fragmentA == null) {
-//            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//
-//            lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
-//
-//            Bundle eventArgs = new Bundle();
-//            eventArgs.putParcelable("event", e);
-//           // newEventDetail.setArguments(eventArgs);
-//
-//           // fragmentTransaction.add(R.id.frame_det, newEventDetail, "detail");
-//            fragmentTransaction.commit();
-//        }
-
          dialogFragment = MyAlertDialogFragment.newInstance(e);
          dialogFragment.show(getSupportFragmentManager(), "dlg1");
-
     }
-
-//    @Override
-//    public void removeDetail()
-//    {
-//        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//       // fragmentTransaction.remove(newEventDetail);
-//        fragmentTransaction.commit();
-//    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

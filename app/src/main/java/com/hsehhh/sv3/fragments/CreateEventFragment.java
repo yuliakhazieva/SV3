@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.MainActivity;
@@ -73,7 +74,7 @@ public class CreateEventFragment extends Fragment
                 Event e = new Event(eventTitleEditText.getText().toString(),
                         eventDescriptionEditText.getText().toString(),
                         eventTypeSpinner.getSelectedItem().toString(),
-                        "uid1",
+                        FirebaseAuth.getInstance().getUid(),
                         Integer.parseInt(eventFloorEditText.getText().toString()),
                         null);
                 mDatabase.push().setValue(e);

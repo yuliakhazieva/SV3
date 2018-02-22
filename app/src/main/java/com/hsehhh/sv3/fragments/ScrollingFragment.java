@@ -122,7 +122,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         @Override
                         public void onClick(View view) {
                             //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
-                          //  ((FragmentSwitcher)getActivity()).switchToEventDetails(eventsMap.get(e.key));
                             presenter.addDetail(eventsMap.get(e.key));
                         }
                     });
@@ -156,8 +155,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + "uid1" + "/subscribedTo");
                     //потестить
-//                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
-//                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
+                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
+                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
              //   }
             }
 

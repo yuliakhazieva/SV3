@@ -3,13 +3,10 @@ package com.hsehhh.sv3.fragments;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +46,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                 .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // e.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
+                        e.participants.add(FirebaseAuth.getInstance().getUid());
                         FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()).child("subscribedTo").push().setValue(e.key);
                     }
                 })
