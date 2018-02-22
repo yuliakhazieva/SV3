@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,7 +122,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         @Override
                         public void onClick(View view) {
                             //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
-                           // fragmentSwitcher.switchToEventDetails(eventsMap.get(e.key));
+                          //  ((FragmentSwitcher)getActivity()).switchToEventDetails(eventsMap.get(e.key));
                             presenter.addDetail(eventsMap.get(e.key));
                         }
                     });
