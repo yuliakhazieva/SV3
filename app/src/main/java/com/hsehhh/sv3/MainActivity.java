@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -22,8 +21,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.User;
+import com.hsehhh.sv3.fragments.CreateEventFragment;
+import com.hsehhh.sv3.fragments.EventDetailFragment;
+import com.hsehhh.sv3.fragments.MyEventsFragment;
+import com.hsehhh.sv3.fragments.NewEventDetail;
+import com.hsehhh.sv3.fragments.ProfileFragment;
+import com.hsehhh.sv3.fragments.ScrollingFragment;
+import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
-public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
+public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
     //constants
     private static final int RC_SIGN_IN = 1;

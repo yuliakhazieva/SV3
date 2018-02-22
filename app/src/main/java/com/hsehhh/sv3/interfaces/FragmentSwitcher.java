@@ -1,4 +1,4 @@
-package com.hsehhh.sv3;
+package com.hsehhh.sv3.interfaces;
 
 import com.hsehhh.sv3.data.Event;
 

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,14 +18,14 @@ import java.util.ListIterator;
 public class User implements Parcelable {
     public String name;
     public String floor;
-    public ArrayList<String> subscribedTo;
+    public HashMap<String, String> subscribedTo;
 
     public User() { }
 
     public User(String name, String floor) {
         this.name = name;
 
-        subscribedTo = new ArrayList<>();
+        subscribedTo = new HashMap<>();
         this.floor = floor;
     }
 

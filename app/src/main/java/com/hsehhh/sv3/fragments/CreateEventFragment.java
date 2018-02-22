@@ -1,4 +1,4 @@
-package com.hsehhh.sv3;
+package com.hsehhh.sv3.fragments;
 /**
  * Created by a1 on 18.01.18.
  */
@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 public class CreateEventFragment extends Fragment
 {
