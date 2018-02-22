@@ -24,6 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
+import com.hsehhh.sv3.adapters.EventsAdapter;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.User;
 import com.hsehhh.sv3.interfaces.EventFilter;
@@ -61,7 +62,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
         // Надо наверное написать дефолтные фильтры. Пока пусть так.
         //EventFilter orgFilter = new EventFilter();
-        organizedEventsAdapter = new EventsAdapter(new EventFilter() {
+        organizedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
             @Override
             public boolean filter(Event e) {
                 //заглушка
@@ -74,17 +75,15 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         } );
 
         organizedEventsAdapter.isHosted = true;
-        visitedEventsAdapter = new EventsAdapter(new EventFilter() {
+        visitedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
             @Override
             public boolean filter(Event e) {
-
-
-                if(e.participants != null) {
-                    for (String participant : e.participants) {
-                        if (participant.equals(FirebaseAuth.getInstance().getUid()))
-                            return true;
-                    }
-                }
+//                if(e.participants != null) {
+//                    for (String participant : e.participants) {
+//                        if (participant.equals(presenter.firebaseUser.getUid()))
+//                            return true;
+//                    }
+//                }
                 return false;
 
 
@@ -128,146 +127,4 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         return super.onOptionsItemSelected(item);
     }
 
-    class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
-
-        private List<Event> events;
-        private DatabaseReference eventsReference;
-        private ChildEventListener childEventListener;
-        public boolean isHosted;
-
-        public EventsAdapter(EventFilter filter) {
-            events = new ArrayList<>(0);
-            initializeReference(filter);
-        }
-
-        @Override
-        public int getItemCount() { return events.size(); }
-
-        private int getEventIndex(Event e) {
-            for (int i = 0; i < getItemCount(); i++)
-                if (events.get(i).equals(e))
-                    return i;
-            return -1;
-        }
-
-        public void initializeReference(final EventFilter eventFilter){
-            eventsReference = FirebaseDatabase.getInstance().getReference("events");
-            childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Event model = dataSnapshot.getValue(Event.class);
-                    model.setKey(dataSnapshot.getKey());
-
-                    if (eventFilter.filter(model)) {
-                        events.add(model);
-                        notifyItemInserted(events.size() - 1);
-                    }
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Event model = dataSnapshot.getValue(Event.class);
-                    model.setKey(dataSnapshot.getKey());
-                    if (eventFilter.filter(model)) {
-                        int eventIndex = getEventIndex(model);
-                        if (eventIndex != -1) { // бывает ли иначе? хм.
-                            events.set(eventIndex, model);
-                            notifyItemChanged(eventIndex);
-                        }
-                    }
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Event model = dataSnapshot.getValue(Event.class);
-                    model.setKey(dataSnapshot.getKey());
-
-                    if (eventFilter.filter(model)) {
-                        int eventIndex = getEventIndex(model);
-                        if (eventIndex != -1) { // бывает ли иначе? хм.
-                            events.remove(eventIndex);
-                            notifyItemRemoved(eventIndex);
-                        }
-                    }
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) { }
-            };
-            eventsReference.addChildEventListener(childEventListener);
-        }
-
-        public void cleanup() {
-            if (eventsReference != null)
-                eventsReference.removeEventListener(childEventListener);
-            events.clear();
-        }
-
-        @Override
-        public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_event, viewGroup, false);
-            return new EventViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(final EventViewHolder holder, int i) {
-            final Event model = events.get(i);
-
-            holder.title.setText(model.title);
-            holder.description.setText(model.description);
-            holder.published_by.setText(model.published_by);
-
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
-
-            holder.chat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    presenter.switchToEventDetails(model);
-                }
-            });
-
-            holder.delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(isHosted)
-                        FirebaseDatabase.getInstance().getReference("events/" + model.key).removeValue();
-                    else
-                    {
-                        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
-                        ref.child(model.key).removeValue();
-                        FirebaseDatabase.getInstance().getReference("events/" + model.key + "/participants/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
-                    }
-                }
-            });
-        }
-
-
-        class EventViewHolder extends RecyclerView.ViewHolder {
-            TextView title;
-            TextView description;
-            TextView published_by;
-            Button chat;
-            ImageButton delete;
-
-            EventViewHolder(View v) {
-                super(v);
-
-                title = v.findViewById(R.id.text_view_title);
-                description =  v.findViewById(R.id.text_view_description);
-                published_by = v.findViewById(R.id.text_view_published_by);
-                delete = v.findViewById(R.id.button_delete);
-                chat = v.findViewById(R.id.button_chat);
-
-            }
-        }
-
-    }
 }

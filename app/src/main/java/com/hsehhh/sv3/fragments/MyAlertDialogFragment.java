@@ -59,7 +59,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // event.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
-                        presenter.getUsersReference().child(presenter.user.ID).child("subscribedTo").push().setValue(event.key);
+                        presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
                     }
                 });
 //                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
