@@ -9,14 +9,21 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +57,28 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Надо наверное написать дефолтные фильтры. Пока пусть так.
+        EventFilter orgFilter = new EventFilter();
         organizedEventsAdapter = new EventsAdapter(new EventFilter() {
             @Override
-            public boolean filter(Event e) { return e.published_by.equals("uid1"); }
+            public boolean filter(Event e) {
+                return e.published_by.equals(FirebaseAuth.getInstance().getUid());
+            }
         } );
+
+        organizedEventsAdapter.isHosted = true;
         visitedEventsAdapter = new EventsAdapter(new EventFilter() {
             @Override
-            public boolean filter(Event e) { return !e.published_by.equals("uid1"); }
+            public boolean filter(Event e) {
+                if(e.participants != null) {
+                    for (User participant : e.participants) {
+                        if (participant.ID.equals(FirebaseAuth.getInstance().getUid()))
+                            return true;
+                    }
+                }
+                return false;
+            }
         });
-
+        visitedEventsAdapter.isHosted = false;
         organizedEventsView = v.findViewById(R.id.recycler_organized_events);
         organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
         organizedEventsView.setAdapter(organizedEventsAdapter);
@@ -99,6 +119,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         private List<Event> events;
         private DatabaseReference eventsReference;
         private ChildEventListener childEventListener;
+        public boolean isHosted;
 
         public EventsAdapter(EventFilter filter) {
             events = new ArrayList<>(0);
@@ -178,11 +199,11 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         }
 
         @Override
-        public void onBindViewHolder(EventViewHolder holder, int i) {
+        public void onBindViewHolder(final EventViewHolder holder, int i) {
             final Event model = events.get(i);
 
             holder.title.setText(model.title);
-            holder.desciption.setText(model.description);
+            holder.description.setText(model.description);
             holder.published_by.setText(model.published_by);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -192,20 +213,45 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                 }
             });
 
+            holder.chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            holder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isHosted)
+                    {
+                        FirebaseDatabase.getInstance().getReference("events/" + model.key).removeValue();
+                        organizedEventsAdapter.filter();
+                    } else
+                    {
+
+                    }
+                }
+            });
         }
 
 
         class EventViewHolder extends RecyclerView.ViewHolder {
             TextView title;
-            TextView desciption;
+            TextView description;
             TextView published_by;
+            Button chat;
+            ImageButton delete;
 
             EventViewHolder(View v) {
                 super(v);
 
-                title = v.findViewById(R.id.event_title);
-                desciption =  v.findViewById(R.id.event_description);
-                published_by = v.findViewById(R.id.published_user_id);
+                title = v.findViewById(R.id.text_view_title);
+                description =  v.findViewById(R.id.text_view_description);
+                published_by = v.findViewById(R.id.text_view_published_by);
+                delete = v.findViewById(R.id.button_delete);
+                chat = v.findViewById(R.id.button_chat);
+
             }
         }
 

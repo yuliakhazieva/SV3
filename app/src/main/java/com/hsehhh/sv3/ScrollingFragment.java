@@ -1,4 +1,5 @@
 package com.hsehhh.sv3;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -149,6 +150,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 } else {
                     tRow.removeViewAt(dataSnapshot.getValue(Event.class).aptNumber);
                     eventsMap.remove(dataSnapshot.getValue(Event.class).key);
+
+                    //отписываем пользователя от несуществующего события
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + "uid1" + "/subscribedTo");
+                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
+                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
                 }
             }
 
