@@ -38,11 +38,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
-<<<<<<< HEAD
     ProfileFragment profileFragment;
-=======
     NewEventDetail newEventDetail;
->>>>>>> e56fa80ef3bc3d18aeff7fcba8de785bed4b4a82
+
 
     private Fragment lastViewedFragment;
 
@@ -167,11 +165,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
-<<<<<<< HEAD
         profileFragment = new ProfileFragment();
-=======
         newEventDetail = new NewEventDetail();
->>>>>>> e56fa80ef3bc3d18aeff7fcba8de785bed4b4a82
     }
 
     // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
@@ -225,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     }
 
     @Override
-<<<<<<< HEAD
     public void switchToProfile() {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
@@ -235,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         fragmentTransaction.commit();
     }
 
-=======
     public void addDetail(Event e)
     {
         Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
@@ -272,5 +265,4 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         }
     }
 
->>>>>>> e56fa80ef3bc3d18aeff7fcba8de785bed4b4a82
 }
