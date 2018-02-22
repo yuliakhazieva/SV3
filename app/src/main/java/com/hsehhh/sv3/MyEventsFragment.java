@@ -57,11 +57,14 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Надо наверное написать дефолтные фильтры. Пока пусть так.
-        EventFilter orgFilter = new EventFilter();
+        //EventFilter orgFilter = new EventFilter();
         organizedEventsAdapter = new EventsAdapter(new EventFilter() {
             @Override
             public boolean filter(Event e) {
-                return e.published_by.equals(FirebaseAuth.getInstance().getUid());
+                //заглушка
+                return true;
+                //вот правильное
+             //   return e.published_by.equals(FirebaseAuth.getInstance().getUid());
             }
         } );
 
@@ -69,13 +72,17 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         visitedEventsAdapter = new EventsAdapter(new EventFilter() {
             @Override
             public boolean filter(Event e) {
-                if(e.participants != null) {
-                    for (User participant : e.participants) {
-                        if (participant.ID.equals(FirebaseAuth.getInstance().getUid()))
-                            return true;
-                    }
-                }
-                return false;
+//                //правильное
+//                if(e.participants != null) {
+//                    for (User participant : e.participants) {
+//                        if (participant.ID.equals(FirebaseAuth.getInstance().getUid()))
+//                            return true;
+//                    }
+//                }
+//                return false;
+
+                //заглушка
+                return true;
             }
         });
         visitedEventsAdapter.isHosted = false;
@@ -206,17 +213,17 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
             holder.description.setText(model.description);
             holder.published_by.setText(model.published_by);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    fragmentSwitcher.switchToEventDetails(model);
-                }
-            });
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                }
+//            });
 
             holder.chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    fragmentSwitcher.switchToEventDetails(model);
                 }
             });
 
@@ -224,12 +231,12 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                 @Override
                 public void onClick(View v) {
                     if(isHosted)
-                    {
                         FirebaseDatabase.getInstance().getReference("events/" + model.key).removeValue();
-                        organizedEventsAdapter.filter();
-                    } else
+                    else
                     {
-
+                        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
+                        ref.child(model.key).removeValue();
+                        FirebaseDatabase.getInstance().getReference("events/" + model.key + "/participants/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
                     }
                 }
             });

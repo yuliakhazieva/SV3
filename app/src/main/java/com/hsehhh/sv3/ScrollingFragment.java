@@ -127,6 +127,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         }
                     });
                     trow.addView(ib, 0);
+                    ib.setTag(e.floor+e.aptNumber);
                 }
             }
 
@@ -144,19 +145,20 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
-                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
-                {
-                    //логика если там были еще евенты
-                } else {
-                    tRow.removeViewAt(dataSnapshot.getValue(Event.class).aptNumber);
+//                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
+//                {
+//                    //логика если там были еще евенты
+//                } else {
+                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).floor+dataSnapshot.getValue(Event.class).aptNumber));
                     eventsMap.remove(dataSnapshot.getValue(Event.class).key);
 
                     //отписываем пользователя от несуществующего события
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + "uid1" + "/subscribedTo");
-                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
-                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
-                }
+                    //потестить
+//                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
+//                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
+             //   }
             }
 
             @Override
