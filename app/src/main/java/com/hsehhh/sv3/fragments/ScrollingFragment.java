@@ -122,7 +122,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         @Override
                         public void onClick(View view) {
                             //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
-                          //  ((FragmentSwitcher)getActivity()).switchToEventDetails(eventsMap.get(e.key));
+                          //  ((FragmentSwitcher)getActivity()).switchToEventDetails(eventsMap.get(event.key));
                             presenter.addDetail(eventsMap.get(e.key));
                         }
                     });

@@ -67,7 +67,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                 //заглушка
                 return true;
                 //вот правильное
-                //   return e.published_by.equals(FirebaseAuth.getInstance().getUid());
+                //   return event.published_by.equals(FirebaseAuth.getInstance().getUid());
             }
         } );
 
@@ -76,8 +76,8 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
             @Override
             public boolean filter(Event e) {
 //                //правильное
-//                if(e.participants != null) {
-//                    for (User participant : e.participants) {
+//                if(event.participants != null) {
+//                    for (User participant : event.participants) {
 //                        if (participant.ID.equals(FirebaseAuth.getInstance().getUid()))
 //                            return true;
 //                    }

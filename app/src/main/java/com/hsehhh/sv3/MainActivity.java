@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     //UI objects
     Toolbar mainToolbar;
     FrameLayout mainFrame;
-    FrameLayout detailFrame;
 
     //Fragments
     FragmentTransaction fragmentTransaction;
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     public DatabaseReference eventsReference;
 
     // User objects
-    FirebaseUser firebaseUser;
-    User user;
+    public FirebaseUser firebaseUser;
+    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

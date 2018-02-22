@@ -73,7 +73,7 @@ public class CreateEventFragment extends Fragment
                 Event e = new Event(eventTitleEditText.getText().toString(),
                         eventDescriptionEditText.getText().toString(),
                         eventTypeSpinner.getSelectedItem().toString(),
-                        "uid1",
+                        presenter.firebaseUser.getUid(),
                         Integer.parseInt(eventFloorEditText.getText().toString()),
                         null);
                 mDatabase.push().setValue(e);
