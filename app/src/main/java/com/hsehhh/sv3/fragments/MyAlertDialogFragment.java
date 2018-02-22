@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
@@ -59,7 +60,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // event.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
-                        presenter.getEventsReference().child(event.key).child("participants").push().setValue(presenter.user.ID);
+                        presenter.getEventsReference().child(event.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
 
                     }

@@ -7,7 +7,9 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 
 @IgnoreExtraProperties
 public class Event implements Parcelable {
@@ -20,25 +22,27 @@ public class Event implements Parcelable {
     public int aptNumber;
     public String date;
     public String time;
-    public enum section {A,B,C};
+    public HashMap<String, String> participants;
 
     @Exclude
     public String type;
 
-    public List<String> participants;
-
-    @Exclude
+   // @Exclude
     public String key;
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, int floor, List<String> participants) {
+    public Event(String title, String description, String type, String published_by, int floor, int aptNumber, String date, String time) {
         this.title = title;
         this.description = description;
         this.type = type;
         this.published_by = published_by;
         this.floor = floor;
-        this.participants = participants;
+        this.time = time;
+        this.date = date;
+        this.aptNumber = aptNumber;
+        this.participants = new HashMap<String, String>();
+
     }
 
 
@@ -47,9 +51,13 @@ public class Event implements Parcelable {
         description = in.readString();
         published_by = in.readString();
         floor = in.readInt();
+        aptNumber = in.readInt();
         type = in.readString();
         key = in.readString();
-        in.readStringList(participants);
+        time = in.readString();
+        date = in.readString();
+        participants = in.readHashMap(String.class.getClassLoader());
+      //  in.readHashMap(participants);
     }
 
     @Override
@@ -61,14 +69,26 @@ public class Event implements Parcelable {
         in.writeString(description);
         in.writeString(published_by);
         in.writeInt(floor);
+        in.writeInt(aptNumber);
         in.writeString(type);
         in.writeString(key);
-        in.writeStringList(participants);
+        in.writeString(time);
+        in.writeString(date);
+        in.writeMap(participants);
+      //  in.writeMap(participants);
     }
 
     public String getTitle()
     {
         return title;
+    }
+    public void setParticipants(HashMap<String, String> p)
+    {
+        participants = p;
+    }
+    public HashMap<String, String> getParticipants()
+    {
+        return participants;
     }
     public void setTitle(String title)
     {

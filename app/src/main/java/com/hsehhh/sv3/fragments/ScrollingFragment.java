@@ -114,7 +114,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 {
                     //тут логика двух иконок в одном месте
                 } else {
-                    ImageButton ib = new ImageButton(getActivity());
+                    ImageButton ib = new ImageButton(presenter.getBaseContext());
                     ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setTag("one"); //если в этой ячейке токо одно событие
@@ -134,12 +134,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
-                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
-                {
+//                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
+            //    {
                     //логика если там были еще евенты
-                } else {
+            //    } else {
                     eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
-                }
+            //    }
             }
 
             @Override
@@ -154,9 +154,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
                     //отписываем пользователя от несуществующего события
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + "uid1" + "/subscribedTo");
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
                     //потестить
-                    if(ref.child(dataSnapshot.getValue(Event.class).key) != null)
+                    String s = dataSnapshot.getValue(Event.class).key;
+                    if(ref.child(s) != null)
                         ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
              //   }
             }

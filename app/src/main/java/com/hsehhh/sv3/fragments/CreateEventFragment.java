@@ -74,12 +74,12 @@ public class CreateEventFragment extends Fragment
                 Event e = new Event(eventTitleEditText.getText().toString(),
                         eventDescriptionEditText.getText().toString(),
                         eventTypeSpinner.getSelectedItem().toString(),
-
                         presenter.firebaseUser.getUid(),
-
                         Integer.parseInt(eventFloorEditText.getText().toString()),
-                        null);
-                mDatabase.push().setValue(e);
+                        1, "12/12/12", "12:12");
+                String key = mDatabase.push().getKey();
+                e.key = key;
+                mDatabase.child(key).setValue(e);
                 Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
             }
         });
