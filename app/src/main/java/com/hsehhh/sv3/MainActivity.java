@@ -2,6 +2,7 @@ package com.hsehhh.sv3;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +23,8 @@ import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.User;
 import com.hsehhh.sv3.fragments.CreateEventFragment;
 import com.hsehhh.sv3.fragments.EventDetailFragment;
+import com.hsehhh.sv3.fragments.MyAlertDialogFragment;
 import com.hsehhh.sv3.fragments.MyEventsFragment;
-import com.hsehhh.sv3.fragments.NewEventDetail;
 import com.hsehhh.sv3.fragments.ProfileFragment;
 import com.hsehhh.sv3.fragments.ScrollingFragment;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
@@ -46,8 +47,11 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
     ProfileFragment profileFragment;
-    NewEventDetail newEventDetail;
+
     Fragment lastViewedFragment;
+
+    //  NewEventDetail newEventDetail;
+    DialogFragment dialogFragment;
 
 
     //Firebase objects
@@ -137,16 +141,16 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case RC_SIGN_IN:{
-                if (resultCode == RESULT_OK){
+        switch (requestCode) {
+            case RC_SIGN_IN: {
+                if (resultCode == RESULT_OK) {
                     firebaseUser = firebaseAuth.getCurrentUser();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-                } else if (resultCode == RESULT_CANCELED){
+                } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
                 }
             }
-            default:{
+            default: {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
@@ -187,15 +191,15 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     }
 
 
-
     // Utility fragment methods
-    void initFragments(){
+    void initFragments() {
         scrollingFragment = new ScrollingFragment();
         myEventsFragment = new MyEventsFragment();
+        dialogFragment = new MyAlertDialogFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
         profileFragment = new ProfileFragment();
-        newEventDetail = new NewEventDetail();
+        // newEventDetail = new NewEventDetail();
     }
 
     void showDefaultFragment() {
@@ -269,26 +273,23 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     @Override
     public void addDetail(Event e) {
-        Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
-        if (fragmentA == null) {
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+////        Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
+////        if (fragmentA == null) {
+////            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+////
+////            lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+////
+////            Bundle eventArgs = new Bundle();
+////            eventArgs.putParcelable("event", e);
+////           // newEventDetail.setArguments(eventArgs);
+////
+////           // fragmentTransaction.add(R.id.frame_det, newEventDetail, "detail");
+////            fragmentTransaction.commit();
+////        }
 
-            lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+        dialogFragment = MyAlertDialogFragment.newInstance(e);
+        dialogFragment.show(getSupportFragmentManager(), "dlg1");
 
-            Bundle eventArgs = new Bundle();
-            eventArgs.putParcelable("event", e);
-            newEventDetail.setArguments(eventArgs);
-
-            fragmentTransaction.add(R.id.frame_det, newEventDetail, "detail");
-            fragmentTransaction.commit();
-        }
     }
-
-    @Override
-    public void removeDetail() {
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(newEventDetail);
-        fragmentTransaction.commit();
-    }
-
 }
+

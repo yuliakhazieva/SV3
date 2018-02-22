@@ -14,5 +14,4 @@ public interface FragmentSwitcher {
     void switchToPrevious();
     void switchToProfile();
     void addDetail(Event e);
-    void removeDetail();
 }
