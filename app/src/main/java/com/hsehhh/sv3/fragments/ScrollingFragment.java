@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
-import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 import java.util.HashMap;
 
@@ -108,13 +106,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 e.setKey(dataSnapshot.getKey());
                 eventsMap.put(e.key, e);
 
-                TableRow trow = (TableRow) table.getChildAt(e.floor);
-                int aptNum = e.aptNumber;
+                TableRow trow = (TableRow) table.getChildAt(e.room.floor);
+                int aptNum = e.room.aptNumber;
                 if(trow.getChildAt(aptNum) != null)
                 {
                     //тут логика двух иконок в одном месте
                 } else {
                     ImageButton ib = new ImageButton(presenter.getBaseContext());
+
                     ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setTag("one"); //если в этой ячейке токо одно событие
@@ -127,15 +126,17 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         }
                     });
                     trow.addView(ib, 0);
-                    ib.setTag(e.floor+e.aptNumber);
+                    ib.setTag(e.room.floor+e.room.aptNumber);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
                 TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
             //    {
+
                     //логика если там были еще евенты
             //    } else {
                     eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
@@ -144,12 +145,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
+                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
 //                {
 //                    //логика если там были еще евенты
 //                } else {
-                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).floor+dataSnapshot.getValue(Event.class).aptNumber));
+                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).room.floor+dataSnapshot.getValue(Event.class).room.aptNumber));
                     eventsMap.remove(dataSnapshot.getValue(Event.class).key);
 
                     //отписываем пользователя от несуществующего события

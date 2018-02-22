@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.Room;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 public class CreateEventFragment extends Fragment
@@ -80,6 +81,7 @@ public class CreateEventFragment extends Fragment
                 String key = mDatabase.push().getKey();
                 e.key = key;
                 mDatabase.child(key).setValue(e);
+
                 Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
             }
         });

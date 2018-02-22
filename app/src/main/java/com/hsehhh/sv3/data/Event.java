@@ -18,13 +18,16 @@ public class Event implements Parcelable {
     public String title;
     public String description;
     public String published_by;
-    public int floor;
-    public int aptNumber;
+    public Room room;
+
+
     public String date;
     public String time;
+<<<<<<< HEAD
     public HashMap<String, String> participants;
+=======
+>>>>>>> 625c640a98553f77d40bd6e3922026840e4eb861
 
-    @Exclude
     public String type;
 
    // @Exclude
@@ -32,26 +35,39 @@ public class Event implements Parcelable {
 
     Event() { }
 
+<<<<<<< HEAD
     public Event(String title, String description, String type, String published_by, int floor, int aptNumber, String date, String time) {
+=======
+
+    public Event(String title, String description, String type, String published_by, Room room, List<String> participants) {
+>>>>>>> 625c640a98553f77d40bd6e3922026840e4eb861
         this.title = title;
         this.description = description;
         this.type = type;
+        this.room = room;
         this.published_by = published_by;
+<<<<<<< HEAD
         this.floor = floor;
         this.time = time;
         this.date = date;
         this.aptNumber = aptNumber;
         this.participants = new HashMap<String, String>();
 
+=======
+        this.participants = participants;
+>>>>>>> 625c640a98553f77d40bd6e3922026840e4eb861
     }
-
 
     protected Event(Parcel in) {
         title = in.readString();
         description = in.readString();
         published_by = in.readString();
+<<<<<<< HEAD
         floor = in.readInt();
         aptNumber = in.readInt();
+=======
+        room = in.readTypedObject(Room.CREATOR);
+>>>>>>> 625c640a98553f77d40bd6e3922026840e4eb861
         type = in.readString();
         key = in.readString();
         time = in.readString();
@@ -68,8 +84,13 @@ public class Event implements Parcelable {
         in.writeString(title);
         in.writeString(description);
         in.writeString(published_by);
+<<<<<<< HEAD
         in.writeInt(floor);
         in.writeInt(aptNumber);
+=======
+        in.writeTypedObject(room, 0);
+//        in.writeInt(floor);
+>>>>>>> 625c640a98553f77d40bd6e3922026840e4eb861
         in.writeString(type);
         in.writeString(key);
         in.writeString(time);
