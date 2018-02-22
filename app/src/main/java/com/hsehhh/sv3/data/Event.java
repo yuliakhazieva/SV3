@@ -15,41 +15,39 @@ import java.util.List;
 public class Event implements Parcelable {
 
     // инкапуслировать всё вщщи
+    public String type;
     public String title;
     public String description;
     public String published_by;
-    public int floor;
-    public int aptNumber;
+
+    public Room room;
+
     public String date;
     public String time;
     public HashMap<String, String> participants;
-
-
-    public String type;
 
    // @Exclude
     public String key;
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, int floor, int aptNumber, String date, String time) {
-        this.floor = floor;
+    public Event(String title, String description, String type, String published_by, Room room, String date, String time) {
+        this.title = title;
+        this.description = description;
+        this.room = room;
         this.time = time;
         this.date = date;
-        this.aptNumber = aptNumber;
         this.published_by = published_by;
-        this.participants = new HashMap<String, String>();
-
+        this.participants = new HashMap<>();
     }
 
     protected Event(Parcel in) {
+        key = in.readString();
+        type = in.readString();
         title = in.readString();
         description = in.readString();
         published_by = in.readString();
-        floor = in.readInt();
-        aptNumber = in.readInt();
-        type = in.readString();
-        key = in.readString();
+        room = in.readTypedObject(Room.CREATOR);
         time = in.readString();
         date = in.readString();
         participants = in.readHashMap(String.class.getClassLoader());
@@ -61,17 +59,15 @@ public class Event implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel in, int flags) {
+        in.writeString(key);
+        in.writeString(type);
         in.writeString(title);
         in.writeString(description);
         in.writeString(published_by);
-        in.writeInt(floor);
-        in.writeInt(aptNumber);
-        in.writeString(type);
-        in.writeString(key);
+        in.writeTypedObject(room, 0);
         in.writeString(time);
         in.writeString(date);
         in.writeMap(participants);
-      //  in.writeMap(participants);
     }
 
     public String getTitle()

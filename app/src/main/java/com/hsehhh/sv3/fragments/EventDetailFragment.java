@@ -71,7 +71,7 @@ public class EventDetailFragment extends Fragment {
 
         eventTitleTextView.setText(event.title);
         eventDescriptionTextView.setText(event.description);
-        eventFloorTextView.setText(String.format(Locale.ROOT, "%d", event.floor));
+        eventFloorTextView.setText(String.format(Locale.ROOT, "%d", event.room.floor));
         eventUserIdTextView.setText(event.published_by);
 
 

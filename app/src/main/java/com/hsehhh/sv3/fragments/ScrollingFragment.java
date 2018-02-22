@@ -106,8 +106,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 e.setKey(dataSnapshot.getKey());
                 eventsMap.put(e.key, e);
 
-                TableRow trow = (TableRow) table.getChildAt(e.floor);
-                int aptNum = e.aptNumber;
+                TableRow trow = (TableRow) table.getChildAt(e.room.floor);
+                int aptNum = e.room.aptNumber;
                 if(trow.getChildAt(aptNum) != null)
                 {
                     //тут логика двух иконок в одном месте
@@ -126,14 +126,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         }
                     });
                     trow.addView(ib, 0);
-                    ib.setTag(e.floor+e.aptNumber);
+                    ib.setTag(e.room.floor+e.room.aptNumber);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
+                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
             //    {
 
@@ -145,12 +145,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).floor);
+                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
 //                {
 //                    //логика если там были еще евенты
 //                } else {
-                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).floor+dataSnapshot.getValue(Event.class).aptNumber));
+                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).room.floor+dataSnapshot.getValue(Event.class).room.aptNumber));
                     eventsMap.remove(dataSnapshot.getValue(Event.class).key);
 
                     //отписываем пользователя от несуществующего события

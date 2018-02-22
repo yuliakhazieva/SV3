@@ -78,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         };
-        presenter.getEventsReference().child(eventId).addChildEventListener(childEventListener);
+        presenter.getChatsReference().child(eventId).addChildEventListener(childEventListener);
     }
 
     public void cleanup() {
