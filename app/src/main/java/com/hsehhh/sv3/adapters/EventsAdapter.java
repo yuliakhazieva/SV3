@@ -4,8 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +33,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     private List<Event> events;
     private ChildEventListener childEventListener;
+    public boolean isHosted;
 
     public EventsAdapter(MainActivity presenter, EventFilter filter) {
         this.presenter = presenter;
@@ -113,13 +117,34 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         final Event model = events.get(i);
 
         holder.title.setText(model.title);
-        holder.desciption.setText(model.description);
+        holder.description.setText(model.description);
         holder.published_by.setText(model.published_by);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.switchToEventDetails(model);
+            }
+        });
+
+        holder.chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.switchToEventDetails(model);
+            }
+        });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isHosted)
+                    FirebaseDatabase.getInstance().getReference("events/" + model.key).removeValue();
+                else
+                {
+                    DatabaseReference ref= FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
+                    ref.child(model.key).removeValue();
+                    FirebaseDatabase.getInstance().getReference("events/" + model.key + "/participants/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                }
             }
         });
 
