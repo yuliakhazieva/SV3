@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     CreateEventFragment createEventFragment;
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
+    ProfileFragment profileFragment;
     NewEventDetail newEventDetail;
+
 
     private Fragment lastViewedFragment;
 
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
         myEventsFragment = new MyEventsFragment();
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
+        profileFragment = new ProfileFragment();
         newEventDetail = new NewEventDetail();
     }
 
@@ -218,6 +221,15 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher{
     }
 
     @Override
+    public void switchToProfile() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.frame_main, profileFragment);
+        fragmentTransaction.commit();
+    }
+
     public void addDetail(Event e)
     {
         Fragment fragmentA = getSupportFragmentManager().findFragmentByTag("detail");
