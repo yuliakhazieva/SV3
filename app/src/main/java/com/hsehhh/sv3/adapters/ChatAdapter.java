@@ -11,8 +11,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Message;
+import com.hsehhh.sv3.viewholders.MessageViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +22,14 @@ import java.util.List;
 /**
  * Created by Tima on 22.02.2018.
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+    MainActivity presenter;
 
     private List<Message> messages;
-    private DatabaseReference messagesReference;
     private ChildEventListener childEventListener;
 
-    public ChatAdapter(String eventId) {
+    public ChatAdapter(MainActivity presenter, String eventId) {
+        this.presenter = presenter;
         messages = new ArrayList<>(0);
         initializeReference(eventId);
     }
@@ -42,7 +45,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     }
 
     public void initializeReference(String eventId){
-        messagesReference = FirebaseDatabase.getInstance().getReference("chats").child(eventId);
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -76,38 +78,28 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         };
-        messagesReference.addChildEventListener(childEventListener);
+        presenter.getEventsReference().child(eventId).addChildEventListener(childEventListener);
     }
 
     public void cleanup() {
-        if (messagesReference != null)
-            messagesReference.removeEventListener(childEventListener);
+        if (presenter.getEventsReference() != null)
+            presenter.getEventsReference().removeEventListener(childEventListener);
         messages.clear();
     }
 
     @Override
-    public ChatAdapter.MessageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public MessageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_message, viewGroup, false);
-        return new ChatAdapter.MessageViewHolder(v);
+        return new MessageViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ChatAdapter.MessageViewHolder holder, int i) {
+    public void onBindViewHolder(MessageViewHolder holder, int i) {
         Message model = messages.get(i);
 
         holder.user_id.setText(model.user_id);
         holder.message.setText(model.message);
     }
 
-    class MessageViewHolder extends RecyclerView.ViewHolder {
-        TextView user_id;
-        TextView message;
 
-        MessageViewHolder(View v) {
-            super(v);
-
-            user_id = v.findViewById(R.id.text_view_user_id);
-            message =  v.findViewById(R.id.text_view_message);
-        }
-    }
 }
