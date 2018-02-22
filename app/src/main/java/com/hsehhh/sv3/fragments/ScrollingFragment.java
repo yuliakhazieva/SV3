@@ -114,7 +114,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 {
                     //тут логика двух иконок в одном месте
                 } else {
-                    ImageButton ib = new ImageButton(getContext());
+                    ImageButton ib = new ImageButton(getActivity());
                     ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setTag("one"); //если в этой ячейке токо одно событие

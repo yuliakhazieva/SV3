@@ -46,7 +46,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                 .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        e.participants.add(FirebaseAuth.getInstance().getUid());
+                        FirebaseDatabase.getInstance().getReference("events/" + e.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()).child("subscribedTo").push().setValue(e.key);
                     }
                 })

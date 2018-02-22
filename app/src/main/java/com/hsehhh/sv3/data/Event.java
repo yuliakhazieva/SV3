@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -19,11 +20,12 @@ public class Event implements Parcelable {
     public int aptNumber;
     public String date;
     public String time;
+    public enum section {A,B,C};
 
     @Exclude
     public String type;
 
-    public List<String> participants;
+    public ArrayList<String> participants;
 
     @Exclude
     public String key;
@@ -36,7 +38,7 @@ public class Event implements Parcelable {
         this.type = type;
         this.published_by = published_by;
         this.floor = floor;
-        this.participants = participants;
+        this.participants = new ArrayList<>();
     }
 
 

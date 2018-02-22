@@ -74,7 +74,7 @@ public class EventDetailFragment extends Fragment {
         eventFloorTextView.setText(String.format(Locale.ROOT, "%d", event.floor));
         eventUserIdTextView.setText(event.published_by);
 
-        chatAdapter = new ChatAdapter(event.key);
+        chatAdapter = new ChatAdapter((MainActivity) getActivity(),event.key);
 
         chat = v.findViewById(R.id.recycler_chat);
         chat.setLayoutManager(new LinearLayoutManager(getContext()));
