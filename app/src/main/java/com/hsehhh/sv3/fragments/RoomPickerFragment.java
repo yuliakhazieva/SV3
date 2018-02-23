@@ -44,7 +44,7 @@ public class RoomPickerFragment extends DialogFragment {
         section.setDisplayedValues(sections);
 
         floor.setMinValue(1);
-        floor.setMaxValue(7);
+        floor.setMaxValue(24);
 
         aptNumber.setMinValue(1);
         aptNumber.setMaxValue(4);
