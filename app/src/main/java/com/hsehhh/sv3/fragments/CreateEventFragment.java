@@ -54,7 +54,7 @@ public class CreateEventFragment extends Fragment
 
         eventTitleEditText = v.findViewById(R.id.edit_text_title);
         eventDescriptionEditText = v.findViewById(R.id.edit_text_description);
-        eventFloorEditText = v.findViewById(R.id.edit_text_floor);
+        eventFloorEditText = v.findViewById(R.id.edit_text_room);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, eventTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

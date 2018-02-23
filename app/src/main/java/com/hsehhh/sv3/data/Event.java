@@ -6,9 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 @IgnoreExtraProperties
@@ -22,11 +20,12 @@ public class Event implements Parcelable {
 
     public Room room;
 
+
     public String date;
     public String time;
     public HashMap<String, String> participants;
 
-   // @Exclude
+    @Exclude
     public String key;
 
     Event() { }
@@ -39,6 +38,7 @@ public class Event implements Parcelable {
         this.date = date;
         this.published_by = published_by;
         this.participants = new HashMap<>();
+
     }
 
     protected Event(Parcel in) {
@@ -74,18 +74,22 @@ public class Event implements Parcelable {
     {
         return title;
     }
+
     public void setParticipants(HashMap<String, String> p)
     {
         participants = p;
     }
+
     public HashMap<String, String> getParticipants()
     {
         return participants;
     }
+
     public void setTitle(String title)
     {
         this.title = title;
     }
+
     public void setKey(String key)
     {
         this.key = key;
