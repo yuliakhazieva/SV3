@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/trilist_2" />
+                app:srcCompat="@drawable/trilist_map" />
 
             <TableLayout
                 android:id="@+id/table"

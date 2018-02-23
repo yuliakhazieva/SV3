@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // TODO: Посмотреть, есть ли более гуманный способ переключения на предыдущий фрагмент.
     @Override
     public void switchToPrevious() {
+        getSupportFragmentManager().popBackStack();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);
         fragmentTransaction.commit();
@@ -225,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
         fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
+        fragmentTransaction.addToBackStack("main");
         fragmentTransaction.commit();
     }
 
@@ -232,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     public void switchToScrolling() {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
+        getSupportFragmentManager().popBackStack("main", 0);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, scrollingFragment);
         fragmentTransaction.commit();
@@ -245,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
+        fragmentTransaction.addToBackStack("main");
         fragmentTransaction.commit();
     }
 
@@ -258,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, eventDetailFragment);
+        fragmentTransaction.addToBackStack("frag");
         fragmentTransaction.commit();
     }
 
@@ -268,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileFragment);
+        fragmentTransaction.addToBackStack("main");
         fragmentTransaction.commit();
     }
 
