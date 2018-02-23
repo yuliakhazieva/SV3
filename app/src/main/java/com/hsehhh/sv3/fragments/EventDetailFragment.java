@@ -87,7 +87,7 @@ public class EventDetailFragment extends Fragment {
     }
 
     private void sendMessage(String messageText) {
-        presenter.getChatsReference().push().setValue(new Message( presenter.firebaseUser.getUid(), messageText));
+        presenter.getChatsReference().child(event.key).push().setValue(new Message( presenter.firebaseUser.getUid(), messageText));
     }
 
     @Override
