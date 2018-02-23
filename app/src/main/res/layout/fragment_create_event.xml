@@ -47,12 +47,23 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/edit_text_floor"
+            android:id="@+id/edit_text_room"
             android:layout_width="126dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:hint="@string/event_floor"
-            android:inputType="number"
+            android:hint="@string/event_room"
+            android:inputType="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.209"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/edit_text_date"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:hint="Date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.209"

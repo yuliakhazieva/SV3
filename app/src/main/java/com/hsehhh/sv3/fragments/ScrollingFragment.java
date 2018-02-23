@@ -60,7 +60,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //Save the fragment's instance
         getFragmentManager().putFragment(outState, "lscrol", this);
     }
 
