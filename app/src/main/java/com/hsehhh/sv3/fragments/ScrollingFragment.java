@@ -185,7 +185,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings: {
-                presenter.switchToProfile();
+                presenter.switchToProfile(false);
                 return true;
             }
             case R.id.action_add:{

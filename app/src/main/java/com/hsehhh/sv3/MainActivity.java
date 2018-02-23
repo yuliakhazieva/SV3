@@ -27,6 +27,7 @@ import com.hsehhh.sv3.fragments.EventDetailFragment;
 import com.hsehhh.sv3.fragments.MyAlertDialogFragment;
 import com.hsehhh.sv3.fragments.MyEventsFragment;
 import com.hsehhh.sv3.fragments.ProfileFragment;
+import com.hsehhh.sv3.fragments.ProfileSettingsFragment;
 import com.hsehhh.sv3.fragments.ScrollingFragment;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
     ProfileFragment profileFragment;
+    ProfileSettingsFragment profileSettingsFragment;
+
 
     Fragment lastViewedFragment;
 
@@ -77,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         setSupportActionBar(mainToolbar);
         mainFrame = findViewById(R.id.frame_main);
 
+//        //Fullscreen/hidden status bar
+//        View decorView = getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//
+//        ActionBar actionBar = this.getActionBar();
+//        actionBar.hide();
+
         //Init database reference
         initDatabaseReferences();
 
@@ -105,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         usersReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
 
             private void createUser() {
-                //   FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-                //    user = new User(fbUser.getDisplayName(), fbUser.);
+                // TODO: it closes the app for some reason
+                switchToProfileSettings(true);
                 usersReference.child(firebaseUser.getUid()).setValue(user);
             }
 
@@ -199,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
         profileFragment = new ProfileFragment();
+        profileSettingsFragment = new ProfileSettingsFragment();
         // newEventDetail = new NewEventDetail();
     }
 
@@ -262,12 +273,25 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     }
 
     @Override
-    public void switchToProfile() {
+    public void switchToProfile(boolean wasChanged) {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
+        if (wasChanged)
+            profileFragment.onInfoChanged();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void switchToProfileSettings(boolean isNew) {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
+        profileSettingsFragment.IS_NEW = isNew;
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
         fragmentTransaction.commit();
     }
 

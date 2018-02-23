@@ -12,6 +12,7 @@ public interface FragmentSwitcher {
     void switchToMyEvents();
     void switchToScrolling();
     void switchToPrevious();
-    void switchToProfile();
+    void switchToProfile(boolean wasChanged);
+    void switchToProfileSettings(boolean isNew);
     void addDetail(Event e);
 }
