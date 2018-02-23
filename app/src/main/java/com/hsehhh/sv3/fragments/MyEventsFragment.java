@@ -69,6 +69,9 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         visitedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
             @Override
             public boolean filter(Event e) {
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                if(e.participants != null && e.participants.containsValue(uid))
+                    return true;
                 return false;
             }
         });
