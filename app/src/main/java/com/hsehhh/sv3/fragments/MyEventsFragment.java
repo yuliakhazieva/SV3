@@ -2,6 +2,7 @@ package com.hsehhh.sv3.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.adapters.EventsAdapter;
+import com.hsehhh.sv3.adapters.EventsPagerAdapter;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.EventFilter;
 
@@ -28,24 +30,30 @@ public class MyEventsFragment extends android.support.v4.app.Fragment {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager eventsPager;
+    private ViewGroup eventsPager;
+
+    public static MyEventsFragment create(int pageNumber) {
+        MyEventsFragment fragment = new MyEventsFragment();
+        Bundle args = new Bundle();
+        args.putInt("events", pageNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
-        
         setHasOptionsMenu(true);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_events, container, false);
+        eventsPager = (ViewGroup) inflater.inflate(R.layout.fragment_my_events, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //фильтры (которые судя по комментам требовалось поменять) в hosted b attended
 
-        // Надо наверное написать дефолтные фильтры. Пока пусть так.
-
-        return v;
+        return eventsPager;
     }
 
 //    @Override
@@ -61,6 +69,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment {
 ////        organizedEventsAdapter.cleanup();
 ////        visitedEventsAdapter.cleanup();
 //    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

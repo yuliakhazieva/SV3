@@ -22,7 +22,6 @@ public class HostedEventsFragment extends android.support.v4.app.Fragment
     MainActivity presenter;
 
     public RecyclerView organizedEventsView;
-
     EventsAdapter organizedEventsAdapter;
 
     @Override
