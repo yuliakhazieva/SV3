@@ -3,12 +3,8 @@ package com.hsehhh.sv3.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 @IgnoreExtraProperties
