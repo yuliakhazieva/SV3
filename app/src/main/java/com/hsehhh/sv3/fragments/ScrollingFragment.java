@@ -51,17 +51,17 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-      //  if (savedInstanceState != null)
-      //      getFragmentManager().getFragment(savedInstanceState, "scroll");
+        if (savedInstanceState != null)
+            getFragmentManager().getFragment(savedInstanceState, "scroll");
 
         return inflater.inflate(R.layout.new_grid_scrolling, container, false);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-      //  super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
         //Save the fragment's instance
-      //  getFragmentManager().putFragment(outState, "lscrol", this);
+        getFragmentManager().putFragment(outState, "lscrol", this);
     }
 
 
