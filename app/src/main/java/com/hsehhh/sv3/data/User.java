@@ -10,21 +10,22 @@ import java.util.HashMap;
 
 public class User implements Parcelable {
     public String name;
-    public String floor;
     public HashMap<String, String> subscribedTo;
     public String ID;
+    public Room room;
+
     public User() { }
 
-    public User(String name, String floor) {
+    public User(String name, Room room) {
         this.name = name;
+        this.room = room;
 
         subscribedTo = new HashMap<>();
-        this.floor = floor;
     }
 
     protected User(Parcel in) {
         name = in.readString();
-        floor = in.readString();
+        room = in.readTypedObject(Room.CREATOR);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(floor);
+        dest.writeTypedObject(room, 0);
     }
 
     @SuppressWarnings("unused")

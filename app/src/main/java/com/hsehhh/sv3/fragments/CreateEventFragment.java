@@ -29,7 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.app.Activity.RESULT_OK;
+import static com.hsehhh.sv3.fragments.RoomPickerFragment.RC_ROOM_SET;
+
 public class CreateEventFragment extends Fragment {
+    public static final int RC_TIME_SET = 3;
     MainActivity presenter;
 
     EditText eventTitleEditText;
@@ -40,6 +44,7 @@ public class CreateEventFragment extends Fragment {
 
     private RoomPickerFragment roomPickerFragment;
     private DatePickerDialog datePickerDialog;
+
     Calendar date;
     Button submitButton;
 
@@ -71,7 +76,7 @@ public class CreateEventFragment extends Fragment {
                                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                     date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                     date.set(Calendar.MINUTE, minute);
-                                    onActivityResult(1, 0, presenter.getIntent());
+                                    onActivityResult(RC_TIME_SET, RESULT_OK, presenter.getIntent());
                                 }
                             }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), false).show();
                         }
@@ -107,13 +112,26 @@ public class CreateEventFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0 & resultCode == 0)
-            eventRoomEditText.setText(roomPickerFragment.room.toString());
-        else if (requestCode == 1 & resultCode == 0)
-            eventDateEditText.setText(new SimpleDateFormat().format(date.getTime()));
-
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        switch (requestCode) {
+            case RC_ROOM_SET: {
+                if (resultCode == RESULT_OK) {
+                    eventRoomEditText.setText(roomPickerFragment.room.toString());
+                    break;
+                }
+            }
+            case RC_TIME_SET: {
+                if (resultCode == RESULT_OK) {
+                    eventDateEditText.setText(new SimpleDateFormat().format(date.getTime()));
+                    break;
+                }
+            }
+            default: {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

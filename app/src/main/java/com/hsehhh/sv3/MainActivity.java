@@ -34,7 +34,8 @@ import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
     //constants
-    private static final int RC_SIGN_IN = 1;
+    public static final int RC_SIGN_IN = 1;
+    public static final int RC_USER_CHANGED = 2;
 
     //UI objects
     Toolbar mainToolbar;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             }
         };
 
+
 //        Init all fragments and show default
 //        if (savedInstanceState == null) надо починить чтобы не было лишней реинициализации
         initFragments(); //
@@ -110,23 +112,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     }
 
-
     private void onSignedIn() {
         usersReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-
-            private void createUser() {
-                // TODO: it closes the app for some reason
-                switchToProfileSettings(true);
-                usersReference.child(firebaseUser.getUid()).setValue(user);
-            }
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot == null || dataSnapshot.getValue() == null) {
                     // user is new
-                    createUser();
-                } else {
-                    // user already existed
+                    switchToProfileSettings();
+                } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
                 }
             }
@@ -150,15 +143,26 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         switch (requestCode) {
             case RC_SIGN_IN: {
                 if (resultCode == RESULT_OK) {
                     firebaseUser = firebaseAuth.getCurrentUser();
+//                    onSignedIn();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            }
+            case RC_USER_CHANGED: {
+                if (resultCode == RESULT_OK) {
+                    usersReference.child(firebaseUser.getUid()).setValue(user);
+                    Toast.makeText(this, "User changed!", Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                }
+                break;
             }
             default: {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -216,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     void showDefaultFragment() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_main, scrollingFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
     }
@@ -226,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     public void switchToPrevious() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
         fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -245,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, scrollingFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
     }
 
@@ -256,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -269,37 +273,36 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, eventDetailFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
-    public void switchToProfile(boolean wasChanged) {
+    public void switchToProfile() {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
-        if (wasChanged)
-            profileFragment.onInfoChanged();
+//        if (wasChanged)
+//            profileFragment.onInfoChanged();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
-    public void switchToProfileSettings(boolean isNew) {
+    public void switchToProfileSettings() {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
-        profileSettingsFragment.IS_NEW = isNew;
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
-    public void addDetail(Event e)
-    {
-         dialogFragment = MyAlertDialogFragment.newInstance(e);
-         dialogFragment.show(getSupportFragmentManager(), "dlg1");
-    }
+//    public void addDetail(Event e)
+//    {
+//         dialogFragment = MyAlertDialogFragment.newInstance(e);
+//         dialogFragment.show(getSupportFragmentManager(), "dlg1");
+//    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -310,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
+
 }
 
