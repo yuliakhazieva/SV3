@@ -16,25 +16,20 @@ import com.hsehhh.sv3.adapters.EventsAdapter;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.EventFilter;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-
-public class MyEventsFragment extends android.support.v4.app.Fragment {
+//это то, что находится под табами
+public class HostedEventsFragment extends android.support.v4.app.Fragment
+{
     MainActivity presenter;
 
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager eventsPager;
+    public RecyclerView organizedEventsView;
+
+    EventsAdapter organizedEventsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
-        
+
         setHasOptionsMenu(true);
     }
 
@@ -44,6 +39,17 @@ public class MyEventsFragment extends android.support.v4.app.Fragment {
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Надо наверное написать дефолтные фильтры. Пока пусть так.
+
+        organizedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
+            @Override
+            public boolean filter(Event e) {
+                return e.published_by.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            }
+        } );
+
+        organizedEventsView = v.findViewById(R.id.organizedEvents);
+        organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
+        organizedEventsView.setAdapter(organizedEventsAdapter);
 
         return v;
     }

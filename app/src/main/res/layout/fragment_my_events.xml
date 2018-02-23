@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -34,60 +33,3 @@
         android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>
-
-
-
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="horizontal">
-
-<LinearLayout
-    android:layout_width="192dp"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:gravity="center_vertical"
-        android:text="@string/host"
-        android:textAlignment="center"
-        android:textColor="@color/btn_login_bg"
-        android:textSize="30sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_organized_events"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp" />
-
-</LinearLayout>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:gravity="center_vertical"
-        android:text="@string/attend"
-        android:textAlignment="center"
-        android:textColor="@color/btn_login_bg"
-        android:textSize="25sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_visited_events"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"></android.support.v7.widget.RecyclerView>
-</LinearLayout>
-</LinearLayout>
