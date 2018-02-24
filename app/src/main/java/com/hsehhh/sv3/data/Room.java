@@ -52,6 +52,6 @@ public class Room implements Parcelable {
 
     @Override
     public String toString() {
-        return section + floor + aptNumber;
+        return section + (floor < 10 ? "0" : "") + floor + aptNumber;
     }
 }
