@@ -20,7 +20,8 @@ public class VisitedEventsFilter implements EventFilter{
 
     @Override
     public boolean filter(Event e) {
-        Log.d("f", user.name + " " + user.ID);
+        if (e.getParticipants() == null)
+            return false;
         return e.getParticipants().containsValue(user.ID);
     }
 }

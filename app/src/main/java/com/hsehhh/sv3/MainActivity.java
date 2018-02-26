@@ -105,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         };
 
 
-//        Init all fragments and show default
-//        if (savedInstanceState == null) надо починить чтобы не было лишней реинициализации
         initFragments(); //
         showDefaultFragment();
 
@@ -122,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
                     user.ID = firebaseUser.getUid();
+                    Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -149,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             case RC_SIGN_IN: {
                 if (resultCode == RESULT_OK) {
                     firebaseUser = firebaseAuth.getCurrentUser();
-//                    onSignedIn();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();

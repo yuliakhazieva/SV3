@@ -31,9 +31,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     ViewPager pager;
     PagerAdapter listPagerAdapter;
     TabLayout tabLayout;
-
-    EventsListFragment eventsListFragment;
-
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +44,6 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_events, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        eventsListFragment = new EventsListFragment();
 
         listPagerAdapter = new ListPagerAdapter(presenter.getSupportFragmentManager(), presenter);
         pager = view.findViewById(R.id.pager);
@@ -86,8 +82,6 @@ class ListPagerAdapter extends FragmentPagerAdapter {
 
         visitedEventsListFragment = new EventsListFragment();
         visitedEventsListFragment.setEventFilter(new VisitedEventsFilter(presenter.user));
-
-
     }
 
     @Override
@@ -108,7 +102,7 @@ class ListPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Organized";
             case 1:
-                return "Hosted";
+                return "Visited";
             default:
                 return null;
         }
@@ -118,4 +112,5 @@ class ListPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 2;
     }
+
 }
