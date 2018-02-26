@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<set
-android:fillEnabled="true"
-android:fillAfter="true"
-xmlns:android="http://schemas.android.com/apk/res/android">
-
-<translate
-    android:toYDelta="30%"
-    android:duration="1000" />
-
-</set>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromYDelta="0%"
+    android:toYDelta="-100%"
+    android:duration="500"
+    />

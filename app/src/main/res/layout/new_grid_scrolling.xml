@@ -2,32 +2,51 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
-        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TableLayout
-            android:id="@+id/table"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tri">
+            android:layout_height="wrap_content">
 
-        </TableLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/trilist_map" />
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </TableLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_det"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="100dp">
+
+            </FrameLayout>
+
+
+        </FrameLayout>
 
     </ScrollView>
 
     <Button
         android:id="@+id/showMyEvents"
         android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Мои события"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/slider_my_events"
+        android:textColor="?android:attr/colorForegroundInverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
