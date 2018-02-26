@@ -43,6 +43,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     }
 
     public void initializeReference(final EventFilter eventFilter){
+//        cleanup();
+        events.clear();
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -88,6 +90,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         };
+
         presenter.getEventsReference().addChildEventListener(childEventListener);
     }
 
@@ -144,6 +147,4 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                     .child("participants").child(presenter.firebaseUser.getUid()).removeValue();
         }
     }
-
-
 }

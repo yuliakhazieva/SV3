@@ -2,6 +2,12 @@ package com.hsehhh.sv3.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +26,11 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 {
     MainActivity presenter;
 
-    public RecyclerView organizedEventsView;
-    public RecyclerView visitedEventsView;
+    ViewPager pager;
+    PagerAdapter listPagerAdapter;
+    TabLayout tabLayout;
 
-    EventsAdapter organizedEventsAdapter;
-    EventsAdapter visitedEventsAdapter;
+    EventsListFragment f1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,49 +42,18 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_events, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Надо наверное написать дефолтные фильтры. Пока пусть так.
+        listPagerAdapter = new ListPagerAdapter(presenter.getSupportFragmentManager());
+        pager = view.findViewById(R.id.pager);
+        pager.setAdapter(listPagerAdapter);
 
-        organizedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
-            @Override
-            public boolean filter(Event e) {
-                return e.published_by.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            }
-        } );
-
-        visitedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
-            @Override
-            public boolean filter(Event e) {
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                return e.participants != null && e.participants.containsValue(uid);
-            }
-        });
-        organizedEventsView = v.findViewById(R.id.recycler_organized_events);
-        organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
-        organizedEventsView.setAdapter(organizedEventsAdapter);
-
-        visitedEventsView = v.findViewById(R.id.recycler_visited_events);
-        visitedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
-        visitedEventsView.setAdapter(visitedEventsAdapter);
-
-        return v;
+        tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(pager);
+        return view;
     }
 
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-////        Тут еще надо с инициализацией похимичить. Унести в правильные места.
-////        organizedEventsAdapter.initializeReference();
-////        visitedEventsAdapter.initializeReference();
-//    }
-//
-//    public void onStop(){
-//        super.onStop();
-////        organizedEventsAdapter.cleanup();
-////        visitedEventsAdapter.cleanup();
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,4 +65,42 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         return super.onOptionsItemSelected(item);
     }
 
+}
+
+
+class ListPagerAdapter extends FragmentPagerAdapter {
+
+    ListPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position){
+            case 0:
+
+                return EventsListFragment.newInstance();
+            case 1:
+                return EventsListFragment.newInstance();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position){
+            case 0:
+                return "Organized";
+            case 1:
+                return "Hosted";
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
+    }
 }
