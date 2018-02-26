@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                     switchToProfileSettings();
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
+                    user.ID = firebaseUser.getUid();
                 }
             }
 
@@ -309,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
         fragmentTransaction.commitAllowingStateLoss();
     }
-    
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
