@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,8 +45,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     }
 
     public void initializeReference(final EventFilter eventFilter){
-//        cleanup();
-        events.clear();
+        if (eventFilter == null)
+            return;
+
+        cleanup();
+
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -92,10 +97,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         };
 
         presenter.getEventsReference().addChildEventListener(childEventListener);
+        notifyDataSetChanged();
     }
 
     public void cleanup() {
-        if (presenter.getEventsReference() != null)
+        if (presenter.getEventsReference() != null && childEventListener != null)
             presenter.getEventsReference().removeEventListener(childEventListener);
         events.clear();
     }

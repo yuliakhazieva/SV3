@@ -20,6 +20,8 @@ import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.adapters.EventsAdapter;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.interfaces.EventFilter;
+import com.hsehhh.sv3.utils.OrganizedEventsFilter;
+import com.hsehhh.sv3.utils.VisitedEventsFilter;
 
 
 public class MyEventsFragment extends android.support.v4.app.Fragment
@@ -30,7 +32,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
     PagerAdapter listPagerAdapter;
     TabLayout tabLayout;
 
-    EventsListFragment f1;
+    EventsListFragment eventsListFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +47,9 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
         View view = inflater.inflate(R.layout.fragment_my_events, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listPagerAdapter = new ListPagerAdapter(presenter.getSupportFragmentManager());
+        eventsListFragment = new EventsListFragment();
+
+        listPagerAdapter = new ListPagerAdapter(presenter.getSupportFragmentManager(), presenter);
         pager = view.findViewById(R.id.pager);
         pager.setAdapter(listPagerAdapter);
 
@@ -69,19 +73,30 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
 
 class ListPagerAdapter extends FragmentPagerAdapter {
+    MainActivity presenter;
+    EventsListFragment organizedEventsListFragment;
+    EventsListFragment visitedEventsListFragment;
 
-    ListPagerAdapter(FragmentManager fm) {
+    ListPagerAdapter(FragmentManager fm, MainActivity presenter) {
         super(fm);
+        this.presenter = presenter;
+
+        organizedEventsListFragment = new EventsListFragment();
+        organizedEventsListFragment.setEventFilter(new OrganizedEventsFilter(presenter.user));
+
+        visitedEventsListFragment = new EventsListFragment();
+        visitedEventsListFragment.setEventFilter(new VisitedEventsFilter(presenter.user));
+
+
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-
-                return EventsListFragment.newInstance();
+                return organizedEventsListFragment;
             case 1:
-                return EventsListFragment.newInstance();
+                return visitedEventsListFragment;
             default:
                 return null;
         }

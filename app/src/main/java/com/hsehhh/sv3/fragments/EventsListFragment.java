@@ -30,24 +30,16 @@ public class EventsListFragment extends android.support.v4.app.Fragment
 
     EventFilter eventFilter;
 
-    public static EventsListFragment newInstance() {
-        EventsListFragment eventsListFragment = new EventsListFragment();
-//        eventsListFragment.eventFilter = filter;
-        return eventsListFragment;
-    }
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
+        eventsAdapter = new EventsAdapter(presenter, eventFilter);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events_list, container, false);
-        eventFilter = new OrganizedEventsFilter(presenter.user);
-        eventsAdapter = new EventsAdapter(presenter, eventFilter);
 
         eventsView = v.findViewById(R.id.recycler_events);
         eventsView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -56,4 +48,7 @@ public class EventsListFragment extends android.support.v4.app.Fragment
         return v;
     }
 
+    public void setEventFilter(EventFilter eventFilter) {
+        this.eventFilter = eventFilter;
+    }
 }

@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                     switchToProfileSettings();
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
+                    user.ID = firebaseUser.getUid();
                 }
             }
 
