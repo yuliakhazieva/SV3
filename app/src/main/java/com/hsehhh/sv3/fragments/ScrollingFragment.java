@@ -59,6 +59,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+
         super.onSaveInstanceState(outState);
         getFragmentManager().putFragment(outState, "lscrol", this);
     }
@@ -119,8 +120,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                         @Override
                         public void onClick(View view) {
                             //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
-
-                            presenter.addDetail(eventsMap.get(e.key));
+                            MyAlertDialogFragment dialogFragment = MyAlertDialogFragment.newInstance(e);
+                            dialogFragment.show(presenter.getSupportFragmentManager(), "dlg1");
                         }
                     });
                     trow.addView(ib, 0);
@@ -154,10 +155,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     //отписываем пользователя от несуществующего события
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
                     //потестить
-                    String s = dataSnapshot.getValue(Event.class).key;
-                    if(ref.child(s) != null)
-                        ref.child(dataSnapshot.getValue(Event.class).key).removeValue();
-             //   }
+                 ref.child(dataSnapshot.getKey()).removeValue();
+                //   }
             }
 
             @Override

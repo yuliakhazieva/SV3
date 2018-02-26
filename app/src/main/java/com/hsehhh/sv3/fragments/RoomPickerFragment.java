@@ -17,11 +17,14 @@ import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.Room;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by a1 on 22.02.18.
  */
 
 public class RoomPickerFragment extends DialogFragment {
+    public static final int RC_ROOM_SET = 1;
     MainActivity presenter;
 
     final String[] sections = new String[] {"A", "B", "C"};
@@ -44,7 +47,7 @@ public class RoomPickerFragment extends DialogFragment {
         section.setDisplayedValues(sections);
 
         floor.setMinValue(1);
-        floor.setMaxValue(24);
+        floor.setMaxValue(25);
 
         aptNumber.setMinValue(1);
         aptNumber.setMaxValue(4);
@@ -75,7 +78,7 @@ public class RoomPickerFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         room = new Room(sections[section.getValue()], floor.getValue(), aptNumber.getValue());
                         presenter.getSupportFragmentManager().findFragmentById(R.id.frame_main)
-                                .onActivityResult(0, 0, presenter.getIntent());
+                                .onActivityResult(RC_ROOM_SET, RESULT_OK, presenter.getIntent());
                     }
                 });
         builder.setView(view);

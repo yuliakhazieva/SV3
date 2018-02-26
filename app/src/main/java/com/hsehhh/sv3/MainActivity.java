@@ -27,13 +27,15 @@ import com.hsehhh.sv3.fragments.EventDetailFragment;
 import com.hsehhh.sv3.fragments.MyAlertDialogFragment;
 import com.hsehhh.sv3.fragments.MyEventsFragment;
 import com.hsehhh.sv3.fragments.ProfileFragment;
+import com.hsehhh.sv3.fragments.ProfileSettingsFragment;
 import com.hsehhh.sv3.fragments.ScrollingFragment;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
     //constants
-    private static final int RC_SIGN_IN = 1;
+    public static final int RC_SIGN_IN = 1;
+    public static final int RC_USER_CHANGED = 2;
 
     //UI objects
     Toolbar mainToolbar;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     MyEventsFragment myEventsFragment;
     EventDetailFragment eventDetailFragment;
     ProfileFragment profileFragment;
+    ProfileSettingsFragment profileSettingsFragment;
+
 
     Fragment lastViewedFragment;
 
@@ -77,6 +81,13 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         setSupportActionBar(mainToolbar);
         mainFrame = findViewById(R.id.frame_main);
 
+//        //Fullscreen/hidden status bar
+//        View decorView = getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//
+//        ActionBar actionBar = this.getActionBar();
+//        actionBar.hide();
+
         //Init database reference
         initDatabaseReferences();
 
@@ -93,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             }
         };
 
+
 //        Init all fragments and show default
 //        if (savedInstanceState == null) надо починить чтобы не было лишней реинициализации
         initFragments(); //
@@ -100,23 +112,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     }
 
-
     private void onSignedIn() {
         usersReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-
-            private void createUser() {
-                //   FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-                //    user = new User(fbUser.getDisplayName(), fbUser.);
-                usersReference.child(firebaseUser.getUid()).setValue(user);
-            }
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot == null || dataSnapshot.getValue() == null) {
                     // user is new
-                    createUser();
-                } else {
-                    // user already existed
+                    switchToProfileSettings();
+                } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
                 }
             }
@@ -140,15 +143,26 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         switch (requestCode) {
             case RC_SIGN_IN: {
                 if (resultCode == RESULT_OK) {
                     firebaseUser = firebaseAuth.getCurrentUser();
+//                    onSignedIn();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            }
+            case RC_USER_CHANGED: {
+                if (resultCode == RESULT_OK) {
+                    usersReference.child(firebaseUser.getUid()).setValue(user);
+                    Toast.makeText(this, "User changed!", Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                }
+                break;
             }
             default: {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -199,13 +213,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         createEventFragment = new CreateEventFragment();
         eventDetailFragment = new EventDetailFragment();
         profileFragment = new ProfileFragment();
+        profileSettingsFragment = new ProfileSettingsFragment();
         // newEventDetail = new NewEventDetail();
     }
 
     void showDefaultFragment() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_main, scrollingFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
     }
@@ -216,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         getSupportFragmentManager().popBackStack();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, lastViewedFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -227,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
         fragmentTransaction.replace(R.id.frame_main, myEventsFragment);
         fragmentTransaction.addToBackStack("main");
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -237,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         getSupportFragmentManager().popBackStack("main", 0);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, scrollingFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
     }
 
@@ -248,8 +263,10 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, createEventFragment);
+
         fragmentTransaction.addToBackStack("main");
-        fragmentTransaction.commit();
+
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -262,26 +279,37 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, eventDetailFragment);
+
         fragmentTransaction.addToBackStack("frag");
-        fragmentTransaction.commit();
+
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
     public void switchToProfile() {
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
+//        if (wasChanged)
+//            profileFragment.onInfoChanged();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileFragment);
+
         fragmentTransaction.addToBackStack("main");
-        fragmentTransaction.commit();
+
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
-    public void addDetail(Event e)
-    {
-         dialogFragment = MyAlertDialogFragment.newInstance(e);
-         dialogFragment.show(getSupportFragmentManager(), "dlg1");
+    @Override
+    public void switchToProfileSettings() {
+        lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
+    
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -292,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
+
 }
 

@@ -1,25 +1,55 @@
 package com.hsehhh.sv3.fragments;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 
 
 public class ProfileFragment extends Fragment {
-
     MainActivity presenter;
+
+    TextView name, flat, email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = (MainActivity) getActivity();
 
+        presenter = (MainActivity) getActivity();
         setHasOptionsMenu(true);
+    }
+
+    public void initViews(View view) {
+
+        name = view.findViewById(R.id.profileName);
+        flat = view.findViewById(R.id.profileFlat);
+        email = view.findViewById(R.id.profileEmail);
+
+        name.setText(presenter.user.name);
+        flat.setText(presenter.user.room != null ? presenter.user.room.toString() : "Not specified");
+        email.setText(presenter.firebaseUser.getEmail());
+
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.switchToProfileSettings();
+            }
+        });
     }
 
     @Override
@@ -29,19 +59,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        getActivity().setContentView(R.layout.fragment_profile);
-//        Toolbar toolbar = getView().findViewById(R.id.toolbar);
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = getView().findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initViews(view);
 
         return view;
     }
@@ -50,12 +68,10 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                presenter.switchToPrevious();
+                presenter.switchToScrolling();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }
