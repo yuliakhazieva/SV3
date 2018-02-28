@@ -1,6 +1,9 @@
 package com.hsehhh.sv3;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -81,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         setSupportActionBar(mainToolbar);
         mainFrame = findViewById(R.id.frame_main);
 
+        if(!isNetworkAvailable())
+            Toast.makeText(MainActivity.this, "Нет подключения к сети", Toast.LENGTH_LONG).show();
+
 //        //Fullscreen/hidden status bar
 //        View decorView = getWindow().getDecorView();
 //        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -88,26 +94,26 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 //        ActionBar actionBar = this.getActionBar();
 //        actionBar.hide();
 
-        //Init database reference
-        initDatabaseReferences();
 
-        //Init authorization
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser == null || firebaseUser.isAnonymous())
-                    onSignedOut();
-                else
-                    onSignedIn();
-            }
-        };
+            //Init database reference
+            initDatabaseReferences();
+
+            //Init authorization
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    if (firebaseUser == null || firebaseUser.isAnonymous())
+                        onSignedOut();
+                    else
+                        onSignedIn();
+                }
+            };
 
 
         initFragments(); //
         showDefaultFragment();
-
     }
 
     private void onSignedIn() {
@@ -120,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
                     user.ID = firebaseUser.getUid();
-                    Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
+                    if(isNetworkAvailable())
+                      Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -173,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(firebaseAuthStateListener);
+        if(!isNetworkAvailable())
+            Toast.makeText(MainActivity.this, "Нет подключения к сети", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -319,6 +328,13 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,7 +81,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         showEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.switchToMyEvents();
+                if(presenter.isNetworkAvailable())
+                    presenter.switchToMyEvents();
+                else
+                    Toast.makeText(getContext(), "Нет подключения к сети", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -113,17 +117,35 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 } else {
                     ImageButton ib = new ImageButton(presenter.getBaseContext());
 
-                    ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
+                    switch (e.room.section)
+                    {
+                        case "A":
+                            ib.setImageResource(R.drawable.rsz_msg_icon_a);
+                            break;
+                        case "B":
+                            ib.setImageResource(R.drawable.rsz_msg_icon_b);
+                            break;
+                        case "C":
+                            ib.setImageResource(R.drawable.rsz_msg_icon_c);
+                            break;
+                            default:
+                                ib.setImageResource(R.drawable.msg_icon_a);
+                    }
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
-                            MyAlertDialogFragment dialogFragment = MyAlertDialogFragment.newInstance(e);
-                            dialogFragment.show(presenter.getSupportFragmentManager(), "dlg1");
+                            if(presenter.isNetworkAvailable()) {
+                                //делаем так чтобы если что-то изменилось в объекте события мы всегда брали его последнюю версию из мапы
+                                MyAlertDialogFragment dialogFragment = MyAlertDialogFragment.newInstance(e);
+                                dialogFragment.show(presenter.getSupportFragmentManager(), "dlg1");
+                            }
+                            else
+                                Toast.makeText(getContext(), "Нет подключения к сети", Toast.LENGTH_LONG).show();
                         }
                     });
+                    ib.setBackground(null);
                     trow.addView(ib, 0);
                     ib.setTag(e.room.floor+e.room.aptNumber);
                 }
@@ -187,7 +209,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 return true;
             }
             case R.id.action_add:{
-                presenter.switchToCreateEvent();
+                if(presenter.isNetworkAvailable())
+                    presenter.switchToCreateEvent();
+                else
+                    Toast.makeText(getContext(), "Нет подключения к сети", Toast.LENGTH_LONG).show();
                 return true;
             }
             case R.id.sign_out:{
