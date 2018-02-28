@@ -10,9 +10,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.User;
 
 /**
  * Created by a1 on 22.02.18.
@@ -25,6 +30,8 @@ public class MyAlertDialogFragment extends DialogFragment {
     TextView publisher;
     TextView apt;
     TextView description;
+    TextView date;
+    TextView time;
     AlertDialog.Builder builder;
 
     public static MyAlertDialogFragment newInstance(Event event) {
@@ -68,10 +75,26 @@ public class MyAlertDialogFragment extends DialogFragment {
         publisher = view.findViewById(R.id.text_view_published_by);
         apt = view.findViewById(R.id.text_view_floor);
         description = view.findViewById(R.id.text_view_description);
+        date = view.findViewById(R.id.text_view_date);
+        time = view.findViewById(R.id.text_view_time);
 
-        publisher.setText(event.published_by);
+        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                publisher.setText(dataSnapshot.getValue(User.class).name);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         apt.setText("" + event.room.floor + event.room.aptNumber);
         description.setText(event.description);
+        date.setText(event.date);
+        time.setText(event.time);
 
         builder.setView(view);
 

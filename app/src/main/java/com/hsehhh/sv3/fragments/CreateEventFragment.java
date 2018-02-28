@@ -22,12 +22,8 @@ import android.widget.Toast;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
-import com.hsehhh.sv3.data.Room;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static com.hsehhh.sv3.fragments.RoomPickerFragment.RC_ROOM_SET;
@@ -107,6 +103,7 @@ public class CreateEventFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 createEvent();
+                presenter.switchToScrolling();
             }
         });
     }

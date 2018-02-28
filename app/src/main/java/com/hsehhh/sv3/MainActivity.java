@@ -310,12 +310,17 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     @Override
     public void switchToProfileSettings() {
+
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
+
+        fragmentTransaction.addToBackStack("main");
+        
         fragmentTransaction.commitAllowingStateLoss();
+
     }
 
 

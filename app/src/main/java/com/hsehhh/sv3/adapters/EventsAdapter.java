@@ -6,12 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.User;
 import com.hsehhh.sv3.interfaces.EventFilter;
 import com.hsehhh.sv3.viewholders.EventViewHolder;
 
@@ -113,12 +117,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder holder, int i) {
+    public void onBindViewHolder(final EventViewHolder holder, int i) {
         final Event model = events.get(i);
 
         holder.title.setText(model.title);
         holder.description.setText(model.description);
-        holder.published_by.setText(model.published_by);
+
+        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                holder.published_by.setText(dataSnapshot.getValue(User.class).name);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
