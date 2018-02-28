@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
 
         fragmentTransaction.addToBackStack("main");
-        
+
         fragmentTransaction.commitAllowingStateLoss();
 
     }

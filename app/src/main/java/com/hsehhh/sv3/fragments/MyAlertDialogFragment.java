@@ -94,7 +94,6 @@ public class MyAlertDialogFragment extends DialogFragment {
         apt.setText("" + event.room.floor + event.room.aptNumber);
         description.setText(event.description);
         date.setText(event.date);
-        time.setText(event.time);
 
         builder.setView(view);
 

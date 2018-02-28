@@ -37,6 +37,7 @@ public class CreateEventFragment extends Fragment {
     EditText eventRoomEditText;
     EditText eventDateEditText;
     Spinner eventTypeSpinner;
+    String date_string;
 
     private RoomPickerFragment roomPickerFragment;
     private DatePickerDialog datePickerDialog;
@@ -103,7 +104,6 @@ public class CreateEventFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 createEvent();
-                presenter.switchToScrolling();
             }
         });
     }
@@ -119,7 +119,8 @@ public class CreateEventFragment extends Fragment {
             }
             case RC_TIME_SET: {
                 if (resultCode == RESULT_OK) {
-                    eventDateEditText.setText(new SimpleDateFormat().format(date.getTime()));
+                    date_string = new SimpleDateFormat().format(date.getTime());
+                    eventDateEditText.setText(date_string);
                     break;
                 }
             }
@@ -140,15 +141,22 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Event e = new Event(eventTitleEditText.getText().toString(),
+        Event e;
+        if(roomPickerFragment != null && (e = new Event(eventTitleEditText.getText().toString(),
                 eventDescriptionEditText.getText().toString(),
                 eventTypeSpinner.getSelectedItem().toString(),
                 presenter.firebaseUser.getUid(),
                 roomPickerFragment.room,
-                "12/12/12", "12:12");
+                date_string)) != null)
+        {
         presenter.getEventsReference().push().setValue(e);
-
-        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
+        presenter.switchToScrolling();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
