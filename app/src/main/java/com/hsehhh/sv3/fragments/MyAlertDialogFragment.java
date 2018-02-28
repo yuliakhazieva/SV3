@@ -57,18 +57,12 @@ public class MyAlertDialogFragment extends DialogFragment {
                 .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // event.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
                         presenter.getEventsReference().child(event.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
-
+                        if(event.published_by != presenter.firebaseUser.getUid())
+                            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
                     }
                 });
-//                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
+
 
         builder.create();
         publisher = view.findViewById(R.id.text_view_published_by);
