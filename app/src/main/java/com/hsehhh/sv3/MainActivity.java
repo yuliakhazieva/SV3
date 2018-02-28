@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.User;
@@ -127,7 +128,19 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                     user = dataSnapshot.getValue(User.class);
                     user.ID = firebaseUser.getUid();
                     if(isNetworkAvailable())
-                      Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
+                    {
+                        Query q = getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        q.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Toast.makeText(MainActivity.this, "Вы вошли как " + dataSnapshot.getValue(User.class).name, Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
             }
 

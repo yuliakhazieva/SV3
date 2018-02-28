@@ -90,12 +90,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
         //делаем пустую таблицу
         table = getView().findViewById(R.id.table);
-        table.setPadding(0,130,0,0);
+        table.setPadding(0,90,0,0);
         for(int i = 0; i < 25; i++)
         {
             TableRow newRow = new TableRow(getContext());
             newRow.setTag("r" + i);
-            newRow.setMinimumHeight(90);
+            newRow.setMinimumHeight(110);
             table.addView(newRow, i);
         }
 
@@ -109,7 +109,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 e.setKey(dataSnapshot.getKey());
                 eventsMap.put(e.key, e);
 
-                TableRow trow = (TableRow) table.getChildAt(e.room.floor);
+                TableRow trow = (TableRow) table.getChildAt(25 - e.room.floor);
                 int aptNum = e.room.aptNumber;
                 if(trow.getChildAt(aptNum) != null)
                 {
@@ -131,7 +131,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                             default:
                                 ib.setImageResource(R.drawable.msg_icon_a);
                     }
-                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
+                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum + 1));
+                    ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
                         @Override
