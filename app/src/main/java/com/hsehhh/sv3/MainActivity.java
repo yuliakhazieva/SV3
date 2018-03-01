@@ -1,6 +1,9 @@
 package com.hsehhh.sv3;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.User;
@@ -30,6 +34,9 @@ import com.hsehhh.sv3.fragments.ProfileFragment;
 import com.hsehhh.sv3.fragments.ProfileSettingsFragment;
 import com.hsehhh.sv3.fragments.ScrollingFragment;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
@@ -71,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     public FirebaseUser firebaseUser;
     public User user;
 
+    //util
+    public String nameForGetNameFromID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         setSupportActionBar(mainToolbar);
         mainFrame = findViewById(R.id.frame_main);
 
+        if(!isNetworkAvailable())
+            Toast.makeText(MainActivity.this, "Нет подключения к сети", Toast.LENGTH_LONG).show();
+
 //        //Fullscreen/hidden status bar
 //        View decorView = getWindow().getDecorView();
 //        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -88,25 +101,24 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 //        ActionBar actionBar = this.getActionBar();
 //        actionBar.hide();
 
-        //Init database reference
-        initDatabaseReferences();
 
-        //Init authorization
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser == null || firebaseUser.isAnonymous())
-                    onSignedOut();
-                else
-                    onSignedIn();
-            }
-        };
+            //Init database reference
+            initDatabaseReferences();
+
+            //Init authorization
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    if (firebaseUser == null || firebaseUser.isAnonymous())
+                        onSignedOut();
+                    else
+                        onSignedIn();
+                }
+            };
 
 
-//        Init all fragments and show default
-//        if (savedInstanceState == null) надо починить чтобы не было лишней реинициализации
         initFragments(); //
         showDefaultFragment();
 
@@ -121,6 +133,22 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                     switchToProfileSettings();
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
+                    user.ID = firebaseUser.getUid();
+                    if(isNetworkAvailable())
+                    {
+                        Query q = getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        q.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Toast.makeText(MainActivity.this, "Вы вошли как " + dataSnapshot.getValue(User.class).name, Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+//                    Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -148,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             case RC_SIGN_IN: {
                 if (resultCode == RESULT_OK) {
                     firebaseUser = firebaseAuth.getCurrentUser();
-//                    onSignedIn();
                     Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
@@ -174,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(firebaseAuthStateListener);
+        if(!isNetworkAvailable())
+            Toast.makeText(MainActivity.this, "Нет подключения к сети", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -302,14 +331,18 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     @Override
     public void switchToProfileSettings() {
+
         lastViewedFragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.frame_main, profileSettingsFragment);
+
+        fragmentTransaction.addToBackStack("main");
+
         fragmentTransaction.commitAllowingStateLoss();
     }
-    
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -320,6 +353,30 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public String getNameFromId(String id)
+    {
+        Query q = getUsersReference().child(id);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            Map<String, String> map;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                nameForGetNameFromID = dataSnapshot.getValue(User.class).name;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return nameForGetNameFromID;
     }
 
 }

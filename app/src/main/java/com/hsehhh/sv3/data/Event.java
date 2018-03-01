@@ -22,7 +22,6 @@ public class Event implements Parcelable {
 
 
     public String date;
-    public String time;
     public HashMap<String, String> participants;
 
     @Exclude
@@ -30,11 +29,10 @@ public class Event implements Parcelable {
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, Room room, String date, String time) {
+    public Event(String title, String description, String type, String published_by, Room room, String date) {
         this.title = title;
         this.description = description;
         this.room = room;
-        this.time = time;
         this.date = date;
         this.published_by = published_by;
         this.participants = new HashMap<>();
@@ -48,7 +46,6 @@ public class Event implements Parcelable {
         description = in.readString();
         published_by = in.readString();
         room = in.readTypedObject(Room.CREATOR);
-        time = in.readString();
         date = in.readString();
         participants = in.readHashMap(String.class.getClassLoader());
       //  in.readHashMap(participants);
@@ -65,7 +62,6 @@ public class Event implements Parcelable {
         in.writeString(description);
         in.writeString(published_by);
         in.writeTypedObject(room, 0);
-        in.writeString(time);
         in.writeString(date);
         in.writeMap(participants);
     }

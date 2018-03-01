@@ -2,83 +2,53 @@ package com.hsehhh.sv3.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.firebase.auth.FirebaseAuth;
+import android.widget.Toast;
+
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
-import com.hsehhh.sv3.adapters.EventsAdapter;
-import com.hsehhh.sv3.data.Event;
-import com.hsehhh.sv3.interfaces.EventFilter;
+import com.hsehhh.sv3.utils.OrganizedEventsFilter;
+import com.hsehhh.sv3.utils.VisitedEventsFilter;
 
 
 public class MyEventsFragment extends android.support.v4.app.Fragment
 {
     MainActivity presenter;
 
-    public RecyclerView organizedEventsView;
-    public RecyclerView visitedEventsView;
-
-    EventsAdapter organizedEventsAdapter;
-    EventsAdapter visitedEventsAdapter;
-
+    ViewPager pager;
+    PagerAdapter listPagerAdapter;
+    TabLayout tabLayout;
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
-
+        listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), presenter);
         setHasOptionsMenu(true);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_events, container, false);
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Надо наверное написать дефолтные фильтры. Пока пусть так.
+        pager = view.findViewById(R.id.pager);
+        pager.setAdapter(listPagerAdapter);
 
-        organizedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
-            @Override
-            public boolean filter(Event e) {
-                return e.published_by.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            }
-        } );
-
-        visitedEventsAdapter = new EventsAdapter(presenter, new EventFilter() {
-            @Override
-            public boolean filter(Event e) {
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                return e.participants != null && e.participants.containsValue(uid);
-            }
-        });
-        organizedEventsView = v.findViewById(R.id.recycler_organized_events);
-        organizedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
-        organizedEventsView.setAdapter(organizedEventsAdapter);
-
-        visitedEventsView = v.findViewById(R.id.recycler_visited_events);
-        visitedEventsView.setLayoutManager(new LinearLayoutManager(getContext()));
-        visitedEventsView.setAdapter(visitedEventsAdapter);
-
-        return v;
+        tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(pager);
+        return view;
     }
 
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-////        Тут еще надо с инициализацией похимичить. Унести в правильные места.
-////        organizedEventsAdapter.initializeReference();
-////        visitedEventsAdapter.initializeReference();
-//    }
-//
-//    public void onStop(){
-//        super.onStop();
-////        organizedEventsAdapter.cleanup();
-////        visitedEventsAdapter.cleanup();
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -88,6 +58,56 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+}
+
+
+class ListPagerAdapter extends FragmentPagerAdapter {
+    MainActivity presenter;
+    EventsListFragment organized;
+    EventsListFragment visited;
+
+    ListPagerAdapter(FragmentManager fm, MainActivity presenter) {
+        super(fm);
+        this.presenter = presenter;
+
+        organized = EventsListFragment.newInstance();
+        organized.changeEventFilter(new OrganizedEventsFilter(presenter.user));
+
+        visited = EventsListFragment.newInstance();
+        visited.changeEventFilter(new VisitedEventsFilter(presenter.user));
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position){
+            case 0:
+
+                return organized;
+            case 1:
+
+                return visited;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position){
+            case 0:
+                return "Организую";
+            case 1:
+                return "Пойду";
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
     }
 
 }

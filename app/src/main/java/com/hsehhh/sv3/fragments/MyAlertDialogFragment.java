@@ -10,9 +10,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.User;
 
 /**
  * Created by a1 on 22.02.18.
@@ -25,6 +30,8 @@ public class MyAlertDialogFragment extends DialogFragment {
     TextView publisher;
     TextView apt;
     TextView description;
+    TextView date;
+    TextView time;
     AlertDialog.Builder builder;
 
     public static MyAlertDialogFragment newInstance(Event event) {
@@ -57,27 +64,24 @@ public class MyAlertDialogFragment extends DialogFragment {
                 .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // event.participants.add(FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getUid()));
                         presenter.getEventsReference().child(event.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
-
+                        if(event.published_by != presenter.firebaseUser.getUid())
+                            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
                     }
                 });
-//                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
+
 
         builder.create();
         publisher = view.findViewById(R.id.text_view_published_by);
         apt = view.findViewById(R.id.text_view_floor);
         description = view.findViewById(R.id.text_view_description);
+        date = view.findViewById(R.id.text_view_date);
 
-        publisher.setText(event.published_by);
+        publisher.setText(presenter.getNameFromId(presenter.firebaseUser.getUid()));
+
         apt.setText("" + event.room.floor + event.room.aptNumber);
         description.setText(event.description);
+        date.setText(event.date);
 
         builder.setView(view);
 

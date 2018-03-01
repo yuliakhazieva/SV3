@@ -22,12 +22,8 @@ import android.widget.Toast;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
-import com.hsehhh.sv3.data.Room;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static com.hsehhh.sv3.fragments.RoomPickerFragment.RC_ROOM_SET;
@@ -41,6 +37,7 @@ public class CreateEventFragment extends Fragment {
     EditText eventRoomEditText;
     EditText eventDateEditText;
     Spinner eventTypeSpinner;
+    String date_string;
 
     private RoomPickerFragment roomPickerFragment;
     private DatePickerDialog datePickerDialog;
@@ -122,7 +119,8 @@ public class CreateEventFragment extends Fragment {
             }
             case RC_TIME_SET: {
                 if (resultCode == RESULT_OK) {
-                    eventDateEditText.setText(new SimpleDateFormat().format(date.getTime()));
+                    date_string = new SimpleDateFormat().format(date.getTime());
+                    eventDateEditText.setText(date_string);
                     break;
                 }
             }
@@ -143,15 +141,22 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Event e = new Event(eventTitleEditText.getText().toString(),
+        Event e;
+        if(roomPickerFragment != null && (e = new Event(eventTitleEditText.getText().toString(),
                 eventDescriptionEditText.getText().toString(),
                 eventTypeSpinner.getSelectedItem().toString(),
                 presenter.firebaseUser.getUid(),
                 roomPickerFragment.room,
-                "12/12/12", "12:12");
+                date_string)) != null)
+        {
         presenter.getEventsReference().push().setValue(e);
-
-        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
+        presenter.switchToScrolling();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
