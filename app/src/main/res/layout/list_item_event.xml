@@ -11,7 +11,8 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary1">
+        android:background="@color/colorPrimary3"
+        android:elevation="@dimen/text_margin">
 
         <TextView
             android:id="@+id/text_view_title"
@@ -19,28 +20,33 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:text="TextView"
-            android:textColor="@color/btn_login_bg" />
+            android:textColor="@color/colorPrimaryDark3"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_toStartOf="@id/buttons_and_datetime"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_view_floor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/btn_login_bg" />
+            android:orientation="vertical"
+            android:paddingRight="64dp">
 
             <TextView
                 android:id="@+id/text_view_published_by"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="@color/btn_login_bg" />
+                android:textColor="@color/colorPrimaryDark3" />
+
+            <TextView
+                android:id="@+id/text_view_floor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/colorPrimaryDark3" />
 
         </LinearLayout>
 
@@ -54,23 +60,27 @@
             android:layout_toStartOf="@id/buttons_and_datetime"
             android:gravity="center"
             android:text="TextView"
-            android:textColor="@color/btn_login_bg" />
+            android:textColor="@color/colorPrimaryDark3"
+            android:textStyle="italic" />
 
         <LinearLayout
             android:id="@+id/buttons_and_datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
             android:gravity="end"
             android:orientation="vertical">
 
             <!--<ImageButton-->
-                <!--android:id="@+id/button_delete"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@color/colorAccent"-->
-                <!--android:elevation="@dimen/button_elevation"-->
-                <!--app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />-->
+            <!--android:id="@+id/button_delete"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--android:elevation="@dimen/button_elevation"-->
+            <!--app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />-->
 
             <EditText
                 android:id="@+id/text_view_date"
@@ -78,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="date"
-                android:textColor="@color/btn_login_bg" />
+                android:textColor="@color/colorPrimaryDark3" />
 
             <EditText
                 android:id="@+id/text_view_time"
@@ -86,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="time"
-                android:textColor="@color/cardview_light_background" />
+                android:textColor="@color/colorPrimaryDark3" />
 
             <Button
                 android:id="@+id/button_chat"
