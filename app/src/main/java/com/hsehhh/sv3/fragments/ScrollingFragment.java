@@ -1,6 +1,8 @@
 package com.hsehhh.sv3.fragments;
 
 import com.google.firebase.database.DatabaseError;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
@@ -116,22 +119,31 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     //тут логика двух иконок в одном месте
                 } else {
                     ImageButton ib = new ImageButton(presenter.getBaseContext());
+                    ib.setImageResource(R.drawable.party);
+//                    switch (e.type)
+//                    {
+//                        case "fun":
+//                            ib.setImageResource(R.drawable.party);
+//                            break;
+//                        default:
+//                            ib.setImageResource(R.drawable.help);
+//                            break;
+//                    }
 
                     switch (e.room.section)
                     {
                         case "A":
-                            ib.setImageResource(R.drawable.rsz_msg_icon_a);
+                            ib.setBackgroundColor(Color.parseColor("#df3b5c"));
                             break;
                         case "B":
-                            ib.setImageResource(R.drawable.rsz_msg_icon_b);
+                            ib.setBackgroundColor(Color.parseColor("#fa943f"));
                             break;
-                        case "C":
-                            ib.setImageResource(R.drawable.rsz_msg_icon_c);
+                        default:
+                            ib.setBackgroundColor(Color.parseColor("#a5ba44"));
                             break;
-                            default:
-                                ib.setImageResource(R.drawable.msg_icon_a);
                     }
-                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum + 1));
+
+                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +158,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                 Toast.makeText(getContext(), "Нет подключения к сети", Toast.LENGTH_LONG).show();
                         }
                     });
-                    ib.setBackground(null);
                     trow.addView(ib, 0);
                     ib.setTag(e.room.floor+e.room.aptNumber);
                 }
