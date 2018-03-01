@@ -75,7 +75,7 @@ public class CreateEventFragment extends Fragment {
                                     date.set(Calendar.MINUTE, minute);
                                     onActivityResult(RC_TIME_SET, RESULT_OK, presenter.getIntent());
                                 }
-                            }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), false).show();
+                            }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), true).show();
                         }
                     }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE)).show();
                 }
@@ -119,7 +119,7 @@ public class CreateEventFragment extends Fragment {
             }
             case RC_TIME_SET: {
                 if (resultCode == RESULT_OK) {
-                    date_string = new SimpleDateFormat().format(date.getTime());
+                    date_string = new SimpleDateFormat("dd-MM HH:mm").format(date);
                     eventDateEditText.setText(date_string);
                     break;
                 }
@@ -141,20 +141,19 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Event e;
-        if(roomPickerFragment != null && (e = new Event(eventTitleEditText.getText().toString(),
+        Event e = new Event(eventTitleEditText.getText().toString(),
                 eventDescriptionEditText.getText().toString(),
                 eventTypeSpinner.getSelectedItem().toString(),
                 presenter.firebaseUser.getUid(),
                 roomPickerFragment.room,
-                date_string)) != null)
-        {
+                date.getTimeInMillis());
+
+        if(roomPickerFragment != null) {
         presenter.getEventsReference().push().setValue(e);
         Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
         presenter.switchToScrolling();
         }
-        else
-        {
+        else {
             Toast.makeText(getContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
         }
     }

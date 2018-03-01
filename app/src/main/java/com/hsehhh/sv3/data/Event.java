@@ -6,6 +6,11 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -21,7 +26,8 @@ public class Event implements Parcelable {
     public Room room;
 
 
-    public String date;
+    long datetime;
+    public Date date;
     public HashMap<String, String> participants;
 
     @Exclude
@@ -29,14 +35,15 @@ public class Event implements Parcelable {
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, Room room, String date) {
+    public Event(String title, String description, String type, String published_by, Room room, long datetime) {
         this.title = title;
         this.description = description;
         this.room = room;
-        this.date = date;
+        this.datetime = datetime;
         this.published_by = published_by;
         this.participants = new HashMap<>();
 
+        date = new Date(datetime);
     }
 
     protected Event(Parcel in) {
@@ -46,9 +53,9 @@ public class Event implements Parcelable {
         description = in.readString();
         published_by = in.readString();
         room = in.readTypedObject(Room.CREATOR);
-        date = in.readString();
+        datetime = in.readLong();
         participants = in.readHashMap(String.class.getClassLoader());
-      //  in.readHashMap(participants);
+        date = new Date(datetime);
     }
 
     @Override
@@ -62,7 +69,7 @@ public class Event implements Parcelable {
         in.writeString(description);
         in.writeString(published_by);
         in.writeTypedObject(room, 0);
-        in.writeString(date);
+        in.writeLong(datetime);
         in.writeMap(participants);
     }
 
@@ -89,6 +96,11 @@ public class Event implements Parcelable {
     public void setKey(String key)
     {
         this.key = key;
+    }
+
+    public String getFormattedDate() {
+        String format = new SimpleDateFormat("dd-MM HH:mm").format(date);
+        return format;
     }
 
     // TODO: Написать нормальное отношение эквивалентности
