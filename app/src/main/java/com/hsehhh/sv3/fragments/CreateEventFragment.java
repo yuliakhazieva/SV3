@@ -54,41 +54,38 @@ public class CreateEventFragment extends Fragment {
         presenter = (MainActivity) getActivity();
         setHasOptionsMenu(true);
         date = Calendar.getInstance();
+        roomPickerFragment = RoomPickerFragment.newInstance();
+        date_string = "";
     }
 
     public void initViews(View view){
         eventTitleEditText = view.findViewById(R.id.edit_text_title);
         eventDescriptionEditText = view.findViewById(R.id.edit_text_description);
         eventDateEditText = view.findViewById(R.id.edit_text_date);
-        eventDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        eventDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            date.set(year, monthOfYear, dayOfMonth);
-                            new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                                @Override
-                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                    date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                    date.set(Calendar.MINUTE, minute);
-                                    onActivityResult(RC_TIME_SET, RESULT_OK, presenter.getIntent());
-                                }
-                            }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), false).show();
-                        }
-                    }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE)).show();
-                }
+            public void onClick(View view) {
+                new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        date.set(year, monthOfYear, dayOfMonth);
+                        new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                date.set(Calendar.MINUTE, minute);
+                                onActivityResult(RC_TIME_SET, RESULT_OK, presenter.getIntent());
+                            }
+                        }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), true).show();
+                    }
+                }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE)).show();
             }
         });
         eventRoomEditText = view.findViewById(R.id.edit_text_room);
-        eventRoomEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        eventRoomEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    roomPickerFragment = RoomPickerFragment.newInstance();
-                    roomPickerFragment.show(presenter.getSupportFragmentManager(), "roomPicker");
-                }
+            public void onClick(View view) {
+                roomPickerFragment.show(presenter.getSupportFragmentManager(), "roomPicker");
             }
         });
 
@@ -141,22 +138,26 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Event e;
-        if(roomPickerFragment != null && (e = new Event(eventTitleEditText.getText().toString(),
+        Event e = new Event(eventTitleEditText.getText().toString(),
                 eventDescriptionEditText.getText().toString(),
                 eventTypeSpinner.getSelectedItem().toString(),
                 presenter.firebaseUser.getUid(),
                 roomPickerFragment.room,
-                date_string)) != null)
-        {
-        presenter.getEventsReference().push().setValue(e);
-        Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
-        presenter.switchToScrolling();
-        }
-        else
-        {
+                date.getTimeInMillis());
+        if (!isFormInvalid()) {
+            presenter.getEventsReference().push().setValue(e);
+            Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
+            presenter.switchToScrolling();
+        } else {
             Toast.makeText(getContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isFormInvalid() {
+        return roomPickerFragment.room == null ||
+                eventTitleEditText.getText().toString().trim().isEmpty() ||
+                eventDescriptionEditText.getText().toString().trim().isEmpty() ||
+                date_string.trim().isEmpty();
     }
 
     @Override
