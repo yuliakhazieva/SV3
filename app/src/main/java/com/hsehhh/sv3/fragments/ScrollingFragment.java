@@ -136,6 +136,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                     ib.setImageResource(R.drawable.icon_a_study);
                                     break;
                             }
+                            break;
 
                         case "B":
                             switch (e.type)
@@ -150,8 +151,9 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                     ib.setImageResource(R.drawable.icon_b_study);
                                     break;
                             }
+                            break;
 
-                        default:
+                        case "C":
                             switch (e.type)
                             {
                                 case "fun":
@@ -164,10 +166,11 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                     ib.setImageResource(R.drawable.icon_c_study);
                                     break;
                             }
+                            break;
                     }
 
                     ib.setBackground(null);
-                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
+                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum + 1));
                     ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {

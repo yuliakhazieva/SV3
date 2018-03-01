@@ -94,9 +94,8 @@ public class MyAlertDialogFragment extends DialogFragment {
         description = view.findViewById(R.id.text_view_description);
         date = view.findViewById(R.id.text_view_date);
 
-        publisher.setText(presenter.getNameFromId(presenter.firebaseUser.getUid()));
-
-        apt.setText("" + event.room.floor + event.room.aptNumber);
+        publisher.setText(presenter.getNameFromId(event.published_by));
+        apt.setText(event.room.toString());
         description.setText(event.description);
         date.setText(event.getFormattedDate());
 

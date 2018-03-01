@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:orientation="vertical">
@@ -24,14 +25,19 @@
             android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark3"
+            android:textSize="24dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_published_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="32dp"
             android:text="TextView"
-            android:textColor="@color/btn_login_bg" />
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_description"
@@ -72,9 +78,9 @@
 
             <Button
                 android:id="@+id/button_chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark2"
+                android:layout_width="77dp"
+                android:layout_height="33dp"
+                android:background="@color/colorAccent"
                 android:elevation="2dp"
                 android:text="Чат"
                 android:textColor="@color/btn_login_bg" />
@@ -88,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:background="@color/colorPrimaryDark2"
+            android:background="@color/colorAccent"
             android:elevation="2dp"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
