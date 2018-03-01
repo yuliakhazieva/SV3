@@ -1,6 +1,8 @@
 package com.hsehhh.sv3.fragments;
 
 import com.google.firebase.database.DatabaseError;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -112,8 +115,30 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     //тут логика двух иконок в одном месте
                 } else {
                     ImageButton ib = new ImageButton(presenter.getBaseContext());
+                    ib.setImageResource(R.drawable.party);
+//                    switch (e.type)
+//                    {
+//                        case "fun":
+//                            ib.setImageResource(R.drawable.party);
+//                            break;
+//                        default:
+//                            ib.setImageResource(R.drawable.help);
+//                            break;
+//                    }
 
-                    ib.setImageResource(R.drawable.common_google_signin_btn_icon_light);
+                    switch (e.room.section)
+                    {
+                        case "A":
+                            ib.setBackgroundColor(Color.parseColor("#df3b5c"));
+                            break;
+                        case "B":
+                            ib.setBackgroundColor(Color.parseColor("#fa943f"));
+                            break;
+                        default:
+                            ib.setBackgroundColor(Color.parseColor("#a5ba44"));
+                            break;
+                    }
+
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
