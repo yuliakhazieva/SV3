@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
@@ -16,6 +17,7 @@ import com.hsehhh.sv3.interfaces.EventFilter;
 import com.hsehhh.sv3.viewholders.EventViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -134,23 +136,27 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
             }
         });
 
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeEvent(model);
-            }
-        });
+//        holder.delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                removeEvent(model);
+//            }
+//        });
     }
+//
+//    void removeEvent(Event event) {
+//        if(event.published_by.equals(presenter.firebaseUser.getUid())) {
+//            // destroy event here
+//            presenter.getEventsReference().child(event.key).removeValue();
+//
+//        } else {
+//            // unsubscribe from event here
+//            presenter.getUsersReference().child(presenter.firebaseUser.getUid());
+//            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo");
+//
+//            presenter.getEventsReference().child(event.key)
+//                    .child("participants").child(presenter.firebaseUser.getUid());
+//        }
+//    }
 
-    void removeEvent(Event event) {
-        if(event.published_by.equals(presenter.firebaseUser.getUid()))
-            presenter.getEventsReference().child(event.key).removeValue();
-        else
-        {
-            presenter.getUsersReference().child(presenter.firebaseUser.getUid())
-                    .child("subscribedTo").child(event.key).removeValue();
-            presenter.getEventsReference().child(event.key)
-                    .child("participants").child(presenter.firebaseUser.getUid()).removeValue();
-        }
-    }
 }

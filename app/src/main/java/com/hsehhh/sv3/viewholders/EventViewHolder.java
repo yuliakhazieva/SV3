@@ -17,7 +17,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     public TextView description;
     public TextView published_by;
     public Button chat;
-    public ImageButton delete;
+//    public ImageButton delete;
 
     public EventViewHolder(View v) {
         super(v);
@@ -25,7 +25,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         title = v.findViewById(R.id.text_view_title);
         description =  v.findViewById(R.id.text_view_description);
         published_by = v.findViewById(R.id.text_view_published_by);
-        delete = v.findViewById(R.id.button_delete);
+//        delete = v.findViewById(R.id.button_delete);
         chat = v.findViewById(R.id.button_chat);
 
     }

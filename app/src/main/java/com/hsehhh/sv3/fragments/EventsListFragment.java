@@ -30,6 +30,11 @@ public class EventsListFragment extends android.support.v4.app.Fragment
 
     EventFilter eventFilter;
 
+    public static EventsListFragment newInstance() {
+        EventsListFragment fragment = new EventsListFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +53,9 @@ public class EventsListFragment extends android.support.v4.app.Fragment
         return v;
     }
 
-    public void setEventFilter(EventFilter eventFilter) {
+    public void changeEventFilter(EventFilter eventFilter) {
         this.eventFilter = eventFilter;
+        if (eventsAdapter != null)
+            eventsAdapter.initializeReference(eventFilter);
     }
 }

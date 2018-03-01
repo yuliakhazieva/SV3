@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                 } else {                     // user already existed
                     user = dataSnapshot.getValue(User.class);
                     user.ID = firebaseUser.getUid();
-                    Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, user.ID, Toast.LENGTH_SHORT).show();
                 }
             }
 
