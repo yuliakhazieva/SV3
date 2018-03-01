@@ -58,18 +58,35 @@ public class MyAlertDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = presenter.getLayoutInflater();
         View view = inflater.inflate(R.layout.new_event_detail, null);
-
-        builder.setView(view)
-                .setTitle(event.title)
-                .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.getEventsReference().child(event.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        if(event.published_by != presenter.firebaseUser.getUid())
-                            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
-                    }
-                });
-
+        if (event.published_by.equals(presenter.user.ID)){
+            builder.setView(view).setTitle(event.title).setPositiveButton("Вы организуете это событие.", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    presenter.switchToEventDetails(event);
+                }
+            });
+        } else if (event.participants.containsValue(presenter.user.ID)) {
+            builder.setView(view)
+                    .setTitle(event.title)
+                    .setPositiveButton("Вы идетё на это событие.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            presenter.switchToEventDetails(event);
+                        }
+                    });
+        } else {
+            builder.setView(view)
+                    .setTitle(event.title)
+                    .setPositiveButton("Пойду", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            presenter.getEventsReference().child(event.key).child("participants").push().setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            if(event.published_by != presenter.firebaseUser.getUid())
+                                presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo").push().setValue(event.key);
+                            presenter.switchToEventDetails(event);
+                        }
+                    });
+        }
 
         builder.create();
         publisher = view.findViewById(R.id.text_view_published_by);

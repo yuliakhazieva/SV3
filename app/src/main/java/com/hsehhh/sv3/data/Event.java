@@ -68,6 +68,7 @@ public class Event implements Parcelable {
         in.writeMap(participants);
     }
 
+    @Exclude
     public String getTitle()
     {
         return title;
@@ -78,10 +79,12 @@ public class Event implements Parcelable {
         participants = p;
     }
 
+    @Exclude
     public String getFormattedDate() {
         return new SimpleDateFormat("dd-MM HH:mm").format(new Date(date));
-
     }
+
+    @Exclude
     public HashMap<String, String> getParticipants()
     {
         return participants;
