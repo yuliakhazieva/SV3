@@ -119,7 +119,7 @@ public class CreateEventFragment extends Fragment {
             }
             case RC_TIME_SET: {
                 if (resultCode == RESULT_OK) {
-                    date_string = new SimpleDateFormat().format(date.getTime());
+                    date_string = new SimpleDateFormat("dd-MM HH:mm").format(date.getTime());
                     eventDateEditText.setText(date_string);
                     break;
                 }

@@ -94,6 +94,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         //делаем пустую таблицу
         table = getView().findViewById(R.id.table);
         table.setPadding(0,90,0,0);
+
         for(int i = 0; i < 25; i++)
         {
             TableRow newRow = new TableRow(getContext());
@@ -119,30 +120,53 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     //тут логика двух иконок в одном месте
                 } else {
                     ImageButton ib = new ImageButton(presenter.getBaseContext());
-                    ib.setImageResource(R.drawable.party);
-//                    switch (e.type)
-//                    {
-//                        case "fun":
-//                            ib.setImageResource(R.drawable.party);
-//                            break;
-//                        default:
-//                            ib.setImageResource(R.drawable.help);
-//                            break;
-//                    }
 
                     switch (e.room.section)
                     {
                         case "A":
-                            ib.setBackgroundColor(Color.parseColor("#df3b5c"));
-                            break;
+                            switch (e.type)
+                            {
+                                case "fun":
+                                    ib.setImageResource(R.drawable.icon_a_party);
+                                    break;
+                                case "request":
+                                    ib.setImageResource(R.drawable.icon_a_help);
+                                    break;
+                                default:
+                                    ib.setImageResource(R.drawable.icon_a_study);
+                                    break;
+                            }
+
                         case "B":
-                            ib.setBackgroundColor(Color.parseColor("#fa943f"));
-                            break;
+                            switch (e.type)
+                            {
+                                case "fun":
+                                    ib.setImageResource(R.drawable.icon_b_party);
+                                    break;
+                                case "request":
+                                    ib.setImageResource(R.drawable.icon_b_help);
+                                    break;
+                                default:
+                                    ib.setImageResource(R.drawable.icon_b_study);
+                                    break;
+                            }
+
                         default:
-                            ib.setBackgroundColor(Color.parseColor("#a5ba44"));
-                            break;
+                            switch (e.type)
+                            {
+                                case "fun":
+                                    ib.setImageResource(R.drawable.icon_c_party);
+                                    break;
+                                case "request":
+                                    ib.setImageResource(R.drawable.icon_c_help);
+                                    break;
+                                default:
+                                    ib.setImageResource(R.drawable.icon_c_study);
+                                    break;
+                            }
                     }
 
+                    ib.setBackground(null);
                     ib.setLayoutParams(new TableRow.LayoutParams(aptNum));
                     ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
