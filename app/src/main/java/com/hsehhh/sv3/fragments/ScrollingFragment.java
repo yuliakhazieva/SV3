@@ -114,8 +114,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 eventsMap.put(e.key, e);
 
                 TableRow trow = (TableRow) table.getChildAt(25 - e.room.floor);
-                int aptNum = e.room.aptNumber;
-                if(trow.getChildAt(aptNum) != null)
+                if(trow.getChildAt(e.room.aptNumber) != null)
                 {
                     //тут логика двух иконок в одном месте
                 } else {
@@ -170,7 +169,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     }
 
                     ib.setBackground(null);
-                    ib.setLayoutParams(new TableRow.LayoutParams(aptNum + 1));
+                    ib.setLayoutParams(new TableRow.LayoutParams(e.room.aptNumber));
                     ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
