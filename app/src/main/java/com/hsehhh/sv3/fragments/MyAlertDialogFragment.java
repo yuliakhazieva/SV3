@@ -76,7 +76,6 @@ public class MyAlertDialogFragment extends DialogFragment {
         apt = view.findViewById(R.id.text_view_floor);
         description = view.findViewById(R.id.text_view_description);
         date = view.findViewById(R.id.text_view_date);
-        time = view.findViewById(R.id.text_view_time);
 
         Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -89,7 +88,6 @@ public class MyAlertDialogFragment extends DialogFragment {
 
             }
         });
-
 
         apt.setText("" + event.room.floor + event.room.aptNumber);
         description.setText(event.description);

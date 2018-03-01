@@ -18,11 +18,17 @@ import android.widget.ImageButton;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.adapters.ChatAdapter;
 import com.hsehhh.sv3.data.Event;
 import com.hsehhh.sv3.data.Message;
+import com.hsehhh.sv3.data.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,18 +114,36 @@ public class EventDetailFragment extends Fragment {
         groupDataList.add(map);
         String groupFrom[] = new String[] { "groupName" };
         int groupTo[] = new int[] { android.R.id.text1 };
+
         ArrayList<ArrayList<Map<String, String>>> сhildDataList = new ArrayList<>();
         сhildDataItemList = new ArrayList<>();
-        Iterator it = event.participants.entrySet().iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            map = new HashMap<>();
-            map.put("guestIndex", Integer.toString(i));
-            map.put("guestName", pair.getValue().toString());
-            сhildDataItemList.add(map);
-            i++;
-        }
+
+
+        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            Map<String, String> map;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                map = new HashMap<>();
+                map.put("guestName", dataSnapshot.getValue(User.class).name);
+                сhildDataItemList.add(map);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        Iterator it = event.participants.entrySet().iterator();
+//        int i = 0;
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            map = new HashMap<>();
+//            map.put("guestIndex", Integer.toString(i));
+//            map.put("guestName", pair.getValue().toString());
+//            сhildDataItemList.add(map);
+//            i++;
+//        }
         сhildDataList.add(сhildDataItemList);
         String childFrom[] = new String[] { "guestName" };
         int childTo[] = new int[] { R.id.guest_name };
