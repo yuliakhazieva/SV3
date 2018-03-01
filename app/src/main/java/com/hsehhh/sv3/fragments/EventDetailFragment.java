@@ -43,12 +43,6 @@ public class EventDetailFragment extends Fragment {
 
     MainActivity presenter;
 
-    String tempGuestName;
-    TextView eventTitleTextView;
-    TextView eventDescriptionTextView;
-    TextView eventFloorTextView;
-    TextView eventUserIdTextView;
-
     ArrayList<Map<String, String>> сhildDataItemList;
     ArrayList<Map<String, String>> сhildDataDetailList;
 
@@ -115,52 +109,27 @@ public class EventDetailFragment extends Fragment {
         сhildDataItemList = new ArrayList<>();
 
 
+        if(event.participants != null) {
+            Iterator it = event.participants.entrySet().iterator();
+            int i = 0;
+            while (it.hasNext()) {
+                Query q = presenter.getUsersReference().child(((Map.Entry) it.next()).getValue().toString());
+                q.addListenerForSingleValueEvent(new ValueEventListener() {
+                    Map<String, String> map;
 
-//        Iterator it = event.participants.entrySet().iterator();
-//        int i = 0;
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            map = new HashMap<>();
-//            map.put("guestIndex", Integer.toString(i));
-//
-//            Query q = presenter.getUsersReference().child(pair.getValue().toString());
-//            q.addListenerForSingleValueEvent(new ValueEventListener() {
-//                Map<String, String> map;
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    map = new HashMap<>();
-//                    map.put("guestName", dataSnapshot.getValue(User.class).name);
-//                    сhildDataItemList.add(map);
-//                }
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//
-//            сhildDataItemList.add(map);
-//            i++;
-//        }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        map = new HashMap<>();
+                        map.put("guestName", dataSnapshot.getValue(User.class).name);
+                        сhildDataItemList.add(map);
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-        Iterator it = event.participants.entrySet().iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            Query q = presenter.getUsersReference().child(((Map.Entry)it.next()).getValue().toString());
-            q.addListenerForSingleValueEvent(new ValueEventListener() {
-                Map<String, String> map;
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    map = new HashMap<>();
-                    map.put("guestName", dataSnapshot.getValue(User.class).name);
-                    сhildDataItemList.add(map);
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+                    }
+                });
+            }
         }
 
         сhildDataList.add(сhildDataItemList);
@@ -246,7 +215,8 @@ public class EventDetailFragment extends Fragment {
 
     private void sendMessage(String messageText) {
 
-        presenter.getChatsReference().child(event.key).push().setValue(new Message( presenter.getNameFromId(presenter.firebaseUser.getUid()), messageText));
+        presenter.getChatsReference().child(event.key).push().setValue(new Message(presenter.user.name , messageText));
+        messageTextView.setText("");
     }
 
 

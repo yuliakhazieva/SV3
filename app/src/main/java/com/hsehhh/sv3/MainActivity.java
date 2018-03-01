@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -369,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
             public void onDataChange(DataSnapshot dataSnapshot) {
                 nameForGetNameFromID = dataSnapshot.getValue(User.class).name;
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
