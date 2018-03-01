@@ -31,14 +31,14 @@ public class Event implements Parcelable {
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, Room room, long date) {
+    public Event(String title, String description, String type, String published_by, Room room, long date, HashMap participants) {
         this.title = title;
         this.description = description;
         this.room = room;
         this.date = date;
         this.published_by = published_by;
         this.type = type;
-        this.participants = new HashMap<>();
+        this.participants = participants;
     }
 
     protected Event(Parcel in) {

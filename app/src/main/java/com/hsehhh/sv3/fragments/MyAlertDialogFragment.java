@@ -65,7 +65,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                     presenter.switchToEventDetails(event);
                 }
             });
-        } else if (event.participants.containsValue(presenter.user.ID)) {
+        } else if (event.participants != null && event.participants.containsValue(presenter.user.ID)) {
             builder.setView(view)
                     .setTitle(event.title)
                     .setPositiveButton("Вы идетё на это событие.", new DialogInterface.OnClickListener() {
