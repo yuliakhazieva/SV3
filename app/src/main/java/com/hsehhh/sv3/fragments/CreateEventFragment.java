@@ -143,7 +143,7 @@ public class CreateEventFragment extends Fragment {
                 eventTypeSpinner.getSelectedItem().toString(),
                 presenter.firebaseUser.getUid(),
                 roomPickerFragment.room,
-                date.getTimeInMillis());
+                date.getTimeInMillis(), null);
         if (!isFormInvalid()) {
             presenter.getEventsReference().push().setValue(e);
             Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
