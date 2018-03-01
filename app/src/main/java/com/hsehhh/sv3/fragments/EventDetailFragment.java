@@ -43,22 +43,24 @@ public class EventDetailFragment extends Fragment {
 
     MainActivity presenter;
 
+    String tempGuestName;
     TextView eventTitleTextView;
     TextView eventDescriptionTextView;
     TextView eventFloorTextView;
     TextView eventUserIdTextView;
+
     ArrayList<Map<String, String>> сhildDataItemList;
+    ArrayList<Map<String, String>> сhildDataDetailList;
 
     TextView messageTextView;
     Button sendMessageButton;
-
-    HashMap<String, String> m;
 
     RecyclerView chat;
 
     ChatAdapter chatAdapter;
 
     ExpandableListView participantsList;
+    ExpandableListView detailList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,24 +72,18 @@ public class EventDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_event_detail2, container, false);
 
         // мне не нравится. буду разбираться с тем, как это лучше написать
         presenter.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle arguments = getArguments();
         event = arguments.getParcelable("event");
+        presenter.getSupportActionBar().setTitle(event.title);
 
-        eventTitleTextView = v.findViewById(R.id.layout);
-        eventDescriptionTextView = v.findViewById(R.id.text_view_description);
-        eventFloorTextView = v.findViewById(R.id.text_view_floor);
-        eventUserIdTextView = v.findViewById(R.id.text_view_published_by);
         participantsList = v.findViewById(R.id.participants_list);
+        detailList = v.findViewById(R.id.info_list);
 
-        eventTitleTextView.setText(event.title);
-        eventDescriptionTextView.setText(event.description);
-        eventFloorTextView.setText(String.format(Locale.ROOT, "%d", event.room.floor));
-        eventUserIdTextView.setText(presenter.getNameFromId(event.published_by));
 
         chatAdapter = new ChatAdapter(presenter, event.key);
 
@@ -119,20 +115,53 @@ public class EventDetailFragment extends Fragment {
         сhildDataItemList = new ArrayList<>();
 
 
-        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            Map<String, String> map;
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                map = new HashMap<>();
-                map.put("guestName", dataSnapshot.getValue(User.class).name);
-                сhildDataItemList.add(map);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+//        Iterator it = event.participants.entrySet().iterator();
+//        int i = 0;
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            map = new HashMap<>();
+//            map.put("guestIndex", Integer.toString(i));
+//
+//            Query q = presenter.getUsersReference().child(pair.getValue().toString());
+//            q.addListenerForSingleValueEvent(new ValueEventListener() {
+//                Map<String, String> map;
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    map = new HashMap<>();
+//                    map.put("guestName", dataSnapshot.getValue(User.class).name);
+//                    сhildDataItemList.add(map);
+//                }
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//
+//            сhildDataItemList.add(map);
+//            i++;
+//        }
+
+
+        Iterator it = event.participants.entrySet().iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Query q = presenter.getUsersReference().child(((Map.Entry)it.next()).getValue().toString());
+            q.addListenerForSingleValueEvent(new ValueEventListener() {
+                Map<String, String> map;
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    map = new HashMap<>();
+                    map.put("guestName", dataSnapshot.getValue(User.class).name);
+                    сhildDataItemList.add(map);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         сhildDataList.add(сhildDataItemList);
         String childFrom[] = new String[] { "guestName" };
@@ -145,7 +174,7 @@ public class EventDetailFragment extends Fragment {
             expandableListAdapter = new SimpleExpandableListAdapter(
                     getContext(),
                     groupDataList,
-                    android.R.layout.simple_expandable_list_item_1,
+                    R.layout.list_of_guests_group,
                     groupFrom,
                     groupTo,
                     сhildDataList, R.layout.list_of_guests_item_for_host, childFrom, childTo);
@@ -154,7 +183,7 @@ public class EventDetailFragment extends Fragment {
             expandableListAdapter = new SimpleExpandableListAdapter(
                     getContext(),
                     groupDataList,
-                    android.R.layout.simple_expandable_list_item_1,
+                    R.layout.list_of_guests_group,
                     groupFrom,
                     groupTo,
                     сhildDataList, R.layout.list_of_guests_item, childFrom, childTo);
@@ -162,6 +191,55 @@ public class EventDetailFragment extends Fragment {
 
 
         participantsList.setAdapter(expandableListAdapter);
+
+
+        groupDataList = new ArrayList<>();
+        map = new HashMap<>();
+        map.put("groupName", "Информация");
+        groupDataList.add(map);
+        String groupFrom2[] = new String[] { "groupName" };
+        int groupTo2[] = new int[] { android.R.id.text1 };
+
+        сhildDataList = new ArrayList<>();
+        сhildDataDetailList = new ArrayList<>();
+
+        Map<String, String> map4;
+        map = new HashMap<>();
+        map.put("item", "Хозяин: " + presenter.getNameFromId(event.published_by));
+        сhildDataDetailList.add(map);
+
+        Map<String, String> map1;
+        map = new HashMap<>();
+        map.put("item", event.getFormattedDate());
+        сhildDataDetailList.add(map);
+
+        Map<String, String> map3;
+        map = new HashMap<>();
+        map.put("item", event.room.toString());
+        сhildDataDetailList.add(map);
+
+        Map<String, String> map2;
+        map = new HashMap<>();
+        map.put("item", event.description);
+        сhildDataDetailList.add(map);
+
+
+        сhildDataList.add(сhildDataDetailList);
+        String childFrom2[] = new String[] { "item" };
+        int childTo2[] = new int[] { R.id.guest_name };
+
+        SimpleExpandableListAdapter expandableListAdapterDetail;
+
+        expandableListAdapterDetail = new SimpleExpandableListAdapter(
+                getContext(),
+                groupDataList,
+                R.layout.list_of_guests_group,
+                groupFrom2,
+                groupTo2,
+                сhildDataList, R.layout.list_of_guests_item, childFrom2, childTo2
+        );
+
+        detailList.setAdapter(expandableListAdapterDetail);
 
         return v;
     }
@@ -182,96 +260,5 @@ public class EventDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-//    class CustomExpandableListAdapter extends BaseExpandableListAdapter {
-//
-//        private Context context;
-//        private List<String> expandableListTitle;
-//        private HashMap<String, List<String>> expandableListDetail;
-//
-//        public CustomExpandableListAdapter(Context context, List<String> expandableListTitle,
-//                                           HashMap<String, List<String>> expandableListDetail) {
-//            this.context = context;
-//            this.expandableListTitle = expandableListTitle;
-//            this.expandableListDetail = expandableListDetail;
-//        }
-//
-//        @Override
-//        public Object getChild(int listPosition, int expandedListPosition) {
-//            return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-//                    .get(expandedListPosition);
-//        }
-//
-//        @Override
-//        public long getChildId(int listPosition, int expandedListPosition) {
-//            return expandedListPosition;
-//        }
-//
-//        @Override
-//        public View getChildView(int listPosition, final int expandedListPosition,
-//                                 boolean isLastChild, View convertView, ViewGroup parent) {
-//
-//
-//            final String expandedListText = (String) getChild(listPosition, expandedListPosition);
-//            if (convertView == null) {
-//                LayoutInflater layoutInflater = (LayoutInflater) this.context
-//                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                if (parent.getCh)
-//                    convertView = layoutInflater.inflate(R.layout.list_of_guests_item, null);
-//            }
-//            TextView expandedListTextView = (TextView) convertView
-//                    .findViewById(R.id.expandedListItem);
-//            expandedListTextView.setText(expandedListText);
-//            return convertView;
-//        }
-//
-//
-//        @Override
-//        public View getGroupView(int listPosition, boolean isExpanded,
-//                                 View convertView, ViewGroup parent) {
-//            String listTitle = (String) getGroup(listPosition);
-//            if (convertView == null) {
-//                LayoutInflater layoutInflater = (LayoutInflater) this.context.
-//                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                convertView = layoutInflater.inflate(R.layout.list_of_guests_group, null);
-//            }
-//            TextView listTitleTextView = (TextView) convertView
-//                    .findViewById(R.id.guests);
-//            listTitleTextView.setText(listTitle);
-//            return convertView;
-//        }
-//
-//        @Override
-//        public int getChildrenCount(int listPosition) {
-//            return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-//                    .size();
-//        }
-//
-//        @Override
-//        public Object getGroup(int listPosition) {
-//            return this.expandableListTitle.get(listPosition);
-//        }
-//
-//        @Override
-//        public int getGroupCount() {
-//            return this.expandableListTitle.size();
-//        }
-//
-//        @Override
-//        public long getGroupId(int listPosition) {
-//            return listPosition;
-//        }
-//
-//        @Override
-//        public boolean hasStableIds() {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean isChildSelectable(int listPosition, int expandedListPosition) {
-//            return true;
-//        }
-//    }
 
 }

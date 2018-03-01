@@ -46,6 +46,7 @@ public class MyEventsFragment extends android.support.v4.app.Fragment
 
         tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
+        presenter.getSupportActionBar().setTitle(R.string.app_name);
         return view;
     }
 

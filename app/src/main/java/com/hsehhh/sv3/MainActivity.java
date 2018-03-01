@@ -365,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     {
         Query q = getUsersReference().child(id);
         q.addListenerForSingleValueEvent(new ValueEventListener() {
-            Map<String, String> map;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 nameForGetNameFromID = dataSnapshot.getValue(User.class).name;
