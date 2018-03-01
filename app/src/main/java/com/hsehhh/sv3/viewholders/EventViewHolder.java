@@ -19,6 +19,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     public Button chat;
     public TextView date;
     public ImageButton delete;
+    public TextView room;
 
     public EventViewHolder(View v) {
         super(v);
@@ -29,6 +30,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         delete = v.findViewById(R.id.delete);
         chat = v.findViewById(R.id.button_chat);
         date = v.findViewById(R.id.text_view_date);
-
+        room = v.findViewById(R.id.text_view_floor);
     }
 }
