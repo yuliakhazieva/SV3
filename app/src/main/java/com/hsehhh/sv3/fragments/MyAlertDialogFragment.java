@@ -54,7 +54,7 @@ public class MyAlertDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        builder = new AlertDialog.Builder(presenter);
+        builder = new AlertDialog.Builder(presenter, R.style.AlertTheme);
 
         LayoutInflater inflater = presenter.getLayoutInflater();
         View view = inflater.inflate(R.layout.new_event_detail, null);

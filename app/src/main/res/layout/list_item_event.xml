@@ -12,7 +12,7 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@color/colorPrimary3"
+        android:background="@color/colorAccent"
         android:elevation="4dp">
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="TextView"
-            android:textColor="@color/colorPrimaryDark3"
+            android:textColor="@color/btn_login_bg"
             android:textSize="24dp"
             android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="32dp"
             android:text="TextView"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary3"
             android:textStyle="bold" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_marginStart="64dp"
             android:gravity="center"
             android:text="TextView"
-            android:textColor="@color/colorPrimaryDark3"
+            android:textColor="@color/btn_login_bg"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -58,7 +58,8 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:layout_toStartOf="@id/delete"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingRight="16dp">
 
             <TextView
                 android:id="@+id/text_view_date"
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:textColor="@color/colorPrimaryDark3" />
+                android:textColor="@color/btn_login_bg" />
 
             <TextView
                 android:id="@+id/text_view_floor"
@@ -74,13 +75,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:textColor="@color/colorPrimaryDark3" />
+                android:textColor="@color/btn_login_bg" />
 
             <Button
                 android:id="@+id/button_chat"
                 android:layout_width="77dp"
                 android:layout_height="33dp"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimaryDark3"
                 android:elevation="2dp"
                 android:text="Чат"
                 android:textColor="@color/btn_login_bg" />
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark3"
             android:elevation="2dp"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
