@@ -77,17 +77,7 @@ public class MyAlertDialogFragment extends DialogFragment {
         description = view.findViewById(R.id.text_view_description);
         date = view.findViewById(R.id.text_view_date);
 
-        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                publisher.setText(dataSnapshot.getValue(User.class).name);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        publisher.setText(presenter.getNameFromId(presenter.firebaseUser.getUid()));
 
         apt.setText("" + event.room.floor + event.room.aptNumber);
         description.setText(event.description);

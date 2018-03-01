@@ -35,6 +35,9 @@ import com.hsehhh.sv3.fragments.ProfileSettingsFragment;
 import com.hsehhh.sv3.fragments.ScrollingFragment;
 import com.hsehhh.sv3.interfaces.FragmentSwitcher;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
     //constants
@@ -74,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // User objects
     public FirebaseUser firebaseUser;
     public User user;
+
+    //util
+    public String nameForGetNameFromID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,6 +360,23 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public String getNameFromId(String id)
+    {
+        Query q = getUsersReference().child(id);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            Map<String, String> map;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                nameForGetNameFromID = dataSnapshot.getValue(User.class).name;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return nameForGetNameFromID;
     }
 
 }

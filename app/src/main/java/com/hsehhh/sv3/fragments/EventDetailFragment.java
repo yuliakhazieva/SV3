@@ -87,7 +87,7 @@ public class EventDetailFragment extends Fragment {
         eventTitleTextView.setText(event.title);
         eventDescriptionTextView.setText(event.description);
         eventFloorTextView.setText(String.format(Locale.ROOT, "%d", event.room.floor));
-        eventUserIdTextView.setText(event.published_by);
+        eventUserIdTextView.setText(presenter.getNameFromId(event.published_by));
 
         chatAdapter = new ChatAdapter(presenter, event.key);
 
@@ -134,16 +134,6 @@ public class EventDetailFragment extends Fragment {
             }
         });
 
-//        Iterator it = event.participants.entrySet().iterator();
-//        int i = 0;
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            map = new HashMap<>();
-//            map.put("guestIndex", Integer.toString(i));
-//            map.put("guestName", pair.getValue().toString());
-//            сhildDataItemList.add(map);
-//            i++;
-//        }
         сhildDataList.add(сhildDataItemList);
         String childFrom[] = new String[] { "guestName" };
         int childTo[] = new int[] { R.id.guest_name };
@@ -177,7 +167,8 @@ public class EventDetailFragment extends Fragment {
     }
 
     private void sendMessage(String messageText) {
-        presenter.getChatsReference().child(event.key).push().setValue(new Message( presenter.firebaseUser.getUid(), messageText));
+
+        presenter.getChatsReference().child(event.key).push().setValue(new Message( presenter.getNameFromId(presenter.firebaseUser.getUid()), messageText));
     }
 
 

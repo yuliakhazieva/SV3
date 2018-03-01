@@ -125,17 +125,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         holder.title.setText(model.title);
         holder.description.setText(model.description);
 
-        Query q = presenter.getUsersReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.published_by.setText(dataSnapshot.getValue(User.class).name);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+        holder.published_by.setText(presenter.getNameFromId(presenter.firebaseUser.getUid()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
