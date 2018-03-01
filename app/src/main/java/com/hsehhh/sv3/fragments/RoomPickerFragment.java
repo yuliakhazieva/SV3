@@ -38,6 +38,7 @@ public class RoomPickerFragment extends DialogFragment {
     AlertDialog.Builder builder;
 
     public void initPickers(View view) {
+
         section = view.findViewById(R.id.picker_section);
         floor = view.findViewById(R.id.picker_floor);
         aptNumber = view.findViewById(R.id.picker_aptnumber);

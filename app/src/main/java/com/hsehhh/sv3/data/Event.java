@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -21,7 +23,7 @@ public class Event implements Parcelable {
     public Room room;
 
 
-    public String date;
+    public long date;
     public HashMap<String, String> participants;
 
     @Exclude
@@ -29,7 +31,7 @@ public class Event implements Parcelable {
 
     Event() { }
 
-    public Event(String title, String description, String type, String published_by, Room room, String date) {
+    public Event(String title, String description, String type, String published_by, Room room, long date) {
         this.title = title;
         this.description = description;
         this.room = room;
@@ -46,7 +48,7 @@ public class Event implements Parcelable {
         description = in.readString();
         published_by = in.readString();
         room = in.readTypedObject(Room.CREATOR);
-        date = in.readString();
+        date = in.readLong();
         participants = in.readHashMap(String.class.getClassLoader());
       //  in.readHashMap(participants);
     }
@@ -62,7 +64,7 @@ public class Event implements Parcelable {
         in.writeString(description);
         in.writeString(published_by);
         in.writeTypedObject(room, 0);
-        in.writeString(date);
+        in.writeLong(date);
         in.writeMap(participants);
     }
 
@@ -76,6 +78,10 @@ public class Event implements Parcelable {
         participants = p;
     }
 
+    public String getFormattedDate() {
+        return new SimpleDateFormat("dd-MM HH:mm").format(new Date(date));
+
+    }
     public HashMap<String, String> getParticipants()
     {
         return participants;
