@@ -33,7 +33,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/submit" />
+            android:background="@color/colorPrimaryDark3"
+            android:elevation="4dp"
+            android:text="@string/submit"
+            android:textColor="@color/btn_login_bg" />
 
     </LinearLayout>
 </FrameLayout>

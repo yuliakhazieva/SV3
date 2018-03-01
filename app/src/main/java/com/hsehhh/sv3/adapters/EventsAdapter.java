@@ -120,7 +120,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         holder.room.setText(model.room.toString());
 
         holder.date.setText(model.getFormattedDate());
-        holder.published_by.setText(presenter.getNameFromId(presenter.firebaseUser.getUid()));
+        holder.published_by.setText(presenter.getNameFromId(model.published_by));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -62,6 +62,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginEnd="4dp"
             android:background="@color/colorPrimaryDark3"
+            android:elevation="4dp"
             android:text="@string/btn_send"
             android:textColor="@color/btn_login_bg" />
     </LinearLayout>
