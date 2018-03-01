@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SV3</string>
+    <string name="app_name">Привет, Трилист!</string>
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
@@ -14,7 +14,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
-    <string name="profile">Profile</string>
+    <string name="profile">Профиль</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
@@ -24,9 +24,9 @@
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">New Email</string>
     <string name="btn_change">Change</string>
-    <string name="btn_send">Send</string>
+    <string name="btn_send">Послать</string>
     <string name="btn_remove">Remove</string>
-    <string name="btn_sign_out">Sign Out</string>
+    <string name="btn_sign_out">Выйти</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
@@ -119,19 +119,23 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Settings</string>
-    <string name="title_add">Add</string>
+    <string name="my_events">Мои события</string>
+    <string name="add_event">Добавить</string>
+    <string name="action_settings">Настройки</string>
+    <string name="title_add">Добавить</string>
+    <string name="profile_button">Профиль</string>
+
     <string name="title_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="event_name">Name</string>
-    <string name="event_description">Description</string>
-    <string name="event_room">Floor</string>
-    <string name="event_done">Done</string>
-    <string name="slider_my_events">My events</string>
-    <string name="host">Hosting</string>
-    <string name="attend">Going to attend</string>
-    <string name="flat">Flat</string>
-    <string name="submit">Submit</string>
+    <string name="event_name">Имя</string>
+    <string name="event_description">Описание</string>
+    <string name="event_room">Этаж</string>
+    <string name="event_done">Готово</string>
+    <string name="slider_my_events">Мои события</string>
+    <string name="host">Организую</string>
+    <string name="attend">Пойду</string>
+    <string name="flat">Квартира</string>
+    <string name="submit">Готово</string>
 </resources>

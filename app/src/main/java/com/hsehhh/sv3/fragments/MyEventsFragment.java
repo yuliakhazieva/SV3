@@ -97,9 +97,9 @@ class ListPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0:
-                return "Organized";
+                return "Организую";
             case 1:
-                return "Visited";
+                return "Пойду";
             default:
                 return null;
         }
