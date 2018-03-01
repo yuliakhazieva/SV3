@@ -35,8 +35,8 @@ public class Event implements Parcelable {
         this.room = room;
         this.date = date;
         this.published_by = published_by;
+        this.type = type;
         this.participants = new HashMap<>();
-
     }
 
     protected Event(Parcel in) {
