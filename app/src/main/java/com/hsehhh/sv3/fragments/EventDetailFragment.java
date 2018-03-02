@@ -113,6 +113,7 @@ public class EventDetailFragment extends Fragment {
         if(event.participants != null) {
             Iterator it = event.participants.entrySet().iterator();
             int i = 0;
+
             while (it.hasNext()) {
                 Query q = presenter.getUsersReference().child(((Map.Entry) it.next()).getValue().toString());
                 q.addListenerForSingleValueEvent(new ValueEventListener() {
