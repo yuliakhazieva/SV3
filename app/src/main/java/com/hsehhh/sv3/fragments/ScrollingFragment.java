@@ -130,7 +130,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                     ib.setImageResource(R.drawable.icon_a_party);
                                     break;
                                 case "request":
-                                    ib.setImageResource(R.drawable.icon_a_help);
+                                    ib.setImageResource(R.drawable.icon_a_study);
                                     break;
                                 default:
                                     ib.setImageResource(R.drawable.icon_a_study);
