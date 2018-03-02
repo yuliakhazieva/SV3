@@ -193,12 +193,10 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //не наш случай
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //ошибаются токо ЛОХИ (я не знаю что тут делать пока)
             }
         };
 
@@ -228,8 +226,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     @Override
     public void onStop() {
         super.onStop();
-//        if (childListener != null)
-//            presenter.getEventsReference().removeEventListener(childListener);
+        if (childListener != null)
+            presenter.getEventsReference().removeEventListener(childListener);
     }
 
     @Override

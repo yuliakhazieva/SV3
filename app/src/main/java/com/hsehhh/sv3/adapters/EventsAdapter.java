@@ -41,7 +41,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     private int getEventIndex(Event e) {
         for (int i = 0; i < getItemCount(); i++)
-            if (events.get(i).equals(e))
+            if (events.get(i).key.equals(e.key))
                 return i;
         return -1;
     }
@@ -73,6 +73,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                     if (eventIndex != -1) { // бывает ли иначе? хм.
                         events.set(eventIndex, model);
                         notifyItemChanged(eventIndex);
+                   } else
+                    {
+                        events.add(model);
+                        notifyItemInserted(events.size() - 1);
+                    }
+                } else
+                {
+                    if((getEventIndex(model)) != -1) {
+                        events.remove(getEventIndex(model));
+                        notifyDataSetChanged();
                     }
                 }
             }
@@ -123,11 +133,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         holder.room.setText(model.room.toString());
 
         holder.date.setText(model.getFormattedDate());
+
         Query q = presenter.getUsersReference().child(model.published_by);
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 holder.published_by.setText(dataSnapshot.getValue(User.class).name);
             }
 
@@ -136,6 +146,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
             }
         });
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,20 +170,38 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         });
     }
 //
-    void removeEvent(Event event) {
+    void removeEvent(final Event event) {
         if(event.published_by.equals(presenter.firebaseUser.getUid())) {
             // destroy event here
             presenter.getEventsReference().child(event.key).removeValue();
 
         } else {
             // unsubscribe from event here
-            presenter.getUsersReference().child(presenter.firebaseUser.getUid());
-            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo");
 
-            presenter.getEventsReference().child(event.key)
-                    .child("participants").child(presenter.firebaseUser.getUid());
+            presenter.getUsersReference().child(presenter.user.ID).child("subscribedTo").orderByValue().equalTo(event.key).addListenerForSingleValueEvent(new ValueEventListener()
+            {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                   for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                       snap.getRef().removeValue();
+                   }
+               }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+
+            presenter.getEventsReference().child(event.key).child("participants").orderByValue().equalTo(presenter.user.ID).addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        snap.getRef().removeValue();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+
         }
     }
-
-
 }

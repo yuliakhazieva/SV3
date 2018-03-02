@@ -95,21 +95,7 @@ public class MyAlertDialogFragment extends DialogFragment {
         description = view.findViewById(R.id.text_view_description);
         date = view.findViewById(R.id.text_view_date);
 
-        getNameFromId(event.published_by);
-//        publisher.setText(presenter.getNameFromId(event.published_by));
-        apt.setText(event.room.toString());
-        description.setText(event.description);
-        date.setText(event.getFormattedDate());
-
-        builder.setView(view);
-
-        return builder.create();
-    }
-
-
-    public void getNameFromId(String id)
-    {
-        Query q = presenter.getUsersReference().child(id);
+        Query q = presenter.getUsersReference().child(event.published_by);
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -121,6 +107,13 @@ public class MyAlertDialogFragment extends DialogFragment {
 
             }
         });
-//        return nameForGetNameFromID;
+
+        apt.setText(event.room.toString());
+        description.setText(event.description);
+        date.setText(event.getFormattedDate());
+
+        builder.setView(view);
+
+        return builder.create();
     }
 }

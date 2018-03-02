@@ -2,6 +2,8 @@ package com.hsehhh.sv3;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 //        ActionBar actionBar = this.getActionBar();
 //        actionBar.hide();
 
-
             //Init database reference
             initDatabaseReferences();
 
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                         .createSignInIntentBuilder()
                         .setIsSmartLockEnabled(false)
                         .setLogo(R.drawable.trilist)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
     }
