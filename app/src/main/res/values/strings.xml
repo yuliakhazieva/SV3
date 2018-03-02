@@ -130,6 +130,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="event_name">Название</string>
+    <string name="event_name2">Имя</string>
     <string name="event_description">Описание</string>
     <string name="event_room">Этаж</string>
     <string name="event_done">Готово</string>
