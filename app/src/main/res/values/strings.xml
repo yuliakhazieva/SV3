@@ -24,7 +24,7 @@
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">New Email</string>
     <string name="btn_change">Change</string>
-    <string name="btn_send">Послать</string>
+    <string name="btn_send">Отправить</string>
     <string name="btn_remove">Remove</string>
     <string name="btn_sign_out">Выйти</string>
     <string name="lbl_forgot_password">Forgot password?</string>
@@ -129,7 +129,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="event_name">Имя</string>
+    <string name="event_name">Название</string>
     <string name="event_description">Описание</string>
     <string name="event_room">Этаж</string>
     <string name="event_done">Готово</string>
