@@ -41,6 +41,7 @@ public class EventDetailFragment extends Fragment {
     // Data
     Event event;
 
+    String tempName;
     MainActivity presenter;
 
     ArrayList<Map<String, String>> сhildDataItemList;
@@ -120,7 +121,9 @@ public class EventDetailFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         map = new HashMap<>();
-                        map.put("guestName", dataSnapshot.getValue(User.class).name);
+                        User u = dataSnapshot.getValue(User.class);
+                        if(u != null)
+                             map.put("guestName", dataSnapshot.getValue(User.class).name);
                         сhildDataItemList.add(map);
                     }
 
@@ -174,7 +177,21 @@ public class EventDetailFragment extends Fragment {
 
         Map<String, String> map4;
         map = new HashMap<>();
-        map.put("item", "Хозяин: " + presenter.getNameFromId(event.published_by));
+
+        Query q = presenter.getUsersReference().child(event.published_by);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tempName = dataSnapshot.getValue(User.class).name;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        map.put("item", "Хозяин: " + tempName);
         сhildDataDetailList.add(map);
 
         Map<String, String> map1;
