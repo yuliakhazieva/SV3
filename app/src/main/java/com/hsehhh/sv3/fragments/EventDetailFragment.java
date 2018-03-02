@@ -178,20 +178,21 @@ public class EventDetailFragment extends Fragment {
         Map<String, String> map4;
         map = new HashMap<>();
 
-        Query q = presenter.getUsersReference().child(event.published_by);
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tempName = dataSnapshot.getValue(User.class).name;
-            }
+//
+// q = presenter.getUsersReference().child(event.published_by);
+//        q.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+           //     tempName = dataSnapshot.getValue(User.class).name;
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        map.put("item", "Хозяин: " + tempName);
+        map.put("item", "Хозяин: " + event.name);
         сhildDataDetailList.add(map);
 
         Map<String, String> map1;

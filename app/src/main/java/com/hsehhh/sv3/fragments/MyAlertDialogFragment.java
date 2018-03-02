@@ -95,18 +95,18 @@ public class MyAlertDialogFragment extends DialogFragment {
         description = view.findViewById(R.id.text_view_description);
         date = view.findViewById(R.id.text_view_date);
 
-        Query q = presenter.getUsersReference().child(event.published_by);
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                publisher.setText(dataSnapshot.getValue(User.class).name);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        Query q = presenter.getUsersReference().child(event.published_by);
+//        q.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+                publisher.setText(event.name);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         apt.setText(event.room.toString());
         description.setText(event.description);

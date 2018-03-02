@@ -134,18 +134,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
         holder.date.setText(model.getFormattedDate());
 
-        Query q = presenter.getUsersReference().child(model.published_by);
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.published_by.setText(dataSnapshot.getValue(User.class).name);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        Query q = presenter.getUsersReference().child(model.published_by);
+//        q.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+                holder.published_by.setText(model.name);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

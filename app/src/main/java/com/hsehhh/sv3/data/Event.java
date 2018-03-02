@@ -3,8 +3,14 @@ package com.hsehhh.sv3.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.hsehhh.sv3.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +26,7 @@ public class Event implements Parcelable {
     public String description;
     public String published_by;
 
+
     public Room room;
 
 
@@ -28,6 +35,8 @@ public class Event implements Parcelable {
 
     @Exclude
     public String key;
+    @Exclude
+    public String name;
 
     Event() { }
 
@@ -39,6 +48,7 @@ public class Event implements Parcelable {
         this.published_by = published_by;
         this.type = type;
         this.participants = participants;
+        getName(published_by);
     }
 
     protected Event(Parcel in) {
@@ -51,6 +61,22 @@ public class Event implements Parcelable {
         date = in.readLong();
         participants = in.readHashMap(String.class.getClassLoader());
       //  in.readHashMap(participants);
+    }
+
+    private void getName(String id)
+    {
+        Query q = FirebaseDatabase.getInstance().getReference("users").child(id);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name = dataSnapshot.getValue(User.class).name;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
