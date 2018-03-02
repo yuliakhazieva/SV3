@@ -41,14 +41,15 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     public Button showEvents;
     public TableLayout table;
-    public HashMap<String, Event> eventsMap;
+    ChildEventListener childListener;
+//    public HashMap<String, Event> eventsMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
         setRetainInstance(true);
-        eventsMap = new HashMap<>();
+//        eventsMap = new HashMap<>();
     }
 
     @Override
@@ -58,29 +59,11 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         if (savedInstanceState != null)
             getFragmentManager().getFragment(savedInstanceState, "scroll");
 
-        return inflater.inflate(R.layout.new_grid_scrolling, container, false);
-    }
+        final View view = inflater.inflate(R.layout.new_grid_scrolling, container, false);
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        super.onSaveInstanceState(outState);
-        getFragmentManager().putFragment(outState, "lscrol", this);
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_scroll_frag, menu);
-    }
-
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
 
         //кнопка мои события
-        showEvents = getView().findViewById(R.id.showMyEvents);
+        showEvents = view.findViewById(R.id.showMyEvents);
         showEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +75,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         });
 
         //делаем пустую таблицу
-        table = getView().findViewById(R.id.table);
+        table = view.findViewById(R.id.table);
         table.setPadding(0,90,0,0);
 
         for(int i = 0; i < 25; i++)
@@ -102,16 +85,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             newRow.setMinimumHeight(110);
             table.addView(newRow, i);
         }
-
-        //работа с бд
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
-        ChildEventListener childListener = new ChildEventListener() {
+        childListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 final Event e = dataSnapshot.getValue(Event.class);
                 e.setKey(dataSnapshot.getKey());
-                eventsMap.put(e.key, e);
+//                eventsMap.put(e.key, e);
 
                 TableRow trow = (TableRow) table.getChildAt(25 - e.room.floor);
                 int aptNum = e.room.aptNumber;
@@ -193,30 +172,24 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
-//                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
-            //    {
+//                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
 
-                    //логика если там были еще евенты
-            //    } else {
-                    eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
-            //    }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
+                TableRow tRow =  (TableRow) table.getChildAt(25 - dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
 //                {
 //                    //логика если там были еще евенты
 //                } else {
-                    tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).room.floor+dataSnapshot.getValue(Event.class).room.aptNumber));
-                    eventsMap.remove(dataSnapshot.getValue(Event.class).key);
+                tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).room.floor+dataSnapshot.getValue(Event.class).room.aptNumber));
+//                eventsMap.remove(dataSnapshot.getValue(Event.class).key);
 
-                    //отписываем пользователя от несуществующего события
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
-                    //потестить
-                 ref.child(dataSnapshot.getKey()).removeValue();
+                //отписываем пользователя от несуществующего события
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
+                //потестить
+                ref.child(dataSnapshot.getKey()).removeValue();
                 //   }
             }
 
@@ -230,14 +203,35 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 //ошибаются токо ЛОХИ (я не знаю что тут делать пока)
             }
         };
+        presenter.getEventsReference().addChildEventListener(childListener);
 
-        ref.addChildEventListener(childListener);
+        return view;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState, "lscrol", this);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_scroll_frag, menu);
+    }
+
 
     @Override
     public void onResume(){
         super.onResume();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+//        if (childListener != null)
+//            presenter.getEventsReference().removeEventListener(childListener);
     }
 
     @Override
