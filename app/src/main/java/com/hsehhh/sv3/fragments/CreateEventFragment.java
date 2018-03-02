@@ -138,13 +138,14 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Event e = new Event(eventTitleEditText.getText().toString(),
-                eventDescriptionEditText.getText().toString(),
-                eventTypeSpinner.getSelectedItem().toString(),
-                presenter.firebaseUser.getUid(),
-                roomPickerFragment.room,
-                date.getTimeInMillis(), null);
+
         if (!isFormInvalid()) {
+            Event e = new Event(eventTitleEditText.getText().toString(),
+                    eventDescriptionEditText.getText().toString(),
+                    eventTypeSpinner.getSelectedItem().toString(),
+                    presenter.firebaseUser.getUid(),
+                    roomPickerFragment.room,
+                    date.getTimeInMillis(), null);
             presenter.getEventsReference().push().setValue(e);
             Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
             presenter.switchToScrolling();

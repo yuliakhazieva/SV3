@@ -41,14 +41,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
 
     public Button showEvents;
     public TableLayout table;
-    public HashMap<String, Event> eventsMap;
+ //   public HashMap<String, Event> eventsMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
         setRetainInstance(true);
-        eventsMap = new HashMap<>();
+    //    eventsMap = new HashMap<>();
     }
 
     @Override
@@ -104,14 +104,14 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
         }
 
         //работа с бд
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
+     //   DatabaseReference ref = FirebaseDatabase.getInstance().getReference("events");
         ChildEventListener childListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 final Event e = dataSnapshot.getValue(Event.class);
                 e.setKey(dataSnapshot.getKey());
-                eventsMap.put(e.key, e);
+              //  eventsMap.put(e.key, e);
 
                 TableRow trow = (TableRow) table.getChildAt(25 - e.room.floor);
                 if(trow.getChildAt(e.room.aptNumber) != null)
@@ -169,7 +169,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                     }
 
                     ib.setBackground(null);
-                    ib.setLayoutParams(new TableRow.LayoutParams(e.room.aptNumber));
+                    TableRow.LayoutParams trl = new TableRow.LayoutParams();
+                    trl.column = e.room.aptNumber;
                     ib.setPadding(0,0,0,0);
                     ib.setTag("one"); //если в этой ячейке токо одно событие
                     ib.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +185,8 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                                 Toast.makeText(getContext(), "Нет подключения к сети", Toast.LENGTH_LONG).show();
                         }
                     });
+                    trl.span = 1;
+                    ib.setLayoutParams(trl);
                     trow.addView(ib, 0);
                     ib.setTag(e.room.floor+e.room.aptNumber);
                 }
@@ -192,25 +195,25 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
+             //   TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
             //    {
 
                     //логика если там были еще евенты
             //    } else {
-                    eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
+               //     eventsMap.put(dataSnapshot.getValue(Event.class).key, dataSnapshot.getValue(Event.class));
             //    }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                TableRow tRow =  (TableRow) table.getChildAt(dataSnapshot.getValue(Event.class).room.floor);
+                TableRow tRow =  (TableRow) table.getChildAt(25 - dataSnapshot.getValue(Event.class).room.floor);
 //                if(tRow.getChildAt(dataSnapshot.getValue(Event.class).aptNumber).getTag() != "one")
 //                {
 //                    //логика если там были еще евенты
 //                } else {
                     tRow.removeView(view.findViewWithTag(dataSnapshot.getValue(Event.class).room.floor+dataSnapshot.getValue(Event.class).room.aptNumber));
-                    eventsMap.remove(dataSnapshot.getValue(Event.class).key);
+              //      eventsMap.remove(dataSnapshot.getValue(Event.class).key);
 
                     //отписываем пользователя от несуществующего события
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/subscribedTo");
@@ -230,7 +233,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
             }
         };
 
-        ref.addChildEventListener(childListener);
+        presenter.getEventsReference().addChildEventListener(childListener);
     }
 
     @Override
