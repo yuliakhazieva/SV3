@@ -42,14 +42,12 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public Button showEvents;
     public TableLayout table;
     ChildEventListener childListener;
-//    public HashMap<String, Event> eventsMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = (MainActivity) getActivity();
         setRetainInstance(true);
-//        eventsMap = new HashMap<>();
     }
 
     @Override
@@ -203,7 +201,6 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
                 //ошибаются токо ЛОХИ (я не знаю что тут делать пока)
             }
         };
-        presenter.getEventsReference().addChildEventListener(childListener);
 
         return view;
     }
@@ -225,6 +222,7 @@ public class ScrollingFragment extends android.support.v4.app.Fragment
     public void onResume(){
         super.onResume();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        presenter.getEventsReference().addChildEventListener(childListener);
     }
 
     @Override

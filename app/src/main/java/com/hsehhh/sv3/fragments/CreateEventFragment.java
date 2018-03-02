@@ -147,10 +147,19 @@ public class CreateEventFragment extends Fragment {
         if (!isFormInvalid()) {
             presenter.getEventsReference().push().setValue(e);
             Toast.makeText(getContext(), "Событие добавлено", Toast.LENGTH_SHORT).show();
+            clearEditTexts();
             presenter.switchToScrolling();
         } else {
             Toast.makeText(getContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void clearEditTexts() {
+        eventTitleEditText.setText("");
+        eventDescriptionEditText.setText("");
+        eventDateEditText.setText("");
+        eventRoomEditText.setText("");
+        roomPickerFragment.room = null;
     }
 
     private boolean isFormInvalid() {
