@@ -32,4 +32,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         date = v.findViewById(R.id.text_view_date);
         room = v.findViewById(R.id.text_view_floor);
     }
+
+
 }

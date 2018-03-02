@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
+import com.hsehhh.sv3.data.User;
 import com.hsehhh.sv3.interfaces.EventFilter;
 import com.hsehhh.sv3.viewholders.EventViewHolder;
 
@@ -120,8 +123,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         holder.room.setText(model.room.toString());
 
         holder.date.setText(model.getFormattedDate());
-        holder.published_by.setText(presenter.getNameFromId(model.published_by));
+        Query q = presenter.getUsersReference().child(model.published_by);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                holder.published_by.setText(dataSnapshot.getValue(User.class).name);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,4 +172,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                     .child("participants").child(presenter.firebaseUser.getUid());
         }
     }
+
+
 }

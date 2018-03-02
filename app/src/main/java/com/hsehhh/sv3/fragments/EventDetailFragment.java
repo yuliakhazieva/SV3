@@ -230,5 +230,4 @@ public class EventDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
 }
