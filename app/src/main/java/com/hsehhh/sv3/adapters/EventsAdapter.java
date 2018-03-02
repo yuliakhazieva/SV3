@@ -39,7 +39,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     private int getEventIndex(Event e) {
         for (int i = 0; i < getItemCount(); i++)
-            if (events.get(i).equals(e))
+            if (events.get(i).key.equals(e.key))
                 return i;
         return -1;
     }
@@ -71,6 +71,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                     if (eventIndex != -1) { // бывает ли иначе? хм.
                         events.set(eventIndex, model);
                         notifyItemChanged(eventIndex);
+                   } else
+                    {
+                        events.add(model);
+                        notifyItemInserted(events.size() - 1);
+                    }
+                } else
+                {
+                    if((getEventIndex(model)) != -1) {
+                        events.remove(getEventIndex(model));
+                        notifyDataSetChanged();
                     }
                 }
             }
@@ -145,14 +155,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
         });
     }
 //
-    void removeEvent(Event event) {
+    void removeEvent(final Event event) {
         if(event.published_by.equals(presenter.firebaseUser.getUid())) {
             // destroy event here
             presenter.getEventsReference().child(event.key).removeValue();
 
         } else {
             // unsubscribe from event here
-
 
             presenter.getUsersReference().child(presenter.user.ID).child("subscribedTo").orderByValue().equalTo(event.key).addListenerForSingleValueEvent(new ValueEventListener()
             {
@@ -178,10 +187,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
-
-
-        //    presenter.getUsersReference().child(presenter.user.ID).orderByChild("subscribedTo").orderByValue().getRef().removeValue();
-         //   presenter.getEventsReference().child(event.key).orderByChild("participants").equalTo(presenter.user.ID).getRef().removeValue();
         }
     }
 }
