@@ -11,21 +11,18 @@
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:colorForeground">@android:color/black</item>
         <item name="android:colorBackground">@color/white</item>
-        <item name="android:textColorPrimary">@color/common_google_signin_btn_text_dark_focused</item>
     </style>
 
     <style name="AlertTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/colorAccent2</item>
-        <item name="android:colorForeground">@color/foreground_material_dark</item>
         <item name="colorAccent">@color/colorPrimary3</item>
+        <item name="android:textColorPrimary">@color/btn_login_bg</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:colorForeground">@android:color/white</item>
-        <item name="android:textColorPrimary">@color/common_google_signin_btn_text_dark_focused
-        </item>
+        <item name="android:textColorPrimary">@color/common_google_signin_btn_text_dark_focused</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
