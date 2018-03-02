@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
                         .createSignInIntentBuilder()
                         .setIsSmartLockEnabled(false)
                         .setLogo(R.drawable.trilist)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
     }

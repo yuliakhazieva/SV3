@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.hsehhh.sv3.MainActivity;
 import com.hsehhh.sv3.R;
 import com.hsehhh.sv3.data.Event;
@@ -151,11 +152,36 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
         } else {
             // unsubscribe from event here
-            presenter.getUsersReference().child(presenter.firebaseUser.getUid());
-            presenter.getUsersReference().child(presenter.firebaseUser.getUid()).child("subscribedTo");
 
-            presenter.getEventsReference().child(event.key)
-                    .child("participants").child(presenter.firebaseUser.getUid());
+
+            presenter.getUsersReference().child(presenter.user.ID).child("subscribedTo").orderByValue().equalTo(event.key).addListenerForSingleValueEvent(new ValueEventListener()
+            {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                   for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                       snap.getRef().removeValue();
+                   }
+               }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+
+            presenter.getEventsReference().child(event.key).child("participants").orderByValue().equalTo(presenter.user.ID).addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        snap.getRef().removeValue();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+
+
+
+        //    presenter.getUsersReference().child(presenter.user.ID).orderByChild("subscribedTo").orderByValue().getRef().removeValue();
+         //   presenter.getEventsReference().child(event.key).orderByChild("participants").equalTo(presenter.user.ID).getRef().removeValue();
         }
     }
 }
